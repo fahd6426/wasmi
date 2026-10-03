@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>وسمي — كاشف الفقع</title>
+<meta name="theme-color" content="#2E1C12">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@700&family=IBM+Plex+Sans+Arabic:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root { --sand:#FAF3E6; --honey:#C98F3E; --clay:#A5552E; --earth:#5A331C; --ink:#2E1C12; }
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; background: var(--ink); color: var(--sand); font-family: "IBM Plex Sans Arabic", Tahoma, sans-serif; }
+video, canvas { position: fixed; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+canvas { pointer-events: none; }
+.bar {
+  position: fixed; top: 0; inset-inline: 0; z-index: 2;
+  padding: calc(env(safe-area-inset-top, 0px) + 12px) 18px 14px;
+  display: flex; justify-content: space-between; align-items: center;
+  background: linear-gradient(to bottom, rgba(46,28,18,.85), rgba(46,28,18,0));
+}
+.bar a { color: var(--sand); text-decoration: none; font-weight: 600; }
+.word { font-family: "Reem Kufi", sans-serif; font-size: 26px; }
+.panel {
+  position: fixed; bottom: 0; inset-inline: 0; z-index: 2;
+  padding: 18px 20px calc(env(safe-area-inset-bottom, 0px) + 22px);
+  background: linear-gradient(to top, rgba(46,28,18,.92), rgba(46,28,18,0));
+  text-align: center;
+}
+.meter { height: 8px; border-radius: 9px; background: rgba(250,243,230,.18); overflow: hidden; max-width: 420px; margin: 0 auto 12px; }
+.meter i { display: block; height: 100%; width: 0; background: var(--honey); transition: width .2s; }
+#status { font-size: 17px; font-weight: 600; margin: 0 0 6px; }
+#hint { font-size: 14px; margin: 0 auto; max-width: 42ch; line-height: 1.7; opacity: .85; }
+.start {
+  margin-top: 14px; border: 0; border-radius: 14px; padding: 14px 26px;
+  background: var(--honey); color: var(--ink); font: 600 17px/1 inherit; font-family: inherit; cursor: pointer;
+}
+.start:focus-visible { outline: 3px solid var(--sand); outline-offset: 2px; }
+</style>
+</head>
+<body>
+<video id="cam" playsinline muted></video>
+<canvas id="overlay"></canvas>
+
+<header class="bar">
+  <a href="./">رجوع للخريطة</a>
+  <span class="word">وسمي</span>
+</header>
+
+<section class="panel" aria-live="polite">
+  <div class="meter" aria-hidden="true"><i id="level"></i></div>
+  <p id="status">كاشف الفقع</p>
+  <p id="hint">امشِ بهدوء ووجّه الكاميرا للأرض. الكاشف يحلل الصورة بشكل مباشر، ويصفّر لما يشك بفقعة، ويسرّع الصفير كل ما قربت.</p>
+  <button class="start" id="start" type="button">شغّل الكاشف</button>
+</section>
+
+<script>
+// Detector model hook: when the trained model is ready it is loaded from ./model/ and set here.
+// It must return [{x, y, w, h, score}] in video pixel coordinates.
+window.WASMI_DETECT = null;
+
+const video = document.getElementById('cam');
+const canvas = document.getElementById('overlay');
+const ctx = canvas.getContext('2d');
+const statusEl = document.getElementById('status');
+const hintEl = document.getElementById('hint');
+const levelEl = document.getElementById('level');
+
+let audio = null, lastBeep = 0;
+function beep(confidence) {
+  if (!audio) return;
+  const now = performance.now();
+  const gap = 900 - 750 * confidence; // faster beeps when more confident
+  if (now - lastBeep < gap) return;
+  lastBeep = now;
+  const o = audio.createOscillator(), g = audio.createGain();
+  o.frequency.value = 600 + 600 * confidence;
+  g.gain.setValueAtTime(0.0001, audio.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.3, audio.currentTime + 0.01);
+  g.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + 0.12);
+  o.connect(g).connect(audio.destination);
+  o.start(); o.stop(audio.currentTime + 0.13);
+  if (navigator.vibrate) navigator.vibrate(confidence > 0.75 ? 120 : 40);
+}
+
+function draw(boxes) {
+  canvas.width = canvas.clientWidth; canvas.height = canvas.clientHeight;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const sx = canvas.width / (video.videoWidth || 1), sy = canvas.height / (video.videoHeight || 1);
+  const s = Math.max(sx, sy);
+  const ox = (canvas.width - video.videoWidth * s) / 2, oy = (canvas.height - video.videoHeight * s) / 2;
+  for (const b of boxes) {
+    ctx.strokeStyle = b.score > 0.75 ? '#A5552E' : '#C98F3E';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(ox + b.x * s, oy + b.y * s, b.w * s, b.h * s);
+  }
+}
+
+async function loop() {
+  if (window.WASMI_DETECT) {
+    const boxes = (await window.WASMI_DETECT(video)).filter(b => b.score >= 0.45);
+    const best = boxes.reduce((m, b) => Math.max(m, b.score), 0);
+    levelEl.style.width = Math.round(best * 100) + '%';
+    draw(boxes);
+    if (best >= 0.45) {
+      beep(best);
+      statusEl.textContent = best > 0.75 ? 'فيه علامة فقعة قدامك' : 'يشك بشي… قرّب شوي';
+    } else {
+      statusEl.textContent = 'يدوّر…';
+    }
+  }
+  requestAnimationFrame(loop);
+}
+
+document.getElementById('start').addEventListener('click', async () => {
+  try {
+    audio = new (window.AudioContext || window.webkitAudioContext)();
+    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
+    video.srcObject = stream;
+    await video.play();
+    document.getElementById('start').hidden = true;
+    if (window.WASMI_DETECT) {
+      statusEl.textContent = 'يدوّر…';
+    } else {
+      statusEl.textContent = 'الكاميرا شغالة، والكاشف تحت التدريب';
+      hintEl.textContent = 'نعلّم الكاشف الحين على صور الفقع تحت التراب. أول ما يجهز بيشتغل هنا مباشرة بدون أي تحديث منك.';
+    }
+    loop();
+  } catch (e) {
+    statusEl.textContent = 'ما قدرنا نفتح الكاميرا';
+    hintEl.textContent = 'اسمح للمتصفح يستخدم الكاميرا من الإعدادات، وبعدين اضغط شغّل الكاشف مرة ثانية.';
+  }
+});
+</script>
+</body>
+</html>
