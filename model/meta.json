@@ -1,10 +1,11 @@
 {
- "imgsz": 320,
+ "imgsz": 640,
  "classes": [
   "truffle"
  ],
- "trained_at": "2026-10-04T18:49:20Z",
+ "trained_at": "2026-10-04T23:49:07Z",
  "images": 18,
  "positives": 16,
- "map50": 0.988
+ "synthetic": 32,
+ "map50": 0.964
 }
