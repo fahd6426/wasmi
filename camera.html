@@ -39,6 +39,7 @@ canvas { pointer-events: none; }
 .start:focus-visible { outline: 3px solid var(--sand); outline-offset: 2px; }
 .guide { list-style: none; margin: 12px auto 0; padding: 0; max-width: 360px; text-align: right; display: grid; gap: 8px; }
 .guide li { display: flex; gap: 10px; align-items: flex-start; background: rgba(250,243,230,.08); border-radius: 12px; padding: 10px 12px; font-size: 15px; line-height: 1.6; }
+.guide .ic { display: inline-flex; vertical-align: middle; padding: 3px 6px; margin-left: 4px; border-radius: 8px; background: rgba(250,243,230,.16); color: var(--sand); font-style: normal; }
 .guide b { flex: none; width: 24px; height: 24px; border-radius: 50%; background: var(--honey); color: var(--ink); display: grid; place-items: center; font-size: 13px; }
 </style>
 </head>
@@ -183,8 +184,12 @@ function device() {
   const inApp = /Instagram|FBAN|FBAV|Snapchat|Twitter|TikTok|musical_ly|Line\//i.test(ua);
   const chrome = /CriOS|Chrome/.test(ua) && !/Edg|SamsungBrowser|OPR/.test(ua);
   const samsung = /SamsungBrowser/.test(ua);
-  return { ios, android, inApp, chrome, samsung };
+  const vm = ua.match(/Version\/(\d+)/);
+  const safariVersion = vm ? parseInt(vm[1], 10) : 0;
+  return { ios, android, inApp, chrome, samsung, safariVersion };
 }
+
+const PAGE_ICON = '<svg width="26" height="22" viewBox="0 0 26 22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="5" y="1.5" width="16" height="10" rx="3"/><path d="M4 16h18M4 20.5h18"/></svg>';
 
 function stepsFor(d) {
   if (d.inApp) return [
@@ -196,6 +201,11 @@ function stepsFor(d) {
     'افتح تطبيق الإعدادات بجوالك',
     'انزل لـ Chrome واضغطه',
     'فعّل "الكاميرا"، وارجع هنا'
+  ];
+  if (d.ios && d.safariVersion >= 26) return [
+    { icon: PAGE_ICON, text: 'اضغط هالرمز اللي بآخر شريط الموقع' },
+    'اضغط النقاط الثلاث ⋯ تحت على اليسار',
+    'انزل لآخر القائمة، وفعّل "الكاميرا"'
   ];
   if (d.ios) return [
     'اضغط "aA" بشريط العنوان',
@@ -226,7 +236,14 @@ function showGuide(title, hint, steps) {
   (steps || []).forEach((s, i) => {
     const li = document.createElement('li');
     const b = document.createElement('b'); b.textContent = String(i + 1);
-    const span = document.createElement('span'); span.textContent = s;
+    const span = document.createElement('span');
+    if (typeof s === 'string') {
+      span.textContent = s;
+    } else {
+      const ic = document.createElement('i');
+      ic.className = 'ic'; ic.innerHTML = s.icon;
+      span.append(ic, document.createTextNode(' ' + s.text));
+    }
     li.append(b, span); guideEl.appendChild(li);
   });
   guideEl.hidden = !(steps && steps.length);
