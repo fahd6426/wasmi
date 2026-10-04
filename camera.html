@@ -37,6 +37,9 @@ canvas { pointer-events: none; }
   background: var(--honey); color: var(--ink); font: 600 17px/1 inherit; font-family: inherit; cursor: pointer;
 }
 .start:focus-visible { outline: 3px solid var(--sand); outline-offset: 2px; }
+.guide { list-style: none; margin: 12px auto 0; padding: 0; max-width: 360px; text-align: right; display: grid; gap: 8px; }
+.guide li { display: flex; gap: 10px; align-items: flex-start; background: rgba(250,243,230,.08); border-radius: 12px; padding: 10px 12px; font-size: 15px; line-height: 1.6; }
+.guide b { flex: none; width: 24px; height: 24px; border-radius: 50%; background: var(--honey); color: var(--ink); display: grid; place-items: center; font-size: 13px; }
 </style>
 </head>
 <body>
@@ -52,6 +55,7 @@ canvas { pointer-events: none; }
   <div class="meter" aria-hidden="true"><i id="level"></i></div>
   <p id="status">كاشف الفقع</p>
   <p id="hint">امشِ بهدوء ووجّه الكاميرا للأرض. الكاشف يحلل الصورة بشكل مباشر، ويصفّر لما يشك بفقعة، ويسرّع الصفير كل ما قربت.</p>
+  <ol class="guide" id="guide" hidden></ol>
   <button class="start" id="start" type="button">شغّل الكاشف</button>
 </section>
 
@@ -169,26 +173,104 @@ async function loop() {
   requestAnimationFrame(loop);
 }
 
-document.getElementById('start').addEventListener('click', async () => {
-  try {
-    audio = new (window.AudioContext || window.webkitAudioContext)();
-    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
-    video.srcObject = stream;
-    await video.play();
-    document.getElementById('start').hidden = true;
-    statusEl.textContent = 'نجهّز الكاشف…';
-    await detectorReady;
-    if (window.WASMI_DETECT) {
-      statusEl.textContent = 'يدوّر…';
-    } else {
-      statusEl.textContent = 'الكاميرا شغالة، والكاشف تحت التدريب';
-      hintEl.textContent = 'نعلّم الكاشف الحين على صور الفقع تحت التراب. أول ما يجهز بيشتغل هنا مباشرة بدون أي تحديث منك.';
-    }
-    loop();
-  } catch (e) {
-    statusEl.textContent = 'ما قدرنا نفتح الكاميرا';
-    hintEl.textContent = 'اسمح للمتصفح يستخدم الكاميرا من الإعدادات، وبعدين اضغط شغّل الكاشف مرة ثانية.';
+const startBtn = document.getElementById('start');
+const guideEl = document.getElementById('guide');
+
+function device() {
+  const ua = navigator.userAgent;
+  const ios = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const android = /Android/.test(ua);
+  const inApp = /Instagram|FBAN|FBAV|Snapchat|Twitter|TikTok|musical_ly|Line\//i.test(ua);
+  const chrome = /CriOS|Chrome/.test(ua) && !/Edg|SamsungBrowser|OPR/.test(ua);
+  const samsung = /SamsungBrowser/.test(ua);
+  return { ios, android, inApp, chrome, samsung };
+}
+
+function stepsFor(d) {
+  if (d.inApp) return [
+    'افتح الصفحة بمتصفح الجوال: اضغط النقاط الثلاث ⋯ فوق',
+    d.ios ? 'اختار "فتح في سفاري"' : 'اختار "فتح في المتصفح"',
+    'واضغط "شغّل الكاشف" من هناك'
+  ];
+  if (d.ios && d.chrome) return [
+    'افتح تطبيق الإعدادات بجوالك',
+    'انزل لـ Chrome واضغطه',
+    'فعّل "الكاميرا"، وارجع هنا'
+  ];
+  if (d.ios) return [
+    'اضغط "aA" بشريط العنوان',
+    'اختار "إعدادات موقع الويب"',
+    'خلّ "الكاميرا" على "سماح"'
+  ];
+  if (d.android && d.samsung) return [
+    'اضغط رمز القفل 🔒 جنب الرابط',
+    'اختار "الأذونات"',
+    'فعّل "الكاميرا"'
+  ];
+  if (d.android) return [
+    'اضغط الرمز اللي جنب الرابط فوق',
+    'اختار "الأذونات"',
+    'خلّ "الكاميرا" على "سماح"'
+  ];
+  return [
+    'اضغط رمز الكاميرا أو القفل بشريط العنوان',
+    'خلّ "الكاميرا" على "سماح"',
+    'وحدّث الصفحة'
+  ];
+}
+
+function showGuide(title, hint, steps) {
+  statusEl.textContent = title;
+  hintEl.textContent = hint;
+  guideEl.innerHTML = '';
+  (steps || []).forEach((s, i) => {
+    const li = document.createElement('li');
+    const b = document.createElement('b'); b.textContent = String(i + 1);
+    const span = document.createElement('span'); span.textContent = s;
+    li.append(b, span); guideEl.appendChild(li);
+  });
+  guideEl.hidden = !(steps && steps.length);
+  startBtn.textContent = 'جرّب مرة ثانية';
+  startBtn.hidden = false;
+}
+
+startBtn.addEventListener('click', async () => {
+  const d = device();
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    showGuide('متصفحك ما يدعم الكاميرا هنا', 'افتح الصفحة بسفاري أو كروم.', d.inApp ? stepsFor(d) : []);
+    return;
   }
+  let stream;
+  try {
+    audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+    stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
+  } catch (e) {
+    const n = e && e.name;
+    if (n === 'NotAllowedError' || n === 'SecurityError' || n === 'PermissionDeniedError') {
+      showGuide('الكاشف يحتاج إذن الكاميرا', 'عشان نفعّله، سوّ هالخطوات وبعدها اضغط "جرّب مرة ثانية":', stepsFor(d));
+    } else if (n === 'NotReadableError' || n === 'TrackStartError') {
+      showGuide('الكاميرا مستخدمة بتطبيق ثاني', 'سكّر أي تطبيق يستخدم الكاميرا (مثل سناب أو مكالمة فيديو)، وجرّب مرة ثانية.', []);
+    } else if (n === 'NotFoundError' || n === 'OverconstrainedError') {
+      showGuide('ما لقينا كاميرا بجهازك', 'جرّب من الجوال عشان تستخدم الكاميرا الخلفية.', []);
+    } else {
+      showGuide('ما قدرنا نفتح الكاميرا', 'جرّب مرة ثانية، ولو تكرر افتح الصفحة بسفاري أو كروم.', d.inApp ? stepsFor(d) : []);
+    }
+    return;
+  }
+  guideEl.hidden = true;
+  startBtn.hidden = true;
+  video.srcObject = stream;
+  try { await video.play(); } catch (e) {}
+  statusEl.textContent = 'نجهّز الكاشف…';
+  hintEl.textContent = 'امشِ بهدوء ووجّه الكاميرا للأرض.';
+  await detectorReady;
+  if (window.WASMI_DETECT) {
+    statusEl.textContent = 'يدوّر…';
+  } else {
+    statusEl.textContent = 'الكاميرا شغالة، والكاشف تحت التدريب';
+    hintEl.textContent = 'نعلّم الكاشف الحين على صور الفقع تحت التراب. أول ما يجهز بيشتغل هنا مباشرة بدون أي تحديث منك.';
+  }
+  loop();
 });
 </script>
 </body>
