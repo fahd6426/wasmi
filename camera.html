@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@700&family=IBM+Plex+Sans+Arabic:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <style>
 :root { --sand:#FAF3E6; --honey:#C98F3E; --clay:#A5552E; --earth:#5A331C; --ink:#2E1C12; }
 * { box-sizing: border-box; }
@@ -40,6 +41,19 @@ canvas { pointer-events: none; }
 .guide[hidden], .start[hidden], .zoom[hidden] { display: none; }
 .zoom { position: fixed; z-index: 3; inset-inline-end: 16px; top: calc(env(safe-area-inset-top, 0px) + 64px); min-width: 56px; min-height: 44px; border-radius: 999px; border: 1.5px solid var(--sand); background: rgba(46,28,18,.55); color: var(--sand); font: 600 16px 'IBM Plex Sans Arabic', sans-serif; cursor: pointer; }
 .zoom[aria-pressed="true"] { background: var(--honey); color: var(--ink); border-color: var(--honey); }
+.trackbtn { position: fixed; z-index: 3; inset-inline-end: 16px; top: calc(env(safe-area-inset-top, 0px) + 118px); min-height: 44px; padding: 0 14px; border-radius: 999px; border: 1.5px solid var(--sand); background: rgba(46,28,18,.55); color: var(--sand); font: 600 15px 'IBM Plex Sans Arabic', sans-serif; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+.trackbtn[hidden], .sheet[hidden] { display: none; }
+.sheet { position: fixed; inset: 0; z-index: 10; background: var(--ink); display: flex; flex-direction: column; padding-top: env(safe-area-inset-top, 0px); }
+.sheet header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; }
+.sheet header strong { font-size: 18px; }
+.sheet header button, .sheet .row button { min-height: 44px; padding: 0 16px; border-radius: 12px; border: 0; font: 600 15px 'IBM Plex Sans Arabic', sans-serif; cursor: pointer; }
+.sheet header button { background: var(--sand); color: var(--ink); }
+#trackmap { flex: 1; min-height: 0; background: #3b2a1f; }
+.sheet .row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 16px calc(env(safe-area-inset-bottom, 0px) + 14px); }
+.sheet .stats { display: flex; gap: 18px; font-size: 14px; }
+.sheet .stats b { display: block; font-family: 'Reem Kufi', sans-serif; font-size: 22px; color: var(--honey); }
+.sheet .row button { background: transparent; color: var(--sand); border: 1.5px solid rgba(250,243,230,.4); }
+#tracknote { padding: 0 16px 6px; font-size: 13px; opacity: .8; min-height: 1em; }
 #cam, #overlay { transform-origin: 50% 50%; transition: transform .2s; }
 .guide { list-style: none; margin: 12px auto 0; padding: 0; max-width: 360px; text-align: right; display: grid; gap: 8px; }
 .guide li { display: flex; gap: 10px; align-items: flex-start; background: rgba(250,243,230,.08); border-radius: 12px; padding: 10px 12px; font-size: 15px; line-height: 1.6; }
@@ -51,6 +65,16 @@ canvas { pointer-events: none; }
 <video id="cam" playsinline muted></video>
 <canvas id="overlay"></canvas>
 <button class="zoom" id="zoom" type="button" aria-pressed="false" hidden>2x</button>
+<button class="trackbtn" id="trackbtn" type="button" hidden><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/></svg>مساري</button>
+<div class="sheet" id="sheet" hidden role="dialog" aria-label="المكان اللي مشيته">
+  <header><strong>المكان اللي مشيته</strong><button type="button" id="sheetclose">رجوع للكاشف</button></header>
+  <div id="trackmap"></div>
+  <p id="tracknote"></p>
+  <div class="row">
+    <div class="stats"><span><b id="tdist">0</b>متر مشيته</span><span><b id="tarea">0</b>م² فحصتها</span><span><b id="tmarks">0</b>علامات</span></div>
+    <button type="button" id="trackclear">مسح المسار</button>
+  </div>
+</div>
 
 <header class="bar">
   <a href="./">رجوع للخريطة</a>
@@ -183,6 +207,7 @@ async function loop() {
     draw(boxes);
     if (best >= 0.3) {
       beep(best);
+      if (best > 0.75) markSign();
       statusEl.textContent = best > 0.75 ? 'فيه علامة فقعة قدامك' : 'يشك بشي… قرّب شوي';
     } else {
       statusEl.textContent = 'يدوّر…';
@@ -305,6 +330,8 @@ startBtn.addEventListener('click', async () => {
     hintEl.textContent = 'نعلّم الكاشف الحين على صور الفقع تحت التراب. أول ما يجهز بيشتغل هنا مباشرة بدون أي تحديث منك.';
   }
   zoomBtn.hidden = !window.WASMI_DETECT;
+  document.getElementById('trackbtn').hidden = false;
+  startTracking();
   loop();
 });
 
@@ -316,6 +343,79 @@ zoomBtn.addEventListener('click', () => {
   const t = MODEL.zoom ? 'scale(2)' : '';
   video.style.transform = t; canvas.style.transform = t;
 });
+
+// ---- walked-path coverage ----
+const SWATH_M = 3; // ground width the camera covers while walking
+const TRACK_KEY = 'wasmi-track-' + new Date().toISOString().slice(0, 10);
+const TRACK = { pts: [], marks: [], watch: null, map: null, layer: null };
+try { const s = JSON.parse(localStorage.getItem(TRACK_KEY) || 'null'); if (s) { TRACK.pts = s.pts || []; TRACK.marks = s.marks || []; } } catch (e) {}
+function saveTrack() { try { localStorage.setItem(TRACK_KEY, JSON.stringify({ pts: TRACK.pts, marks: TRACK.marks })); } catch (e) {} }
+function distM(a, b) {
+  const R = 6371000, toR = Math.PI / 180;
+  const dLat = (b[0] - a[0]) * toR, dLon = (b[1] - a[1]) * toR;
+  const x = Math.sin(dLat / 2) ** 2 + Math.cos(a[0] * toR) * Math.cos(b[0] * toR) * Math.sin(dLon / 2) ** 2;
+  return 2 * R * Math.asin(Math.sqrt(x));
+}
+function totalDist() { let d = 0; for (let i = 1; i < TRACK.pts.length; i++) { const g = distM(TRACK.pts[i - 1], TRACK.pts[i]); if (g < 60) d += g; } return d; }
+function startTracking() {
+  if (!navigator.geolocation || TRACK.watch !== null) return;
+  TRACK.watch = navigator.geolocation.watchPosition((p) => {
+    if (p.coords.accuracy > 30) return;
+    const pt = [p.coords.latitude, p.coords.longitude];
+    const last = TRACK.pts[TRACK.pts.length - 1];
+    if (!last || distM(last, pt) >= 2) { TRACK.pts.push(pt); saveTrack(); if (TRACK.map) drawTrack(); }
+    TRACK.here = pt;
+  }, () => { document.getElementById('tracknote').textContent = 'فعّل خدمة الموقع عشان نرسم المكان اللي مشيته.'; }, { enableHighAccuracy: true, maximumAge: 2000, timeout: 20000 });
+}
+let lastMark = 0;
+function markSign() {
+  const now = Date.now();
+  if (!TRACK.here || now - lastMark < 8000) return;
+  const near = TRACK.marks.some(m => distM(m, TRACK.here) < 4);
+  if (near) return;
+  lastMark = now; TRACK.marks.push(TRACK.here.slice()); saveTrack(); if (TRACK.map) drawTrack();
+}
+function loadLeaflet() {
+  if (window.L) return Promise.resolve();
+  return new Promise((res, rej) => { const s = document.createElement('script'); s.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js'; s.onload = res; s.onerror = rej; document.head.appendChild(s); });
+}
+function drawTrack() {
+  if (!TRACK.layer) return;
+  TRACK.layer.clearLayers();
+  let seg = [];
+  const flush = () => { if (seg.length) { for (const p of seg) L.circle(p, { radius: SWATH_M / 2, stroke: false, fillColor: '#C98F3E', fillOpacity: 0.45 }).addTo(TRACK.layer); if (seg.length > 1) L.polyline(seg, { color: '#FAF3E6', weight: 2, opacity: 0.8 }).addTo(TRACK.layer); } seg = []; };
+  for (let i = 0; i < TRACK.pts.length; i++) {
+    if (i && distM(TRACK.pts[i - 1], TRACK.pts[i]) >= 60) flush();
+    seg.push(TRACK.pts[i]);
+  }
+  flush();
+  for (const m of TRACK.marks) L.circleMarker(m, { radius: 8, color: '#FAF3E6', weight: 2, fillColor: '#A5552E', fillOpacity: 1 }).bindTooltip('علامة فقع محتملة').addTo(TRACK.layer);
+  if (TRACK.here) L.circleMarker(TRACK.here, { radius: 7, color: '#FAF3E6', weight: 3, fillColor: '#2E1C12', fillOpacity: 1 }).addTo(TRACK.layer);
+  const d = totalDist();
+  document.getElementById('tdist').textContent = Math.round(d).toLocaleString('ar');
+  document.getElementById('tarea').textContent = Math.round(d * SWATH_M).toLocaleString('ar');
+  document.getElementById('tmarks').textContent = TRACK.marks.length.toLocaleString('ar');
+  if (!TRACK.pts.length && !TRACK.here) document.getElementById('tracknote').textContent = 'امشِ والكاشف شغال، وبيترسم مسارك هنا.';
+  else document.getElementById('tracknote').textContent = 'الأماكن الملونة فحصها الكاشف. دوّر بالأماكن اللي ما تلونت.';
+}
+async function openSheet() {
+  document.getElementById('sheet').hidden = false;
+  try {
+    await loadLeaflet();
+    if (!TRACK.map) {
+      TRACK.map = L.map('trackmap', { zoomControl: false, preferCanvas: true });
+      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 20, maxNativeZoom: 19, attribution: 'Esri' }).addTo(TRACK.map);
+      TRACK.layer = L.layerGroup().addTo(TRACK.map);
+    }
+    const c = TRACK.here || TRACK.pts[TRACK.pts.length - 1];
+    TRACK.map.setView(c || [27.5, 41.7], c ? 19 : 6);
+    setTimeout(() => TRACK.map.invalidateSize(), 50);
+    drawTrack();
+  } catch (e) { document.getElementById('tracknote').textContent = 'ما قدرنا نحمّل الخريطة، تأكد من الإنترنت.'; }
+}
+document.getElementById('trackbtn').addEventListener('click', openSheet);
+document.getElementById('sheetclose').addEventListener('click', () => { document.getElementById('sheet').hidden = true; });
+document.getElementById('trackclear').addEventListener('click', () => { TRACK.pts = []; TRACK.marks = []; saveTrack(); drawTrack(); });
 </script>
 </body>
 </html>
