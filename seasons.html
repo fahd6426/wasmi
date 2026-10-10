@@ -1,1 +1,61 @@
-<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><link rel="canonical" href="https://wasmii.com/"><meta http-equiv="refresh" content="0; url=/"><title>وسمي</title></head><body><a href="/">وسمي</a></body></html>
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>تقويم مواسم البر | وسمي</title>
+<meta name="description" content="تقويم مواسم البر في السعودية: الوسم، المربعانية، الشبط، العقارب، سهيل وغيرها، مع الطوالع وتواريخ كل موسم والموسم الحالي.">
+<link rel="canonical" href="https://wasmii.com/seasons.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@500;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+<style>
+.grid{display:grid;gap:14px;margin:8px 0 22px}
+.s{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 18px 14px}
+.s.cur{border:2px solid var(--honey)}
+.s .top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.s h3{font-size:24px}.s .rng{font-size:14px;color:var(--terra);font-weight:700}
+.tag{display:inline-block;background:var(--honey);color:#fff;font-size:12px;border-radius:999px;padding:1px 10px;margin-inline-start:6px;vertical-align:middle;font-family:'Tajawal'}
+.s .st{font-size:14px;color:var(--muted);margin:2px 0 8px}.s p{font-size:15.5px}.s p b{color:var(--terra)}
+@media(min-width:700px){.grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<nav class="nav"><div class="wrap">
+<a class="logo" href="/">وسمي</a>
+<button class="burger" aria-label="القائمة" onclick="document.querySelector('.menu').classList.toggle('open')">☰</button>
+<ul class="menu">
+<li><a href="/">الرئيسية</a></li>
+<li><a href="/seasons.html" class="on">تقويم المواسم</a></li>
+<li><a class="wx" href="https://ncm.gov.sa" target="_blank" rel="noopener">الطقس الرسمي ↗</a></li>
+</ul></div></nav>
+<main class="wrap">
+<h1 style="font-size:30px;margin:26px 0 2px">تقويم مواسم البر</h1>
+<p style="color:var(--muted)">مواسم السنة وطوالعها كما يعرفها أهل البر من الأولين</p>
+<section class="now" id="now" style="margin:20px 0"></section>
+<div class="grid" id="grid"></div>
+<p style="font-size:13.5px;color:var(--muted)">التواريخ حسب تقويم د. عبدالله المسند، وقد تختلف بيوم أو يومين بين التقاويم. الأوصاف معلومات تراثية وليست توقعات جوية.</p>
+</main>
+<footer class="wrap foot">
+<div class="links"><a href="/about.html">من نحن</a><a href="/about.html#contact">تواصل معنا</a><a href="/privacy.html">سياسة الخصوصية</a></div>
+<p>وسمي ليس جهة أرصاد، ولا يقدّم توقعات أو تنبيهات جوية. للطقس والتنبيهات: <a href="https://ncm.gov.sa" target="_blank" rel="noopener">المركز الوطني للأرصاد</a>.</p>
+<p>© <span id="yr"></span> وسمي</p>
+</footer>
+<script>document.getElementById('yr').textContent=new Date().getFullYear()</script>
+<script src="/seasons-data.js"></script>
+<script>
+const q=seasonNow(),s0=S[q.cur];
+document.getElementById('now').innerHTML=`<small>الموسم الحالي</small><h2>${s0.n}</h2>
+<div class="dates">${gF.format(q.cs)} – ${gF.format(q.end)}${hF?' · '+hF.format(q.cs):''}</div>
+<div class="bar"><i style="width:${Math.round(q.day/q.len*100)}%"></i></div>
+<div class="meta"><span>اليوم ${AR(q.day)} من ${AR(q.len)}</span><span>الطوالع: ${s0.t}</span></div>
+<div class="next"><span>باقي على <strong>${S[q.nx].n}</strong> <b>${AR(q.left)}</b> ${daysWord(q.left)}</span></div>`;
+let html='';
+for(let k=0;k<S.length;k++){const i=(q.cur+k)%S.length,s=S[i],j=(i+1)%S.length;
+const a=new Date(2027,s.m-1,s.d);let b=new Date(2027,S[j].m-1,S[j].d);if(b<=a)b=new Date(2028,S[j].m-1,S[j].d);
+const L=Math.round((b-a)/MS),e=new Date(b-MS);
+html+=`<article class="s${k===0?' cur':''}"><div class="top"><h3>${s.n}${k===0?'<span class="tag">الحين</span>':''}</h3><span class="rng">${gF.format(a)} – ${gF.format(e)}</span></div>
+<div class="st">${AR(L)} يوم · الطوالع: ${s.t}</div><p><b>من التراث:</b> ${s.h}</p>${s.b?`<p><b>بالبر:</b> ${s.b}</p>`:''}</article>`}
+document.getElementById('grid').innerHTML=html;
+</script></body>
+</html>
