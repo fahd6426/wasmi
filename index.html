@@ -17,6 +17,7 @@
 <ul class="menu">
 <li><a href="/" class="on">الرئيسية</a></li>
 <li><a href="/seasons.html">تقويم المواسم</a></li>
+<li><a href="/plants.html">نباتات البر</a></li>
 <li><a class="wx" href="https://ncm.gov.sa" target="_blank" rel="noopener">الطقس الرسمي ↗</a></li>
 </ul></div></nav>
 <main class="wrap">
@@ -26,6 +27,7 @@
 </section>
 <section class="now" id="now"></section>
 <section class="sec" id="thisSeason"></section>
+<section class="sec" id="week"></section>
 </main>
 <footer class="wrap foot">
 <div class="links"><a href="/about.html">من نحن</a><a href="/about.html#contact">تواصل معنا</a><a href="/privacy.html">سياسة الخصوصية</a></div>
@@ -33,7 +35,7 @@
 <p>© <span id="yr"></span> وسمي</p>
 </footer>
 <script>document.getElementById('yr').textContent=new Date().getFullYear()</script>
-<script src="/seasons-data.js"></script>
+<script src="/seasons-data.js"></script><script src="/plants-data.js"></script>
 <script>
 const q=seasonNow(),s=S[q.cur];
 document.getElementById('now').innerHTML=`<small>الموسم الحالي</small><h2>${s.n}</h2>
@@ -41,7 +43,12 @@ document.getElementById('now').innerHTML=`<small>الموسم الحالي</smal
 <div class="bar"><i style="width:${Math.round(q.day/q.len*100)}%"></i></div>
 <div class="meta"><span>اليوم ${AR(q.day)} من ${AR(q.len)}</span><span>الطوالع: ${s.t}</span></div>
 <div class="next"><span>باقي على <strong>${S[q.nx].n}</strong> <b>${AR(q.left)}</b> ${daysWord(q.left)}</span><a class="btn" href="/seasons.html">شوف التقويم كامل</a></div>`;
+const sp=PL.filter(p=>p.s.includes(s.n));
 document.getElementById('thisSeason').innerHTML=`<h2>هذا الموسم بالبر</h2><div class="card">
-<p><b style="color:var(--terra)">من التراث:</b> ${s.h}</p>${s.b?`<p><b style="color:var(--terra)">بالبر:</b> ${s.b}</p>`:''}</div>`;
+<p><b style="color:var(--terra)">من التراث:</b> ${s.h}</p>${s.b?`<p><b style="color:var(--terra)">بالبر:</b> ${s.b}</p>`:''}
+${sp.length?`<p><b style="color:var(--terra)">نباتات موسمه:</b> ${sp.map(p=>`<a href="/plants.html#${p.id}">${p.n}</a>`).join('، ')}</p>`:''}</div>`;
+const wk=Math.floor((Date.now()/864e5+3)/7),w=PL[wk%PL.length];
+document.getElementById('week').innerHTML=`<h2>نبتة الأسبوع</h2><a class="pc" href="/plants.html#${w.id}" style="max-width:520px">
+<div class="ph" style="${w.img?`background-image:url('${w.img}')`:''}">${w.img?'':'🌿'}</div><div class="bd"><h3>${w.n}</h3><div class="sci">${w.sci}</div><p>${w.d}</p></div></a>`;
 </script></body>
 </html>
