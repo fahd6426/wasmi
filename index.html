@@ -29,14 +29,8 @@
 <section class="now" id="now"></section>
 <section class="sec" id="thisSeason"></section>
 <!--HOME-->
-<section class="sec" id="shop" hidden><div class="shead"><h2>مستلزمات البر</h2></div><div class="rail" id="shopRail"></div>
-<p class="disc">روابط أمازون: إذا اشتريت عن طريقها ياخذ وسمي عمولة من أمازون بدون أي زيادة عليك. الأسعار من أمازون السعودية وقت آخر تحديث <span id="shopUp"></span>، وقد تتغير.</p></section>
-<script>fetch('/data/products.json?v='+Date.now()).then(r=>r.json()).then(d=>{if(!d.items||!d.items.length)return;
-const e=s=>String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');const f=n=>Number(n).toLocaleString('ar-SA',{maximumFractionDigits:2});
-document.getElementById('shopRail').innerHTML=d.items.map(x=>`<a class="pr" href="${e(x.u)}" target="_blank" rel="nofollow sponsored noopener"><div class="im"><img src="${e(x.i)}" alt="${e(x.t)}" loading="lazy"></div><div class="bd"><h3>${e(x.t)}</h3><div class="pp"><b>${f(x.p)} ر.س</b>${x.o&&x.o>x.p?`<s>${f(x.o)}</s>`:''}</div><span class="go">شوفه بأمازون</span></div></a>`).join('');
-document.getElementById('shopUp').textContent=new Intl.DateTimeFormat('ar-SA',{dateStyle:'medium',timeStyle:'short',timeZone:'Asia/Riyadh'}).format(new Date(d.updated));
-document.getElementById('shop').hidden=false}).catch(()=>{})</script>
 <section class="sec"><div class="tiles">
+<a class="tile t0" href="/store.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20L12 4l9 16H3z"/><path d="M12 4v16M9 20l3-5 3 5"/></svg><div><h3>مستلزمات البر</h3><p>خيام ودفايات وفوانيس وكل اللي تحتاجه للكشتة</p></div><span class="ar">‹</span></a>
 <a class="tile t1" href="/places.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.6"/></svg><div><h3>أماكن البر</h3><p>روضات ونفود وجبال، ووش تحتاج تعرف قبل تروح</p></div><span class="ar">‹</span></a>
 <a class="tile t2" href="/rules.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5.5c0 4.4-3 8.2-7 9.5-4-1.3-7-5.1-7-9.5V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg><div><h3>أنظمة البر</h3><p>تصريح التخييم، الممنوعات، والغرامات</p></div><span class="ar">‹</span></a>
 <a class="tile t3" href="/seasons.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><div><h3>تقويم المواسم</h3><p>مواسم السنة وطوالعها من الوسم للقيظ</p></div><span class="ar">‹</span></a>
