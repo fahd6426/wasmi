@@ -11,7 +11,7 @@ def nav(active):
     items = "".join(f'<li><a href="{h}"{" class=\"on\"" if h == active else ""}>{t}</a></li>' for h, t in MENU)
     return f'''<nav class="nav"><div class="wrap">
 <a class="logo" href="/">وسمي</a>
-<button class="burger" aria-label="القائمة" onclick="document.querySelector('.menu').classList.toggle('open')">☰</button>
+<button class="burger" aria-label="القائمة" onclick="this.classList.toggle('x');document.querySelector('.menu').classList.toggle('open')">☰</button>
 <ul class="menu">
 {items}
 <li><a class="wx" href="https://ncm.gov.sa" target="_blank" rel="noopener">الطقس الرسمي ↗</a></li>
@@ -265,7 +265,33 @@ def build_rules():
     with open(os.path.join(ROOT, "rules.html"), "w", encoding="utf-8") as f:
         f.write(page("أنظمة البر والتخييم وغراماتها | وسمي", "أنظمة البر في السعودية: تصريح التخييم من منصة نباتي ورسومه، ممنوعات الكشتة، ضوابط المحميات الملكية، وغرامات الاحتطاب ودخول الروضات.", "/rules.html", "/rules.html", body, RCSS))
 
+ICONS = {
+ "pin": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.6"/></svg>',
+ "rule": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5.5c0 4.4-3 8.2-7 9.5-4-1.3-7-5.1-7-9.5V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg>',
+ "cal": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>',
+}
+TOPS = {"روضة": "linear-gradient(135deg,#7E8F4E,#A5552E)", "هضبة": "linear-gradient(135deg,#C98F3E,#8A5A2E)", "عروق رملية": "linear-gradient(135deg,#D9A35B,#A5552E)",
+        "صحراء رملية": "linear-gradient(135deg,#C2622F,#7A3A1C)", "جبال": "linear-gradient(135deg,#8A6A52,#5A331C)", "موقع أثري": "linear-gradient(135deg,#B07A4A,#5A331C)"}
+
+def build_home():
+    tiles = f'''<section class="sec"><div class="tiles">
+<a class="tile t1" href="/places.html">{ICONS["pin"]}<div><h3>أماكن البر</h3><p>روضات ونفود وجبال، ووش تحتاج تعرف قبل تروح</p></div><span class="ar">‹</span></a>
+<a class="tile t2" href="/rules.html">{ICONS["rule"]}<div><h3>أنظمة البر</h3><p>تصريح التخييم، الممنوعات، والغرامات</p></div><span class="ar">‹</span></a>
+<a class="tile t3" href="/seasons.html">{ICONS["cal"]}<div><h3>تقويم المواسم</h3><p>مواسم السنة وطوالعها من الوسم للقيظ</p></div><span class="ar">‹</span></a>
+</div></section>'''
+    rail = "".join(f'<a class="rc" href="/places/{p["slug"]}.html"><div class="tp" style="background:{TOPS.get(p["kind"], TOPS["جبال"])}">{p["kind"]}</div><div class="bd"><h3>{p["name"]}</h3><p>{p["region"]}</p></div></a>' for p in PLACES)
+    places = f'<section class="sec"><div class="shead"><h2>وين تكشت؟</h2><a href="/places.html">كل الأماكن ‹</a></div><div class="rail">{rail}</div></section>'
+    tips = '''<section class="sec"><div class="shead"><h2>قبل ما تطلع</h2><a href="/rules.html">الأنظمة كاملة ‹</a></div><div class="tips">
+<div class="tip"><b>الكشتة اليومية بدون تصريح</b>أما المبيت فيحتاج تصريح تخييم من منصة نباتي، ومجاني لين ١٠ أيام.</div>
+<div class="tip"><b>لا حطب محلي ولا فحم محلي</b>غرامة نقله أو جمعه تبدأ من ٥٠٠٠ ريال للمتر المكعب.</div>
+<div class="tip"><b>الروضات بدون سيارات</b>دخول المركبات للروضات المحمية غرامته ٥٠٠ ريال أول مرة.</div>
+</div></section>'''
+    p = os.path.join(ROOT, "index.html"); s = open(p, encoding="utf-8").read()
+    a, b = s.index("<!--HOME-->") + len("<!--HOME-->"), s.index("<!--/HOME-->")
+    open(p, "w", encoding="utf-8").write(s[:a] + "\n" + tiles + "\n" + places + "\n" + tips + "\n" + s[b:])
+
 if __name__ == "__main__":
     build_places()
     build_rules()
+    build_home()
     print("done")
