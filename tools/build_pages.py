@@ -267,6 +267,7 @@ def build_rules():
 ICONS = {
  "pin": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.6"/></svg>',
  "rule": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5.5c0 4.4-3 8.2-7 9.5-4-1.3-7-5.1-7-9.5V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg>',
+ "tent": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20L12 4l9 16H3z"/><path d="M12 4v16M9 20l3-5 3 5"/></svg>',
  "cal": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>',
 }
 TOPS = {"روضة": "linear-gradient(135deg,#7E8F4E,#A5552E)", "هضبة": "linear-gradient(135deg,#C98F3E,#8A5A2E)", "عروق رملية": "linear-gradient(135deg,#D9A35B,#A5552E)",
@@ -274,6 +275,7 @@ TOPS = {"روضة": "linear-gradient(135deg,#7E8F4E,#A5552E)", "هضبة": "line
 
 def build_home():
     tiles = f'''<section class="sec"><div class="tiles">
+<a class="tile t0" href="/store.html">{ICONS["tent"]}<div><h3>مستلزمات البر</h3><p>خيام ودفايات وفوانيس وكل اللي تحتاجه للكشتة</p></div><span class="ar">‹</span></a>
 <a class="tile t1" href="/places.html">{ICONS["pin"]}<div><h3>أماكن البر</h3><p>روضات ونفود وجبال، ووش تحتاج تعرف قبل تروح</p></div><span class="ar">‹</span></a>
 <a class="tile t2" href="/rules.html">{ICONS["rule"]}<div><h3>أنظمة البر</h3><p>تصريح التخييم، الممنوعات، والغرامات</p></div><span class="ar">‹</span></a>
 <a class="tile t3" href="/seasons.html">{ICONS["cal"]}<div><h3>تقويم المواسم</h3><p>مواسم السنة وطوالعها من الوسم للقيظ</p></div><span class="ar">‹</span></a>
@@ -285,18 +287,35 @@ def build_home():
 <div class="tip"><b>لا حطب محلي ولا فحم محلي</b>غرامة نقله أو جمعه تبدأ من ٥٠٠٠ ريال للمتر المكعب.</div>
 <div class="tip"><b>الروضات بدون سيارات</b>دخول المركبات للروضات المحمية غرامته ٥٠٠ ريال أول مرة.</div>
 </div></section>'''
-    shop = '''<section class="sec" id="shop" hidden><div class="shead"><h2>مستلزمات البر</h2></div><div class="rail" id="shopRail"></div>
-<p class="disc">روابط أمازون: إذا اشتريت عن طريقها ياخذ وسمي عمولة من أمازون بدون أي زيادة عليك. الأسعار من أمازون السعودية وقت آخر تحديث <span id="shopUp"></span>، وقد تتغير.</p></section>
-<script>fetch('/data/products.json?v='+Date.now()).then(r=>r.json()).then(d=>{if(!d.items||!d.items.length)return;
-const e=s=>String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');const f=n=>Number(n).toLocaleString('ar-SA',{maximumFractionDigits:2});
-document.getElementById('shopRail').innerHTML=d.items.map(x=>`<a class="pr" href="${e(x.u)}" target="_blank" rel="nofollow sponsored noopener"><div class="im"><img src="${e(x.i)}" alt="${e(x.t)}" loading="lazy"></div><div class="bd"><h3>${e(x.t)}</h3><div class="pp"><b>${f(x.p)} ر.س</b>${x.o&&x.o>x.p?`<s>${f(x.o)}</s>`:''}</div><span class="go">شوفه بأمازون</span></div></a>`).join('');
-document.getElementById('shopUp').textContent=new Intl.DateTimeFormat('ar-SA',{dateStyle:'medium',timeStyle:'short',timeZone:'Asia/Riyadh'}).format(new Date(d.updated));
-document.getElementById('shop').hidden=false}).catch(()=>{})</script>'''
     p = os.path.join(ROOT, "index.html"); s = open(p, encoding="utf-8").read()
     a, b = s.index("<!--HOME-->") + len("<!--HOME-->"), s.index("<!--/HOME-->")
-    open(p, "w", encoding="utf-8").write(s[:a] + "\n" + shop + "\n" + tiles + "\n" + places + "\n" + tips + "\n" + s[b:])
+    open(p, "w", encoding="utf-8").write(s[:a] + "\n" + tiles + "\n" + places + "\n" + tips + "\n" + s[b:])
+
+SCSS = """
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}@media(min-width:680px){.sg{grid-template-columns:repeat(3,1fr)}}@media(min-width:880px){.sg{grid-template-columns:repeat(4,1fr)}}
+.pr{text-decoration:none;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
+.pr .im{background:#fff;height:160px;padding:12px;border-bottom:1px solid var(--line)}.pr img{display:block;width:100%;height:100%;object-fit:contain}
+.pr .bd{padding:10px 12px 12px;display:flex;flex-direction:column;flex:1}.pr h2{font-size:14px;font-weight:500;line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pr .pp{margin-top:auto;padding-top:6px;display:flex;gap:6px;align-items:baseline;flex-wrap:wrap}.pr .pp b{color:var(--terra);font-size:17px}.pr .pp s{color:var(--muted);font-size:12.5px}
+.pr .go{display:block;margin-top:8px;text-align:center;background:var(--honey);color:#fff;font-weight:700;font-size:13.5px;border-radius:999px;padding:7px}
+.disc{font-size:13px;color:var(--muted);line-height:1.8}.load{color:var(--muted);text-align:center;padding:30px 0;grid-column:1/-1}
+"""
+
+def build_store():
+    body = '''<h1 style="font-size:30px;margin:26px 0 2px">مستلزمات البر</h1>
+<p style="color:var(--muted)">أغراض الكشتة والتخييم المناسبة لهالوقت من السنة، من أمازون السعودية.</p>
+<div class="sg" id="sg"><p class="load">جاري التحميل…</p></div>
+<p class="disc">روابط أمازون: إذا اشتريت عن طريقها ياخذ وسمي عمولة من أمازون بدون أي زيادة عليك. الأسعار من أمازون السعودية وقت آخر تحديث <span id="up"></span>، وقد تتغير.</p>
+<script>fetch('/data/products.json?v='+Date.now()).then(r=>r.json()).then(d=>{
+const e=s=>String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');const f=n=>Number(n).toLocaleString('ar-SA',{maximumFractionDigits:2});
+document.getElementById('sg').innerHTML=d.items.map(x=>`<a class="pr" href="${e(x.u)}" target="_blank" rel="nofollow sponsored noopener"><div class="im"><img src="${e(x.i)}" alt="${e(x.t)}" loading="lazy"></div><div class="bd"><h2>${e(x.t)}</h2><div class="pp"><b>${f(x.p)} ر.س</b>${x.o&&x.o>x.p?`<s>${f(x.o)}</s>`:''}</div><span class="go">شوفه بأمازون</span></div></a>`).join('');
+document.getElementById('up').textContent=new Intl.DateTimeFormat('ar-SA',{dateStyle:'medium',timeStyle:'short',timeZone:'Asia/Riyadh'}).format(new Date(d.updated));
+}).catch(()=>{document.getElementById('sg').innerHTML='<p class="load">ما قدرنا نجيب المنتجات، جرّب بعد شوي.</p>'})</script>'''
+    with open(os.path.join(ROOT, "store.html"), "w", encoding="utf-8") as f:
+        f.write(page("مستلزمات البر والتخييم | وسمي", "مستلزمات البر والكشتة والتخييم من أمازون السعودية: خيام، دفايات، فوانيس، كراسي رحلات، ترامس وأكياس نوم.", "/store.html", "/store.html", body, SCSS))
 
 if __name__ == "__main__":
+    build_store()
     build_places()
     build_rules()
     build_home()
