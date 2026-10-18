@@ -220,12 +220,11 @@ def build_rules():
     srcs = "".join(f'<li><a href="{u}" target="_blank" rel="noopener">{t}</a></li>' for t, u in RULES_SRC)
     body = f'''<h1 style="font-size:30px;margin:26px 0 2px">أنظمة البر</h1>
 <p style="color:var(--muted)">وش المسموح والممنوع بالكشتة والتخييم، والتصاريح والغرامات، من الأنظمة الرسمية.</p>
-<div class="toc"><a href="#tanazzuh">التنزه والتخييم</a><a href="#permit">تصريح التخييم</a><a href="#mamnu">الممنوعات</a><a href="#mahmiyat">المحميات الملكية</a><a href="#fines">الغرامات</a></div>
+<div class="toc"><a href="#tanazzuh">متى تحتاج تصريح؟</a><a href="#permit">تصريح التخييم</a><a href="#mamnu">الممنوعات</a><a href="#mahmiyat">المحميات الملكية</a><a href="#fines">الغرامات</a></div>
 
-<section class="rs"><h2 id="tanazzuh">الكشتة اليومية والتخييم</h2>
-<ul><li><b>الكشتة اليومية</b> (أقل من ٢٤ ساعة) ما تحتاج تصريح تخييم، لكنها تخضع لضوابط التنزه.</li>
-<li><b>التخييم والمبيت</b> يحتاج تصريح من المركز الوطني لتنمية الغطاء النباتي ومكافحة التصحر.</li>
-<li><b>المحميات الملكية</b> لها أنظمتها الخاصة، وبعضها يطلب تصريح حتى للكشتة اليومية.</li></ul></section>
+<section class="rs"><h2 id="tanazzuh">متى تحتاج تصريح؟</h2>
+<div class="fee" style="margin:4px 0 12px"><div><small>طالع كشتة وراجع بنفس اليوم</small><b>ما تحتاج تصريح</b><small>إذا كانت أقل من ٢٤ ساعة</small></div><div><small>بتنام بالبر (تخييم)</small><b>لازم تصريح</b><small>من منصة نباتي، ومجاني لين ١٠ أيام</small></div><div><small>داخل محمية ملكية</small><b>حسب المحمية</b><small>بعضها يطلب تصريح حتى للكشتة</small></div></div>
+<p>مثال: الصمان والدهناء داخل محمية الملك عبدالعزيز الملكية، فلازم تصريح حتى لو بتروح الصبح وترجع العصر، والمبيت فيها ممنوع.</p></section>
 
 <section class="rs"><h2 id="permit">تصريح التخييم</h2>
 <p>يطلع التصريح فوري من منصة <a href="https://nabati.ncvc.gov.sa" target="_blank" rel="noopener" style="color:var(--terra);font-weight:700">نباتي ↗</a>: تختار «طلب ترخيص تخييم»، وتعبي بياناتك وموقع المخيم، وتوافق على التعهد.</p>
@@ -282,13 +281,20 @@ def build_home():
     rail = "".join(f'<a class="rc" href="/places/{p["slug"]}.html"><div class="tp" style="background:{TOPS.get(p["kind"], TOPS["جبال"])}">{p["kind"]}</div><div class="bd"><h3>{p["name"]}</h3><p>{p["region"]}</p></div></a>' for p in PLACES)
     places = f'<section class="sec"><div class="shead"><h2>وين تكشت؟</h2><a href="/places.html">كل الأماكن ‹</a></div><div class="rail">{rail}</div></section>'
     tips = '''<section class="sec"><div class="shead"><h2>قبل ما تطلع</h2><a href="/rules.html">الأنظمة كاملة ‹</a></div><div class="tips">
-<div class="tip"><b>الكشتة اليومية بدون تصريح</b>أما المبيت فيحتاج تصريح تخييم من منصة نباتي، ومجاني لين ١٠ أيام.</div>
+<div class="tip"><b>بتنام بالبر؟ لازم تصريح</b>الكشتة اللي ترجع منها بنفس اليوم ما تحتاج تصريح. أما المبيت فيحتاج تصريح تخييم من منصة نباتي، وهو مجاني إذا كان ١٠ أيام أو أقل.</div>
 <div class="tip"><b>لا حطب محلي ولا فحم محلي</b>غرامة نقله أو جمعه تبدأ من ٥٠٠٠ ريال للمتر المكعب.</div>
 <div class="tip"><b>الروضات بدون سيارات</b>دخول المركبات للروضات المحمية غرامته ٥٠٠ ريال أول مرة.</div>
 </div></section>'''
+    shop = '''<section class="sec" id="shop" hidden><div class="shead"><h2>مستلزمات البر</h2></div><div class="rail" id="shopRail"></div>
+<p class="disc">روابط أمازون: إذا اشتريت عن طريقها ياخذ وسمي عمولة من أمازون بدون أي زيادة عليك. الأسعار من أمازون السعودية وقت آخر تحديث <span id="shopUp"></span>، وقد تتغير.</p></section>
+<script>fetch('/data/products.json?v='+Date.now()).then(r=>r.json()).then(d=>{if(!d.items||!d.items.length)return;
+const e=s=>String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');const f=n=>Number(n).toLocaleString('ar-SA',{maximumFractionDigits:2});
+document.getElementById('shopRail').innerHTML=d.items.map(x=>`<a class="pr" href="${e(x.u)}" target="_blank" rel="nofollow sponsored noopener"><div class="im"><img src="${e(x.i)}" alt="${e(x.t)}" loading="lazy"></div><div class="bd"><h3>${e(x.t)}</h3><div class="pp"><b>${f(x.p)} ر.س</b>${x.o&&x.o>x.p?`<s>${f(x.o)}</s>`:''}</div><span class="go">شوفه بأمازون</span></div></a>`).join('');
+document.getElementById('shopUp').textContent=new Intl.DateTimeFormat('ar-SA',{dateStyle:'medium',timeStyle:'short',timeZone:'Asia/Riyadh'}).format(new Date(d.updated));
+document.getElementById('shop').hidden=false}).catch(()=>{})</script>'''
     p = os.path.join(ROOT, "index.html"); s = open(p, encoding="utf-8").read()
     a, b = s.index("<!--HOME-->") + len("<!--HOME-->"), s.index("<!--/HOME-->")
-    open(p, "w", encoding="utf-8").write(s[:a] + "\n" + tiles + "\n" + places + "\n" + tips + "\n" + s[b:])
+    open(p, "w", encoding="utf-8").write(s[:a] + "\n" + shop + "\n" + tiles + "\n" + places + "\n" + tips + "\n" + s[b:])
 
 if __name__ == "__main__":
     build_places()
