@@ -16,7 +16,7 @@
 .pr .bd{padding:10px 12px 12px;display:flex;flex-direction:column;flex:1}.pr h2{font-size:14px;font-weight:500;line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .pr .pp{margin-top:auto;padding-top:6px;display:flex;gap:6px;align-items:baseline;flex-wrap:wrap}.pr .pp b{color:var(--terra);font-size:17px}.pr .pp s{color:var(--muted);font-size:12.5px}
 .pr .go{display:block;margin-top:8px;text-align:center;background:var(--honey);color:#fff;font-weight:700;font-size:13.5px;border-radius:999px;padding:7px}
-.disc{font-size:13px;color:var(--muted);line-height:1.8}.load{color:var(--muted);text-align:center;padding:30px 0;grid-column:1/-1}
+.disc{font-size:11.5px;color:var(--muted);opacity:.75;text-align:center}.load{color:var(--muted);text-align:center;padding:30px 0;grid-column:1/-1}
 </style>
 </head>
 <body>
@@ -31,11 +31,10 @@
 <h1 style="font-size:30px;margin:26px 0 2px">مستلزمات البر</h1>
 <p style="color:var(--muted)">أغراض الكشتة والتخييم المناسبة لهالوقت من السنة، من أمازون السعودية.</p>
 <div class="sg" id="sg"><p class="load">جاري التحميل…</p></div>
-<p class="disc">روابط أمازون: إذا اشتريت عن طريقها ياخذ وسمي عمولة من أمازون بدون أي زيادة عليك. الأسعار من أمازون السعودية وقت آخر تحديث <span id="up"></span>، وقد تتغير.</p>
+<p class="disc">الأسعار قد تتغير · روابط أمازون بعمولة</p>
 <script>fetch('/data/products.json?v='+Date.now()).then(r=>r.json()).then(d=>{
 const e=s=>String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');const f=n=>Number(n).toLocaleString('ar-SA',{maximumFractionDigits:2});
-document.getElementById('sg').innerHTML=d.items.map(x=>`<a class="pr" href="${e(x.u)}" target="_blank" rel="nofollow sponsored noopener"><div class="im"><img src="${e(x.i)}" alt="${e(x.t)}" loading="lazy"></div><div class="bd"><h2>${e(x.t)}</h2><div class="pp"><b>${f(x.p)} ر.س</b>${x.o&&x.o>x.p?`<s>${f(x.o)}</s>`:''}</div><span class="go">شوفه بأمازون</span></div></a>`).join('');
-document.getElementById('up').textContent=new Intl.DateTimeFormat('ar-SA',{dateStyle:'medium',timeStyle:'short',timeZone:'Asia/Riyadh'}).format(new Date(d.updated));
+document.getElementById('sg').innerHTML=d.items.map(x=>`<a class="pr" href="${e(x.u)}" target="_blank" rel="nofollow sponsored noopener"><div class="im"><img src="${e(x.i)}" alt="${e(x.t)}" loading="lazy"></div><div class="bd"><h2>${e(x.t)}</h2><div class="pp"><b>${f(x.p)} ر.س</b>${x.o&&x.o>x.p?`<s>${f(x.o)}</s>`:''}</div><span class="go">اشتر من أمازون</span></div></a>`).join('');
 }).catch(()=>{document.getElementById('sg').innerHTML='<p class="load">ما قدرنا نجيب المنتجات، جرّب بعد شوي.</p>'})</script>
 </main>
 <footer class="wrap foot">
