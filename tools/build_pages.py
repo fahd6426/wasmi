@@ -294,7 +294,9 @@ def build_home():
 SCSS = """
 .sg{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}@media(min-width:680px){.sg{grid-template-columns:repeat(3,1fr)}}@media(min-width:880px){.sg{grid-template-columns:repeat(4,1fr)}}
 .pr{text-decoration:none;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column}
-.pr .im{position:relative;background:#fff;height:160px;padding:12px;border-bottom:1px solid var(--line)}.off{position:absolute;top:8px;inset-inline-start:8px;background:var(--terra);color:#fff;font-weight:700;font-size:13px;border-radius:999px;padding:1px 9px;direction:ltr}.sh{font-size:22px;margin:22px 0 -6px}.pr img{display:block;width:100%;height:100%;object-fit:contain}
+.pr .im{position:relative;background:#fff;height:160px;padding:12px;border-bottom:1px solid var(--line)}.off{position:absolute;top:8px;inset-inline-start:8px;background:var(--terra);color:#fff;font-weight:700;font-size:13px;border-radius:999px;padding:1px 9px;direction:ltr}.sh{font-size:22px;margin:30px 0 -6px}
+.dbox{background:var(--brown);border-radius:20px;padding:18px 14px 6px;margin-top:18px}.dbox>h2{color:var(--sand);font-size:22px}.dbox>h2 span{color:var(--honey);font-size:16px}.dbox>p{color:var(--sand);opacity:.8;font-size:14px}.dbox .sg{margin-top:12px}.dbox .pr{border:0}
+.pd{margin-top:auto;padding-top:6px;font-size:13px;line-height:1.7}.pd .was{color:var(--brown);font-size:14px}.pd .was span{font-weight:700;font-size:15px;color:var(--muted)}.pd .nw{color:var(--brown)}.pd .nw b{color:var(--terra);font-size:18px}.pd .save{display:inline-block;margin-top:3px;background:#EEF2E3;color:#4E5A22;font-weight:700;font-size:12px;border-radius:6px;padding:0 7px}.pr img{display:block;width:100%;height:100%;object-fit:contain}
 .pr .bd{padding:10px 12px 12px;display:flex;flex-direction:column;flex:1}.pr h2{font-size:14px;font-weight:500;line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .pr .pp{margin-top:auto;padding-top:6px;display:flex;gap:6px;align-items:baseline;flex-wrap:wrap}.pr .pp b{color:var(--terra);font-size:17px}.pr .pp s{color:var(--muted);font-size:12.5px}
 .pr .go{display:block;margin-top:8px;text-align:center;background:var(--honey);color:#fff;font-weight:700;font-size:13.5px;border-radius:999px;padding:7px}
@@ -304,14 +306,14 @@ SCSS = """
 def build_store():
     body = '''<h1 style="font-size:30px;margin:26px 0 2px">مستلزمات البر</h1>
 <p style="color:var(--muted)">أغراض الكشتة والتخييم المناسبة لهالوقت من السنة، من أمازون السعودية.</p>
-<section id="dl" hidden><h2 class="sh">🔥 العروض</h2><div class="sg" id="dg"></div></section>
+<section id="dl" class="dbox" hidden><h2>🔥 العروض <span id="dc"></span></h2><p>منتجات عليها خصم الحين من أمازون</p><div class="sg" id="dg"></div></section>
 <section><h2 class="sh" id="ah" hidden>كل المنتجات</h2><div class="sg" id="sg"><p class="load">جاري التحميل…</p></div></section>
 <p class="disc">الأسعار قد تتغير · روابط أمازون بعمولة</p>
 <script>fetch('/data/products.json?v='+Date.now()).then(r=>r.json()).then(d=>{
 const e=s=>String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');const f=n=>Number(n).toLocaleString('ar-SA',{maximumFractionDigits:2});
-const card=x=>{const pc=x.o&&x.o>x.p?Math.round((1-x.p/x.o)*100):0;return `<a class="pr" href="${e(x.u)}" target="_blank" rel="nofollow sponsored noopener"><div class="im">${pc?`<span class="off">-${pc}%</span>`:''}<img src="${e(x.i)}" alt="${e(x.t)}" loading="lazy"></div><div class="bd"><h2>${e(x.t)}</h2><div class="pp"><b>${f(x.p)} ر.س</b>${pc?`<s>${f(x.o)}</s>`:''}</div><span class="go">اشتر من أمازون</span></div></a>`};
+const card=x=>{const pc=x.o&&x.o>x.p?Math.round((1-x.p/x.o)*100):0;return `<a class="pr" href="${e(x.u)}" target="_blank" rel="nofollow sponsored noopener"><div class="im">${pc?`<span class="off">-${pc}%</span>`:''}<img src="${e(x.i)}" alt="${e(x.t)}" loading="lazy"></div><div class="bd"><h2>${e(x.t)}</h2>${pc?`<div class="pd"><div class="was">قبل: <span>${f(x.o)} ر.س</span></div><div class="nw">الحين: <b>${f(x.p)} ر.س</b></div><div class="save">توفر ${f(x.o-x.p)} ر.س</div></div>`:`<div class="pp"><b>${f(x.p)} ر.س</b></div>`}<span class="go">اشتر من أمازون</span></div></a>`};
 const deals=d.items.filter(x=>x.o&&x.o>x.p).sort((a,b)=>(1-a.p/a.o)<(1-b.p/b.o)?1:-1),rest=d.items.filter(x=>!(x.o&&x.o>x.p));
-if(deals.length){document.getElementById('dg').innerHTML=deals.map(card).join('');document.getElementById('dl').hidden=false;document.getElementById('ah').hidden=false}
+if(deals.length){document.getElementById('dg').innerHTML=deals.map(card).join('');document.getElementById('dl').hidden=false;document.getElementById('dc').textContent='('+deals.length+')';document.getElementById('ah').hidden=false}
 document.getElementById('sg').innerHTML=rest.map(card).join('');
 }).catch(()=>{document.getElementById('sg').innerHTML='<p class="load">ما قدرنا نجيب المنتجات، جرّب بعد شوي.</p>'})</script>'''
     with open(os.path.join(ROOT, "store.html"), "w", encoding="utf-8") as f:
