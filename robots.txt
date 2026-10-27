@@ -1,6 +1,4 @@
 User-agent: *
-Disallow: /camera.html
-Disallow: /review.html
 Allow: /
 
 Sitemap: https://wasmii.com/sitemap.xml
