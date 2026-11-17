@@ -154,6 +154,10 @@
 .recs{display:flex;flex-direction:column;gap:2px}
 
 /* ===== واقعية iOS ===== */
+.cbox{position:absolute;top:42%;left:28%;width:120px;height:100px;border:3px solid var(--honey);border-radius:10px;animation:cscan 2.4s infinite}
+.cbox b{position:absolute;top:-30px;right:-3px;background:var(--honey);color:#fff;font-size:14px;padding:2px 9px;border-radius:7px;white-space:nowrap}
+@keyframes cscan{0%,100%{transform:translate(0,0)}50%{transform:translate(14px,-10px)}}
+
 .i.full{overflow:hidden}.i.full .fs{width:100%;height:100%;filter:none;stroke:none;position:relative;z-index:0}
 .i.full:before{background:linear-gradient(180deg,rgba(255,255,255,.18) 0%,rgba(255,255,255,0) 45%);z-index:1}
 .app .i.full{overflow:visible}.i.full .fs{border-radius:22.5%}
@@ -274,20 +278,20 @@
 <!-- ================= الكاميرا ================= -->
 <section class="scr" id="camapp" style="background:#000">
   <div class="safe"></div><div class="sb" data-sb></div>
-  <div class="top"><span class="back" onclick="camStop();back()" style="color:#fff">‹ وسمي</span><h2>الكاميرا</h2><span style="min-width:74px"></span></div>
-  <div style="flex:1;position:relative;background:#0b0b0b;overflow:hidden">
-    <video id="camV" playsinline muted autoplay style="width:100%;height:100%;object-fit:cover;display:none"></video>
-    <div id="camMsg" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;gap:10px">
-      <div style="font-size:46px">📷</div><p style="font-size:16px;color:var(--mut)">صوّر البر والكشتة</p>
-      <button class="b b1" style="width:auto;padding:12px 28px" onclick="camStart()">افتح الكاميرا</button>
-      <div class="gbox" id="kG" style="text-align:right;width:100%"><h3 id="kGt"></h3><p id="kGp"></p><ol class="guide" id="kGl"></ol></div>
+  <div class="top"><span class="back" onclick="back()" style="color:#fff">‹ وسمي</span><h2>الكاميرا</h2><span style="min-width:74px"></span></div>
+  <div style="flex:1;position:relative;background:linear-gradient(180deg,#d9b98a 0%,#c29a64 55%,#a67c48 100%);overflow:hidden">
+    <div class="cbox"><b>فقع ٨٧٪</b></div>
+    <div style="position:absolute;inset:0;background:rgba(20,10,4,.72);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;gap:12px">
+      <svg viewBox="0 0 24 24" style="width:44px;height:44px;fill:var(--honey)"><path d="M7 10V7a5 5 0 0 1 10 0v3h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h1zm2 0h6V7a3 3 0 0 0-6 0v3z"/></svg>
+      <h3 style="font-size:24px;color:var(--honey)">كاميرا الكاشف</h3>
+      <p style="font-size:16px;line-height:1.8;opacity:.9">افتح الكاميرا بالبر وهي تدلّك على الفقع 🍄<br>تفتح للناس مع موسم الفقع</p>
+      <button class="b b1" style="width:auto;padding:12px 26px" onclick="openWeb('https://wasmii.com/camera.html','كاشف الفقع')">سجّل وكن أول من يعرف</button>
     </div>
-    <div style="position:absolute;top:12px;right:14px;font-family:'Reem Kufi';font-weight:700;color:#fff;opacity:.8;font-size:18px;text-shadow:0 1px 4px #000">وسمي</div>
   </div>
-  <div style="height:130px;display:flex;align-items:center;justify-content:space-around;padding-bottom:16px">
-    <img id="camTh" alt="" style="width:46px;height:46px;border-radius:10px;object-fit:cover;background:#222;cursor:pointer" onclick="camSave()">
-    <div onclick="camShot()" style="width:74px;height:74px;border-radius:50%;border:4px solid #fff;background:#fff;box-shadow:inset 0 0 0 3px #000;cursor:pointer"></div>
-    <div onclick="camFlip()" style="width:46px;height:46px;border-radius:50%;background:#222;display:grid;place-items:center;cursor:pointer;font-size:20px">↻</div>
+  <div style="height:120px;display:flex;align-items:center;justify-content:space-around;padding-bottom:14px;opacity:.45">
+    <div style="width:46px;height:46px;border-radius:10px;background:#222"></div>
+    <div style="width:74px;height:74px;border-radius:50%;border:4px solid #fff;background:#fff;box-shadow:inset 0 0 0 3px #000"></div>
+    <div style="width:46px;height:46px;border-radius:50%;background:#222;display:grid;place-items:center;font-size:20px">↻</div>
   </div>
 </section>
 
@@ -524,17 +528,18 @@ camera:['background:linear-gradient(180deg,#efe8dd,#b8ad9e)','<circle cx="30" cy
 settings:['background:linear-gradient(180deg,#c9bfb2,#857a6d)','<g transform="translate(30 30)" fill="#4b4038">'+Array.apply(null,Array(12)).map(function(_,i){return '<rect x="-2.6" y="-21" width="5.2" height="8" rx="1.3" transform="rotate('+(i*30)+')"/>'}).join('')+'<circle r="15"/><circle r="10" fill="#b9ae9f"/><circle r="6.5" fill="#4b4038"/><circle r="2.6" fill="#b9ae9f"/></g>'],
 maps:['background:#f1e4c8','<path d="M0 34 L22 22 L40 30 L60 18 V60 H0Z" fill="#d7c08e"/><path d="M0 0h26l-8 18L0 26Z" fill="#b9d29a"/><path d="M-4 52 C 16 40, 26 46, 36 34 S 54 14, 64 10" stroke="#e7a43c" stroke-width="7" fill="none"/><path d="M-4 52 C 16 40, 26 46, 36 34 S 54 14, 64 10" stroke="#f8d27f" stroke-width="3" fill="none"/><path d="M8 0 L30 60" stroke="#fff" stroke-width="3"/><path d="M41 15c-5.5 0-9.5 4-9.5 9.5 0 7 9.5 15.5 9.5 15.5s9.5-8.5 9.5-15.5c0-5.5-4-9.5-9.5-9.5z" fill="#e0453a"/><circle cx="41" cy="24.5" r="3.6" fill="#fff"/>'],
 calc:['background:linear-gradient(180deg,#3d2d22,#1b120c)','<rect x="12" y="9" width="36" height="11" rx="3" fill="#6f5b49"/>'+[0,1,2].map(function(r){return [0,1,2].map(function(c){return '<circle cx="'+(17+c*10.5)+'" cy="'+(29+r*9.5)+'" r="3.6" fill="'+(c===2?'#e9a640':'#d8ccbd')+'"/>'}).join('')}).join('')+'<circle cx="17" cy="57.5" r="0"/>'],
+web:['background:linear-gradient(180deg,#fdf6e8,#e9d6b2)','<circle cx="30" cy="30" r="21" fill="#fff" stroke="#c98f3e" stroke-width="2.5"/><ellipse cx="30" cy="30" rx="9" ry="21" fill="none" stroke="#c98f3e" stroke-width="1.8"/><path d="M9 30h42M12 19h36M12 41h36" stroke="#c98f3e" stroke-width="1.8" fill="none"/><circle cx="30" cy="30" r="9" fill="#fff"/><text x="30" y="35" font-size="14" text-anchor="middle" fill="#5a331c" font-family="Reem Kufi,sans-serif" font-weight="700">و</text>'],
 clock:['background:#0e0a07','<circle cx="30" cy="30" r="24.5" fill="#fbf7ef"/>'+Array.apply(null,Array(12)).map(function(_,i){return '<rect x="29.4" y="7.5" width="1.2" height="'+(i%3?2.5:4)+'" fill="#3a2f27" transform="rotate('+(i*30)+' 30 30)"/>'}).join('')+'<text x="30" y="16.5" font-size="6" text-anchor="middle" fill="#1a1410" font-family="Tajawal,sans-serif" font-weight="700">١٢</text><text x="45.5" y="32.2" font-size="6" text-anchor="middle" fill="#1a1410" font-family="Tajawal,sans-serif" font-weight="700">٣</text><text x="30" y="48" font-size="6" text-anchor="middle" fill="#1a1410" font-family="Tajawal,sans-serif" font-weight="700">٦</text><text x="14.5" y="32.2" font-size="6" text-anchor="middle" fill="#1a1410" font-family="Tajawal,sans-serif" font-weight="700">٩</text><line class="ch" x1="30" y1="30" x2="30" y2="19" stroke="#1a1410" stroke-width="2.4" stroke-linecap="round"/><line class="cm" x1="30" y1="30" x2="30" y2="12" stroke="#1a1410" stroke-width="1.7" stroke-linecap="round"/><line class="cs" x1="30" y1="33" x2="30" y2="10" stroke="#e9a640" stroke-width=".8"/><circle cx="30" cy="30" r="1.8" fill="#e9a640"/>']};
 function tickClocks(){var d=new Date(),h=(d.getHours()%12)*30+d.getMinutes()*.5,m=d.getMinutes()*6+d.getSeconds()*.1,s=d.getSeconds()*6;
  document.querySelectorAll('.ch').forEach(function(e){e.setAttribute('transform','rotate('+h+' 30 30)')});document.querySelectorAll('.cm').forEach(function(e){e.setAttribute('transform','rotate('+m+' 30 30)')});document.querySelectorAll('.cs').forEach(function(e){e.setAttribute('transform','rotate('+s+' 30 30)')})}
 
-var LABEL={notes:'الملاحظات',camera:'الكاميرا',settings:'الإعدادات',maps:'الخرائط',calc:'الحاسبة',clock:'الساعة'};
+var LABEL={web:'المتصفح',notes:'الملاحظات',camera:'الكاميرا',settings:'الإعدادات',maps:'الخرائط',calc:'الحاسبة',clock:'الساعة'};
 var BADGE={chats:0,phoneapp:0};
 function icon(k,label){if(FULL[k]){return '<div class="app" onclick="openApp(\''+k+'\')"><div class="i full" style="'+FULL[k][0]+'"><svg viewBox="0 0 60 60" class="fs">'+FULL[k][1]+'</svg><div class="bd" data-b="'+k+'" style="display:none"></div></div>'+(label!==false?'<span>'+LABEL[k]+'</span>':'')+'</div>'}var c=IC[k];var lock=k==='kashif'?'<div class="lockb"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>':'';
  var st=k==='kashif'?' style="background:linear-gradient(160deg,#3b2212,#120803)"':'',sv=k==='kashif'?' style="stroke:var(--honey)"':'';
  return '<div class="app" onclick="openApp(\''+k+'\')"><div class="i '+c[0]+'"'+st+'><svg viewBox="0 0 24 24"'+sv+'>'+c[1]+'</svg>'+lock+'<div class="bd" data-b="'+k+'" style="display:none"></div></div>'+(label!==false?'<span>'+c[2]+'</span>':'')+'</div>'}
 document.getElementById('grid').innerHTML=['seasons','green','chats','notes','camera','maps','clock','calc','compass','loc','stars','settings','places','rules','birds','kashif'].map(function(k){return icon(k)}).join('');
-document.getElementById('dock').innerHTML=['phoneapp','chats','compass','gear'].map(function(k){return icon(k,false)}).join('');
+document.getElementById('dock').innerHTML=['phoneapp','web','chats','gear'].map(function(k){return icon(k,false)}).join('');
 function badges(){document.querySelectorAll('[data-b]').forEach(function(e){var n=BADGE[e.dataset.b];if(n){e.style.display='grid';e.textContent=A(n)}else e.style.display='none'})}
 function aiHtml(k){var c=IC[k];return '<div class="ai '+c[0]+'" style="'+(k==='kashif'?'background:#2a160a':'')+'"><svg viewBox="0 0 24 24">'+c[1]+'</svg></div>'}
 
@@ -547,7 +552,7 @@ function back(){var id=stack.pop();if(!id)return;var s=document.getElementById(i
 function home(){while(stack.length)back()}
 window.addEventListener('popstate',function(){back()});
 function openWeb(u,t){document.getElementById('wT').textContent=t;document.getElementById('wU').textContent=u.replace('https://','');document.getElementById('wF').src=u;go('web')}
-function openApp(k){if(k==='kashif')return openWeb('https://wasmii.com/camera.html','كاشف الفقع');if(k==='clock'){clockApp();return go('clockapp')}if(k==='camera')return go('camapp');if(k==='maps'){if(!document.getElementById('mapF').src)mapSet(28.2,41.5,4,false);return go('mapapp')}if(k==='settings'){loadSettings();return go('settingsapp')}if(k==='chats'){renderChats()}if(k==='phoneapp'){BADGE.phoneapp=0;badges();renderRecents()}if(k==='notes')renderNotes();go(k)}
+function openApp(k){if(k==='kashif')return openWeb('https://wasmii.com/camera.html','كاشف الفقع');if(k==='web')return openWeb('https://wasmii.com/','وسمي');if(k==='clock'){clockApp();return go('clockapp')}if(k==='camera')return go('camapp');if(k==='maps'){if(!document.getElementById('mapF').src)mapSet(28.2,41.5,4,false);return go('mapapp')}if(k==='settings'){loadSettings();return go('settingsapp')}if(k==='chats'){renderChats()}if(k==='phoneapp'){BADGE.phoneapp=0;badges();renderRecents()}if(k==='notes')renderNotes();go(k)}
 
 /* ================= المواسم ================= */
 var SL={'الوسم':'wasm','المربعانية':'murabbaniya','الشبط':'shabt','العقارب':'aqarib','الحميمين':'hamimain','الذراعين':'thiraain','الثريا':'thurayya','التويبع':'tuwaibi','الجوزاء':'jawza','المرزم':'mirzam','الكليبين':'kulaibain','سهيل':'suhail'};
@@ -759,23 +764,6 @@ var dFull=new Intl.DateTimeFormat('ar-SA-u-ca-gregory',{weekday:'long',day:'nume
 document.getElementById('bigClock').innerHTML=FULL.clock[1];
 function clockApp(){var d=new Date();document.getElementById('ckT').textContent=A((d.getHours()%12||12)+':'+('0'+d.getMinutes()).slice(-2))+(d.getHours()<12?' ص':' م');document.getElementById('ckD').textContent=dFull.format(d);if(hijF)document.getElementById('ckH').textContent=hijF.format(d)}
 setInterval(function(){tickClocks();if(stack[stack.length-1]==='clockapp')clockApp()},1000);
-/* ================= الكاميرا ================= */
-var camS=null,camFace='environment',camLast=null;
-function camSteps(d){if(d.inApp)return OPEN_SAFARI(d);
- if(d.ios&&d.chrome)return ['افتح تطبيق الإعدادات بجوالك','انزل لـ Chrome واضغطه','فعّل «الكاميرا»، وارجع هنا'];
- if(d.ios&&d.sv>=26)return [{icon:PAGE_ICON,text:'اضغط هالرمز اللي بآخر شريط الموقع'},'اضغط النقاط الثلاث ⋯ تحت على اليسار','فعّل «الكاميرا»'];
- if(d.ios)return ['اضغط «aA» بشريط العنوان','اختار «إعدادات موقع الويب»','خلّ «الكاميرا» على «سماح»'];
- if(d.android)return ['اضغط الرمز اللي جنب الرابط فوق','اختار «الأذونات»','خلّ «الكاميرا» على «سماح»'];
- return ['اضغط رمز الكاميرا بشريط العنوان','خلّ «الكاميرا» على «سماح»','وحدّث الصفحة']}
-function camStart(){var v=document.getElementById('camV');if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){guide('k','متصفحك ما يدعم الكاميرا هنا','افتح الصفحة بسفاري أو كروم:',OPEN_SAFARI(device()));return}
- navigator.mediaDevices.getUserMedia({video:{facingMode:camFace},audio:false}).then(function(s){camS=s;v.srcObject=s;v.style.display='block';document.getElementById('camMsg').style.display='none';unguide('k')})
- .catch(function(e){var n=e&&e.name;guide('k',n==='NotAllowedError'||n==='SecurityError'?'الكاميرا تحتاج إذن':'ما قدرنا نفتح الكاميرا','سوّ هالخطوات وبعدها اضغط «افتح الكاميرا»:',camSteps(device()))})}
-function camStop(){if(camS){camS.getTracks().forEach(function(t){t.stop()});camS=null}var v=document.getElementById('camV');v.style.display='none';document.getElementById('camMsg').style.display='flex'}
-function camFlip(){camFace=camFace==='environment'?'user':'environment';if(camS){camStop();camStart()}}
-function camShot(){var v=document.getElementById('camV');if(!camS||!v.videoWidth){camStart();return}var c=document.createElement('canvas');c.width=v.videoWidth;c.height=v.videoHeight;var x=c.getContext('2d');x.drawImage(v,0,0);
- x.font='bold '+Math.round(c.width/16)+'px "Reem Kufi",sans-serif';x.fillStyle='rgba(255,255,255,.85)';x.textAlign='right';x.shadowColor='rgba(0,0,0,.6)';x.shadowBlur=8;x.fillText('وسمي',c.width-24,c.height-28);
- camLast=c.toDataURL('image/jpeg',.9);document.getElementById('camTh').src=camLast;v.style.opacity=.2;setTimeout(function(){v.style.opacity=1},120)}
-function camSave(){if(!camLast)return;fetch(camLast).then(function(r){return r.blob()}).then(function(b){var f=new File([b],'wasmi.jpg',{type:'image/jpeg'});if(navigator.canShare&&navigator.canShare({files:[f]}))navigator.share({files:[f],text:'من جوال وسمي 📷 wasmii.com/app'}).catch(function(){});else{var a=document.createElement('a');a.href=camLast;a.download='wasmi.jpg';a.click()}})}
 /* ================= الخرائط ================= */
 var mapC={la:28.2,lo:41.5,z:6};
 function mapSet(la,lo,d,marker){mapC={la:la,lo:lo};var b=[lo-d,la-d*.8,lo+d,la+d*.8].map(function(x){return x.toFixed(4)}).join('%2C');document.getElementById('mapF').src='https://www.openstreetmap.org/export/embed.html?bbox='+b+'&layer=mapnik'+(marker?'&marker='+la.toFixed(5)+'%2C'+lo.toFixed(5):'')}
