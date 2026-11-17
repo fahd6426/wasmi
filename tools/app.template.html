@@ -152,6 +152,43 @@
 .need button{background:var(--card);border:1px solid var(--line);color:var(--sand);border-radius:16px;padding:12px 8px;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer}
 .need button.on{background:var(--honey);border-color:var(--honey);color:#fff}
 .recs{display:flex;flex-direction:column;gap:2px}
+
+/* ===== واقعية iOS ===== */
+.wall{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 860' preserveAspectRatio='xMidYMid slice'%3E%3Cdefs%3E%3ClinearGradient id='b' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%231c0e06'/%3E%3Cstop offset='.45' stop-color='%23472612'/%3E%3Cstop offset='1' stop-color='%23a26a35'/%3E%3C/linearGradient%3E%3ClinearGradient id='w1' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%23f3d7a6' stop-opacity='.55'/%3E%3Cstop offset='1' stop-color='%23c98f3e' stop-opacity='.05'/%3E%3C/linearGradient%3E%3ClinearGradient id='w2' x1='1' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23a5552e' stop-opacity='.85'/%3E%3Cstop offset='1' stop-color='%235a331c' stop-opacity='.2'/%3E%3C/linearGradient%3E%3Cfilter id='f'%3E%3CfeGaussianBlur stdDeviation='7'/%3E%3C/filter%3E%3C/defs%3E%3Crect width='400' height='860' fill='url(%23b)'/%3E%3Cg filter='url(%23f)'%3E%3Cpath d='M-60 420 C 80 300 180 520 300 380 S 470 300 470 300 L470 900 L-60 900Z' fill='url(%23w2)'/%3E%3Cpath d='M-60 250 C 60 160 140 360 260 250 S 430 120 470 160 L470 230 C 380 230 330 330 230 360 S 40 300 -60 380Z' fill='url(%23w1)'/%3E%3Cpath d='M-60 620 C 90 520 200 700 330 600 S 470 560 470 560 L470 900 L-60 900Z' fill='%235a331c' opacity='.75'/%3E%3Cpath d='M-60 560 C 100 470 210 640 340 540 S 470 500 470 500' stroke='%23f3d7a6' stroke-opacity='.35' stroke-width='10' fill='none'/%3E%3C/g%3E%3C/svg%3E") center/cover no-repeat,#2a160b !important}
+.hbody{padding-top:18px}
+.app{font-family:-apple-system,"SF Arabic",system-ui,sans-serif;font-size:12px;font-weight:500;gap:5px;text-shadow:0 1px 2px rgba(0,0,0,.45)}
+.grid{gap:22px 4px;padding:6px 2px 14px}
+.i{border-radius:22.5%;box-shadow:0 5px 14px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.35),inset 0 -3px 8px rgba(0,0,0,.18);overflow:visible}
+.i:before{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,rgba(255,255,255,.32) 0%,rgba(255,255,255,.06) 42%,rgba(255,255,255,0) 60%);pointer-events:none}
+.i:after{content:'';position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 .7px rgba(255,255,255,.28);pointer-events:none}
+.i svg{width:54%;height:54%;stroke-width:2;filter:drop-shadow(0 1px 1.5px rgba(0,0,0,.35));position:relative;z-index:1}
+.i .lockb{z-index:2}.bd{z-index:3}
+.g1{background:linear-gradient(165deg,#f0c27a,#c98f3e 55%,#9e6526)}
+.g2{background:linear-gradient(165deg,#de8456,#a5552e 55%,#6e3016)}
+.g3{background:linear-gradient(165deg,#9a6438,#5a331c 60%,#2e170a)}
+.g4{background:linear-gradient(165deg,#6fae74,#3a7a48 55%,#1f4a2a)}
+.g5{background:linear-gradient(165deg,#4b5d92,#25305a 55%,#11172f)}
+.g6{background:linear-gradient(165deg,#ff7a6b,#d0413a 55%,#8a1f1a)}
+.g7{background:linear-gradient(165deg,#fbe2b2,#e2bb7c 55%,#b98a4c)}
+.g8{background:linear-gradient(165deg,#7fa5bf,#4a6f88 55%,#28404f)}
+.bd{background:#ff3b30;font-family:-apple-system,system-ui,sans-serif;font-weight:600;min-width:24px;height:24px;font-size:14px;top:-7px;left:-7px;border:0}
+.dock{background:rgba(255,255,255,.17);border:1px solid rgba(255,255,255,.22);box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 10px 30px rgba(0,0,0,.25);border-radius:36px;padding:14px 12px;margin:0 10px calc(10px + env(safe-area-inset-bottom))}
+.sharebtn{width:auto;display:inline-flex;margin:4px auto 14px;padding:8px 18px;border-radius:999px;font-size:13.5px;font-weight:700;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.2);font-family:-apple-system,system-ui,sans-serif}
+.wrow2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:0 2px 18px}
+.wcol{display:flex;flex-direction:column;align-items:center;gap:6px}
+.wl{font-family:-apple-system,"SF Arabic",system-ui,sans-serif;font-size:12px;font-weight:500;text-shadow:0 1px 2px rgba(0,0,0,.45)}
+.wsq{width:100%;aspect-ratio:1;border-radius:26px;padding:14px 15px;display:flex;flex-direction:column;cursor:pointer;box-shadow:0 8px 22px rgba(0,0,0,.35),inset 0 0 0 .7px rgba(255,255,255,.12);position:relative;overflow:hidden}
+.wsq:active{transform:scale(.97)}
+.wcd{background:#0b0805;color:#fff}
+.wcd .wh{display:flex;gap:6px;align-items:center;font-size:13px;color:#9fd3ff}.wcd .wh b{font-size:14px;letter-spacing:.3px}
+.wnum{font-size:64px;font-weight:800;line-height:1;margin-top:auto;font-family:-apple-system,system-ui,sans-serif}
+.wsub{font-size:14px;color:rgba(255,255,255,.75);margin-top:2px}
+.wbar{height:5px;background:rgba(255,255,255,.15);border-radius:5px;margin:10px 0 6px;overflow:hidden}.wbar i{display:block;height:100%;background:linear-gradient(90deg,#9fd3ff,#e9f6ff);border-radius:5px}
+.wft{font-size:11.5px;color:rgba(255,255,255,.55)}
+.wmoon{background:linear-gradient(170deg,#1c2547,#0b1024);color:#fff;align-items:center;text-align:center}
+.wmoon .wh{align-self:stretch;text-align:right;font-size:13px;color:#c7d2ff}
+.wmoon canvas{width:58%;height:auto;margin:auto 0 4px;filter:drop-shadow(0 0 12px rgba(255,240,200,.35))}
+.wmn{font-size:16px;font-weight:800}
 </style>
 </head>
 <body>
@@ -162,19 +199,24 @@
 <section class="scr wall" id="home">
   <div class="safe"></div><div class="sb" data-sb></div>
   <div class="hbody">
-    <div class="brand">وسمي</div>
-    <div class="tag">دليلك بالبر</div>
-    <div class="wrow">
-      <div class="wg wbig" onclick="go('seasons')">
-        <small id="wNow">الموسم الحالي</small>
-        <div class="cd"><div class="n" id="wLeft">–</div><div class="l"><span id="wWord">يوم</span> باقي على<b id="wNext">–</b></div></div>
-        <div class="pb"><i id="wBar"></i></div>
-        <div class="s"><span id="wDay"></span><span id="wHij"></span></div>
-      </div>
-      <div class="wg wbig" onclick="go('stars')"><div class="moon"><canvas id="wMoon" width="92" height="92"></canvas><div><b id="wMoonN">القمر</b><span id="wMoonP"></span></div></div></div>
+    <div class="wrow2">
+      <div class="wcol"><div class="wsq wcd" onclick="go('seasons')">
+        <div class="wh"><span>❄️</span><b id="wNext">–</b></div>
+        <div class="wnum"><span id="wLeft">–</span></div>
+        <div class="wsub"><span id="wWord">يوم</span> باقي</div>
+        <div class="wbar"><i id="wBar"></i></div>
+        <div class="wft"><span id="wNow">الموسم الحالي</span></div>
+      </div><span class="wl">المواسم</span></div>
+      <div class="wcol"><div class="wsq wmoon" onclick="go('stars')">
+        <div class="wh"><b>القمر الليلة</b></div>
+        <canvas id="wMoon" width="140" height="140"></canvas>
+        <div class="wmn" id="wMoonN">القمر</div>
+        <div class="wft"><span id="wMoonP"></span></div>
+      </div><span class="wl">النجوم والقمر</span></div>
     </div>
+    <span id="wDay" hidden></span><span id="wHij" hidden></span>
     <div class="grid" id="grid"></div>
-    <button class="sharebtn" onclick="shareApp(false)">📤 أرسل جوال وسمي لربعك</button>
+    <div style="text-align:center"><button class="sharebtn" onclick="shareApp(false)">📤 أرسل جوال وسمي لربعك</button></div>
     <div class="add" id="addHint">ضيف وسمي لشاشتك: اضغط <b>مشاركة</b> ثم <b>إضافة إلى الشاشة الرئيسية</b></div>
   </div>
   <div class="dock" id="dock"></div>
