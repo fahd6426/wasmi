@@ -151,7 +151,11 @@ a{color:inherit;text-decoration:none}
 /* ===== إضافات ===== */
 .island,.sb{display:flex}
 .island{display:block;position:absolute;top:11px;left:50%;transform:translateX(-50%);width:120px;height:34px;background:#000;border-radius:20px;z-index:200;pointer-events:none}
-@media(max-width:599px){.island{display:none}.sb{display:none}}
+@media(max-width:599px){.island{display:none}.sb{height:40px;padding:4px 22px 0}}
+.standalone .sb{display:none!important}
+.sb{width:100%}
+.sb .bat{display:flex;align-items:center;gap:3px;font-size:13px}.sb .bat i{position:relative;width:25px;height:12px;border:1.3px solid rgba(255,255,255,.55);border-radius:4px;display:block}.sb .bat i b{position:absolute;inset:1.5px;right:auto;border-radius:2px;background:#fff;display:block}.sb .bat i:after{content:'';position:absolute;right:-4px;top:3px;width:2px;height:4px;border-radius:0 2px 2px 0;background:rgba(255,255,255,.55)}.sb .bat.low i b{background:#ff3b30}
+.robo{display:inline-flex;align-items:center;gap:6px;background:rgba(201,143,62,.22);color:#f4d29b;border:1px solid rgba(201,143,62,.45);border-radius:999px;padding:5px 14px;font-size:14px;font-weight:700;margin-top:12px}
 
 .bd{position:absolute;top:-6px;left:-4px;background:#ff3b30;border-radius:999px;min-width:23px;height:23px;font-size:13px;font-weight:800;place-items:center;padding:0 6px;color:#fff;box-shadow:0 1px 4px rgba(0,0,0,.4)}
 /* شاشة القفل */
@@ -453,6 +457,7 @@ a{color:inherit;text-decoration:none}
   <div class="who" id="clWho">مكالمة واردة…</div>
   <div class="nm" id="clNm">المربعانية ❄️</div>
   <div class="st" id="clSt">جوال</div>
+  <div class="robo">🤖 اتصال آلي من وسمي.. لا تخاف 😄</div>
   <div class="av" id="clAv">❄️</div>
   <div class="cap" id="clCap"></div>
   <button class="shop" onclick="endCall(true)">وريني أغراض الشتاء 🔥</button>
@@ -500,8 +505,11 @@ var DATA={"places": [{"r": "الوسطى والشرقية والجنوب", "u": 
 <script>
 /* ================= عام ================= */
 var A=function(n){return String(n).replace(/\d/g,function(d){return '٠١٢٣٤٥٦٧٨٩'[d]})};
-var SB='<span class="clk"></span><span class="ic"><svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><svg viewBox="0 0 27 13" style="height:13px"><rect x=".5" y=".5" width="23" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".5"/><rect x="2" y="2" width="16" height="9" rx="2"/></svg></span>';
+var SB='<span class="clk"></span><span class="ic"><svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg><span style="font-size:13.5px;font-weight:700">4G</span><span class="bat"><span class="bp">٨٢٪</span><i><b style="width:76%"></b></i></span></span>';
 document.querySelectorAll('[data-sb]').forEach(function(e){e.innerHTML=SB});
+function setBat(l){var p=Math.round(l*100);document.querySelectorAll('.sb .bat').forEach(function(e){e.classList.toggle('low',p<=20);e.querySelector('.bp').textContent=String(p).replace(/\d/g,function(d){return '٠١٢٣٤٥٦٧٨٩'[d]})+'٪';e.querySelector('i b').style.width=Math.max(8,p)+'%'})}
+try{if(navigator.getBattery)navigator.getBattery().then(function(b){setBat(b.level);b.addEventListener('levelchange',function(){setBat(b.level)})})}catch(e){}
+if(window.navigator.standalone||window.matchMedia('(display-mode: standalone)').matches)document.documentElement.classList.add('standalone');
 var MN=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'],DY=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
 function clk(){var d=new Date(),h=(d.getHours()%12||12),m=('0'+d.getMinutes()).slice(-2);
  document.querySelectorAll('.clk').forEach(function(e){e.textContent=h+':'+m});document.querySelectorAll('.clk2').forEach(function(e){e.textContent=A(h+':'+m)});
@@ -632,9 +640,16 @@ var ringA=(function(){var sr=22050,dur=2.6,n=Math.floor(sr*dur),buf=new ArrayBuf
  var a=new Audio(URL.createObjectURL(new Blob([buf],{type:'audio/wav'})));a.loop=true;a.preload='auto';a.setAttribute('playsinline','');return a})();
 var voiceA=new Audio();voiceA.preload='auto';voiceA.setAttribute('playsinline','');
 var VOICE_URL='https://wasmii.com/assets/audio/murabbaniya.mp3',voiceOK=false;
-voiceA.addEventListener('canplaythrough',function(){voiceOK=true},{once:true});voiceA.addEventListener('error',function(){voiceOK=false});voiceA.src=VOICE_URL;
+try{fetch(VOICE_URL,{method:'HEAD',cache:'no-cache'}).then(function(r){voiceOK=r.ok;if(r.ok&&!voiceA.src)voiceA.src=VOICE_URL}).catch(function(){})}catch(e){}
+var RING_URL=ringA.src,SILENT=(function(){var n=2205,buf=new ArrayBuffer(44+n*2),v=new DataView(buf);function w(o,t){for(var i=0;i<t.length;i++)v.setUint8(o+i,t.charCodeAt(i))}
+ w(0,'RIFF');v.setUint32(4,36+n*2,true);w(8,'WAVE');w(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,22050,true);v.setUint32(28,44100,true);v.setUint16(32,2,true);v.setUint16(34,16,true);w(36,'data');v.setUint32(40,n*2,true);
+ return URL.createObjectURL(new Blob([buf],{type:'audio/wav'}))})();
 var audioUnlocked=false;
-function unlockAudio(){if(audioUnlocked)return;audioUnlocked=true;[ringA,voiceA].forEach(function(a){try{a.muted=true;var p=a.play();if(p&&p.then)p.then(function(){a.pause();a.currentTime=0;a.muted=false}).catch(function(){a.muted=false});else{a.pause();a.muted=false}}catch(e){}})}
+/* نفتح الصوت بأول لمسة بملف صامت، عشان ما يطلع أي صوت إلا وقت الاتصال */
+function unlockAudio(){if(audioUnlocked)return;audioUnlocked=true;
+ [[ringA,function(){return RING_URL}],[voiceA,function(){return voiceOK?VOICE_URL:''}]].forEach(function(x){var a=x[0];try{a.loop=false;a.src=SILENT;var p=a.play();
+  var back=function(){try{a.pause()}catch(e){}var u=x[1]();if(u){a.src=u;a.load()}else a.removeAttribute('src');if(a===ringA)a.loop=true};
+  if(p&&p.then)p.then(back).catch(back);else back()}catch(e){}})}
 document.addEventListener('touchend',unlockAudio,{once:true});document.addEventListener('click',unlockAudio,{once:true});
 function ring(on){try{if(on){ringA.currentTime=0;var p=ringA.play();if(p&&p.catch)p.catch(function(){});if(navigator.vibrate)navigator.vibrate([400,200,400,200,400])}else{ringA.pause();ringA.currentTime=0;if(navigator.vibrate)navigator.vibrate(0)}}catch(e){}}
 function numWord(n){var W={1:'يوم واحد',2:'يومين',3:'ثلاث أيام',4:'أربع أيام',5:'خمس أيام',6:'ست أيام',7:'سبع أيام',8:'ثمان أيام',9:'تسع أيام',10:'عشر أيام',11:'إحدعشر يوم',12:'اثنعشر يوم',13:'ثلطعش يوم',14:'أربعطعش يوم',15:'خمسطعش يوم',16:'ستطعش يوم',17:'سبعطعش يوم',18:'ثمنطعش يوم',19:'تسعطعش يوم',20:'عشرين يوم',30:'ثلاثين يوم',40:'أربعين يوم'};return W[n]||(A(n)+' '+daysWord(n))}
@@ -654,7 +669,7 @@ function answer(){ring(false);callState='talk';var c=document.getElementById('ca
  document.getElementById('clWho').textContent='مكالمة';var L=CALL_LINES(),i=0,cap=document.getElementById('clCap');
  function fin(){if(callState==='talk'){callState='done';c.className='on talk done'}}
  function nx(){if(callState!=='talk')return;if(i>=L.length)return fin();cap.innerHTML=L[i][0];speak(L[i][1],function(){i++;nx()})}
- if(voiceOK){var vt;try{voiceA.currentTime=0}catch(e){}var vp=voiceA.play();cap.innerHTML=L[0][0];
+ if(voiceOK){var vt;if(!voiceA.src)voiceA.src=VOICE_URL;try{voiceA.currentTime=0}catch(e){}var vp=voiceA.play();cap.innerHTML=L[0][0];
   vt=setInterval(function(){if(callState!=='talk'){clearInterval(vt);return}var per=(voiceA.duration||12)/L.length;cap.innerHTML=L[Math.min(L.length-1,Math.floor(voiceA.currentTime/per))][0]},300);
   voiceA.onended=function(){clearInterval(vt);fin()};if(vp&&vp.catch)vp.catch(function(){clearInterval(vt);voiceOK=false;nx()})}
  else nx()}
