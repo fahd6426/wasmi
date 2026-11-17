@@ -15,9 +15,9 @@
 <link rel="manifest" href="/app.webmanifest">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ar_SA">
-<meta property="og:title" content="هذا الجوال ضايع بالبر 🏜️">
+<meta property="og:title" content="جوال وسمي — دليلك بالبر 📱">
 <meta property="og:description" content="كم باقي على المربعانية؟ وين القبلة؟ أرسل موقعك لأهلك.. كل اللي تحتاجه بالبر في جوال واحد.">
-<meta property="og:image" content="https://wasmii.com/assets/og/app3.jpg">
+<meta property="og:image" content="https://wasmii.com/assets/og/app2.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="جوال وسمي — دليلك بالبر">
@@ -831,10 +831,12 @@ LK.addEventListener('mousedown',down);window.addEventListener('mousemove',move);
 LK.addEventListener('click',function(){if(!unlocked&&Math.abs(dy)<6){LK.classList.remove('nudge');void LK.offsetWidth;LK.classList.add('nudge')}});
 
 /* بعد الفتح: إشعار سوالف ثم اتصال المربعانية */
-var called=LS.get('w_called_'+new Date().toDateString(),false);
+var called=false;
+/* اتصال المربعانية بعد ١٥ ثانية من دخول الموقع */
+setTimeout(function(){if(!called&&!callState&&OPT.call!==false){called=true;incoming(false)}},15000);
 function afterUnlock(){BADGE.chats=unread();badges();
  setTimeout(function(){if(!stack.length||stack[stack.length-1]!=='chat')banner('chats','سوالف · المربعانية','ترى قربت 😏 جهّزت نفسك؟',function(){openApp('chats');setTimeout(function(){openChat('mur')},350)})},7000);
- if(!called&&OPT.call!==false)setTimeout(function(){if(!callState&&OPT.call!==false){called=true;LS.set('w_called_'+new Date().toDateString(),true);incoming(false)}},25000)}
+ }
 
 /* تشغيل */
 seasons();moon();badges();
