@@ -404,6 +404,45 @@
   </div>
 </section>
 
+<!-- ================= الملاح (شاشة بيانات زي قارمن) ================= -->
+<section class="scr" id="gps">
+  <div class="safe"></div><div class="sb" data-sb></div>
+  <div class="top"><span class="back" onclick="back()">‹ وسمي</span><h2>الملاح</h2><span style="min-width:74px"></span></div>
+  <div class="body">
+    <style>
+    .gdev{background:linear-gradient(180deg,#2b221b,#16110d);border:1px solid rgba(201,143,62,.35);border-radius:26px;padding:12px;box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 12px 30px rgba(0,0,0,.35)}
+    .glcd{background:#0d0a07;border-radius:16px;padding:4px;display:grid;grid-template-columns:1fr 1fr;gap:4px}
+    .gf{background:#17120d;border-radius:12px;padding:9px 10px 8px;min-height:74px;display:flex;flex-direction:column;justify-content:space-between}
+    .gf.w{grid-column:1/3}
+    .gf small{font-size:12px;color:var(--honey);font-weight:700}
+    .gf b{font-family:Tajawal,sans-serif;font-weight:800;font-size:30px;color:#fbf2e2;direction:ltr;text-align:right;line-height:1.1;font-variant-numeric:tabular-nums}
+    .gf b i{font-style:normal;font-size:14px;color:var(--mut);font-weight:700;margin-left:4px}
+    .gf .cd{font-size:23px;letter-spacing:.3px}
+    .gst{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--mut);padding:8px 6px 2px}
+    .gst .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#6b5d50;margin-left:6px;vertical-align:middle}
+    .gst .dot.on{background:#7fc46a;box-shadow:0 0 8px #7fc46a}
+    .gbtns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+    .gbtns .b{margin:0}
+    </style>
+    <div class="gdev">
+      <div class="glcd">
+        <div class="gf w"><small>الإحداثيات</small><b class="cd" id="nvCo">– , –</b></div>
+        <div class="gf"><small>السرعة</small><b><span id="nvSp">–</span><i>كم/س</i></b></div>
+        <div class="gf"><small>الاتجاه</small><b style="direction:rtl;text-align:right;font-size:20px;white-space:nowrap" id="nvHd">–</b></div>
+        <div class="gf"><small>الارتفاع</small><b><span id="nvAl">–</span><i>م</i></b></div>
+        <div class="gf"><small>المسافة</small><b><span id="nvDs">٠٫٠٠</span><i>كم</i></b></div>
+        <div class="gf"><small>أعلى سرعة</small><b><span id="nvMx">٠</span><i>كم/س</i></b></div>
+        <div class="gf"><small>الوقت</small><b id="nvTm">٠٠:٠٠</b></div>
+      </div>
+      <div class="gst"><span><span class="dot" id="nvDot"></span><span id="nvSt">متوقف</span></span><span id="nvAc"></span></div>
+    </div>
+    <div class="gbtns"><button class="b b1" id="nvBtn" onclick="gpsToggle()">▶︎ ابدأ</button><button class="b b2" onclick="gpsReset()">↺ تصفير</button></div>
+    <button class="b b2" id="nvCp" onclick="gpsCopy()" style="display:none;margin-top:10px">انسخ الإحداثيات</button>
+    <div class="gbox" id="pG"><h3 id="pGt"></h3><p id="pGp"></p><ol class="guide" id="pGl"></ol></div>
+    <div class="note">خلّ الصفحة مفتوحة والجوال بمكان مكشوف عشان القراءات تكون أدق.<br>الاتجاه والسرعة يطلعون وأنت تتحرك. والارتفاع يعتمد على جوالك، وبعض الأجهزة ما تعطيه.</div>
+  </div>
+</section>
+
 <!-- ================= النجوم ================= -->
 <section class="scr" id="stars">
   <div class="safe"></div><div class="sb" data-sb></div>
@@ -520,6 +559,7 @@ notes:['g7','<path d="M6 3h12v18H6z"/><path d="M9 8h6M9 12h6M9 16h4"/>','الم�
 calc:['g3','<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h.01M12 12h.01M16 12h.01M8 16h.01M12 16h.01M16 16h.01" stroke-width="2.4"/>','الحاسبة'],
 green:['g4','<path d="M12 21v-9"/><path d="M12 12c0-4 3-7 8-7 0 5-3 8-8 7z"/><path d="M12 14c0-3-2.5-5.5-7-5.5 0 4 2.5 6 7 5.5z"/>','وسمت أرضك؟'],
 compass:['g3','<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>','البوصلة والقبلة'],
+gps:['g8','<rect x="6" y="2.5" width="12" height="19" rx="3"/><rect x="8.5" y="5.5" width="7" height="7" rx="1"/><path d="M12 7.2v3.6M10.2 9h3.6"/><path d="M9 16h6M9 18.5h3.5"/>','الملاح'],
 loc:['g6','<path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.6"/>','موقعي'],
 stars:['g5','<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/><path d="M17 3l.6 1.4L19 5l-1.4.6L17 7l-.6-1.4L15 5l1.4-.6z"/>','النجوم والقمر'],
 places:['g4','<path d="M3 20l6-11 4 6 2-3 6 8z"/><circle cx="17" cy="6" r="2"/>','أماكن البر'],
@@ -544,7 +584,7 @@ var BADGE={chats:0,phoneapp:0};
 function icon(k,label){if(FULL[k]){return '<div class="app" onclick="openApp(\''+k+'\')"><div class="i full" style="'+FULL[k][0]+'"><svg viewBox="0 0 60 60" class="fs">'+FULL[k][1]+'</svg><div class="bd" data-b="'+k+'" style="display:none"></div></div>'+(label!==false?'<span>'+LABEL[k]+'</span>':'')+'</div>'}var c=IC[k];var lock=k==='kashif'?'<div class="lockb"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>':'';
  var st=k==='kashif'?' style="background:linear-gradient(160deg,#3b2212,#120803)"':'',sv=k==='kashif'?' style="stroke:var(--honey)"':'';
  return '<div class="app" onclick="openApp(\''+k+'\')"><div class="i '+c[0]+'"'+st+'><svg viewBox="0 0 24 24"'+sv+'>'+c[1]+'</svg>'+lock+'<div class="bd" data-b="'+k+'" style="display:none"></div></div>'+(label!==false?'<span>'+c[2]+'</span>':'')+'</div>'}
-document.getElementById('grid').innerHTML=['seasons','green','chats','notes','camera','maps','clock','calc','compass','loc','stars','settings','places','rules','birds','kashif'].map(function(k){return icon(k)}).join('');
+document.getElementById('grid').innerHTML=['seasons','green','chats','notes','camera','maps','clock','calc','compass','loc','gps','stars','settings','places','rules','birds','kashif'].map(function(k){return icon(k)}).join('');
 document.getElementById('dock').innerHTML=['phoneapp','web','chats','gear'].map(function(k){return icon(k,false)}).join('');
 function badges(){document.querySelectorAll('[data-b]').forEach(function(e){var n=BADGE[e.dataset.b];if(n){e.style.display='grid';e.textContent=A(n)}else e.style.display='none'})}
 function aiHtml(k){var c=IC[k];return '<div class="ai '+c[0]+'" style="'+(k==='kashif'?'background:#2a160a':'')+'"><svg viewBox="0 0 24 24">'+c[1]+'</svg></div>'}
@@ -752,7 +792,7 @@ function renderGreen(){if(!GREEN){document.getElementById('gList').innerHTML='<p
  document.getElementById('gNote').textContent='من صور الأقمار الصناعية للاخضرار، والمزارع مستبعدة'+(GREEN.updated?' · آخر تحديث '+dF.format(new Date(GREEN.updated)):'')}
 function greenAt(la,lo){var b=GREEN.bbox;if(la<b[0]-.1||la>b[2]+.1||lo<b[1]-.1||lo>b[3]+.1)return {out:true};
  var arr=cellsArr(),best=null,bd=1e9;arr.forEach(function(c){var d=km(la,lo,c.la,c.lo);if(d<bd){bd=d;best=c}});return {c:best,d:bd}}
-function greenLoc(){var b=document.getElementById('gBtn');b.textContent='جاري تحديد موقعك…';if(!navigator.geolocation){b.textContent='جرّب مرة ثانية';guide('v','متصفحك ما يدعم الموقع هنا','افتح الصفحة بسفاري أو كروم:',OPEN_SAFARI(device()));return}
+function greenLoc(){var b=document.getElementById('nvBtn');b.textContent='جاري تحديد موقعك…';if(!navigator.geolocation){b.textContent='جرّب مرة ثانية';guide('v','متصفحك ما يدعم الموقع هنا','افتح الصفحة بسفاري أو كروم:',OPEN_SAFARI(device()));return}
  navigator.geolocation.getCurrentPosition(function(p){unguide('v');b.textContent='📍 حدّث';gPos={la:p.coords.latitude,lo:p.coords.longitude};var r=GREEN?greenAt(gPos.la,gPos.lo):null,h=document.getElementById('gRes'),t=nearTown(gPos.la,gPos.lo);
   var where=t.d<15?'حولك قرب '+t.n:'حولك ('+t.dir+' '+t.n+')';
   if(!r)h.innerHTML='<small>الأرض حولك</small><div class="big" style="font-size:26px">ما وصلتنا البيانات</div><p>جرّب بعد شوي.</p>';
@@ -808,6 +848,34 @@ function mapUrl(){return 'https://maps.google.com/?q='+pos.latitude.toFixed(6)+'
 function sendWa(){location.href='https://wa.me/?text='+encodeURIComponent('هذا موقعي بالبر 📍\n'+mapUrl())}
 function openMap(){window.open(mapUrl(),'_blank')}
 function copyLoc(){var t=pos.latitude.toFixed(6)+', '+pos.longitude.toFixed(6);(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){document.getElementById('lCp').textContent='انسخت ✓'}).catch(function(){prompt('انسخ الإحداثيات:',t)})}
+
+/* ================= الملاح ================= */
+var GP={w:null,last:null,dist:0,max:0,t0:0,acc:0,tick:null,co:null};
+function gpsHav(a,b){var R=6371000,r=Math.PI/180,dl=(b.la-a.la)*r,dn=(b.lo-a.lo)*r,x=Math.sin(dl/2)*Math.sin(dl/2)+Math.cos(a.la*r)*Math.cos(b.la*r)*Math.sin(dn/2)*Math.sin(dn/2);return 2*R*Math.asin(Math.sqrt(x))}
+function gpsBrg(a,b){var r=Math.PI/180,y=Math.sin((b.lo-a.lo)*r)*Math.cos(b.la*r),x=Math.cos(a.la*r)*Math.sin(b.la*r)-Math.sin(a.la*r)*Math.cos(b.la*r)*Math.cos((b.lo-a.lo)*r);return (Math.atan2(y,x)/r+360)%360}
+function gpsTime(){var s=GP.t0?Math.floor((GP.acc+(GP.w!==null?Date.now()-GP.t0:0))/1000):Math.floor(GP.acc/1000),h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60,p=function(n){return ('0'+n).slice(-2)};
+ document.getElementById('nvTm').textContent=A(h?h+':'+p(m)+':'+p(x):p(m)+':'+p(x))}
+function gpsSet(on){document.getElementById('nvDot').classList.toggle('on',on);document.getElementById('nvSt').textContent=on?'يسجّل':'متوقف';document.getElementById('nvBtn').textContent=on?'❚❚ وقّف':'▶︎ ابدأ'}
+function gpsToggle(){if(GP.w!==null)return gpsStop();
+ if(!navigator.geolocation){guide('p','متصفحك ما يدعم الموقع هنا','افتح الصفحة بسفاري أو كروم:',OPEN_SAFARI(device()));return}
+ document.getElementById('nvSt').textContent='يدوّر على إشارة…';document.getElementById('nvBtn').textContent='❚❚ وقّف';
+ GP.t0=Date.now();GP.tick=setInterval(gpsTime,1000);
+ GP.w=navigator.geolocation.watchPosition(gpsOn,function(err){if(err&&err.code!==1&&GP.co){document.getElementById('nvSt').textContent='يدوّر على إشارة…';document.getElementById('nvDot').classList.remove('on');return}gpsStop();document.getElementById('nvSt').textContent='ما وصلنا موقعك';guide('p',err&&err.code===1?'الملاح يحتاج إذن الموقع':'ما وصلنا موقعك',err&&err.code===1?'عشان نفعّله، سوّ هالخطوات وبعدها اضغط «ابدأ»:':'تأكد إن الموقع (GPS) شغال وإنك بمكان مكشوف، وإذا تكرر:',locSteps(device()))},{enableHighAccuracy:true,timeout:30000,maximumAge:0})}
+function gpsStop(){if(GP.w!==null)navigator.geolocation.clearWatch(GP.w);GP.w=null;if(GP.t0){GP.acc+=Date.now()-GP.t0;GP.t0=0}clearInterval(GP.tick);gpsTime();gpsSet(false);GP.last=null}
+function gpsReset(){var on=GP.w!==null;GP.dist=0;GP.max=0;GP.acc=0;GP.t0=on?Date.now():0;GP.last=null;
+ document.getElementById('nvDs').textContent=A('0.00').replace('.','٫');document.getElementById('nvMx').textContent=A(0);gpsTime()}
+function gpsOn(p){var c=p.coords,pt={la:c.latitude,lo:c.longitude,t:p.timestamp};unguide('p');gpsSet(true);GP.co=c;
+ document.getElementById('nvCo').textContent=c.latitude.toFixed(5)+' , '+c.longitude.toFixed(5);document.getElementById('nvCp').style.display='flex';
+ document.getElementById('nvAc').textContent='الدقة ± '+A(Math.round(c.accuracy))+' م';
+ document.getElementById('nvAl').textContent=(c.altitude!=null&&!isNaN(c.altitude))?A(Math.round(c.altitude)):'–';
+ var sp=(c.speed!=null&&!isNaN(c.speed)&&c.speed>=0)?c.speed:null,hd=(c.heading!=null&&!isNaN(c.heading))?c.heading:null;
+ if(c.accuracy<=40){if(GP.last){var d=gpsHav(GP.last,pt),dt=(pt.t-GP.last.t)/1000;
+   if(d>=Math.max(3,c.accuracy*.5)){var ok=dt>0&&d/dt<90;if(ok){if(sp==null)sp=d/dt;if(hd==null)hd=gpsBrg(GP.last,pt);GP.dist+=d}GP.last=pt}}else GP.last=pt}
+ var kmh=sp!=null?sp*3.6:0;if(kmh<1)kmh=0;if(kmh>GP.max&&kmh<300)GP.max=kmh;
+ document.getElementById('nvSp').textContent=sp!=null?A(Math.round(kmh)):'–';
+ document.getElementById('nvHd').textContent=(hd!=null&&kmh>=2)?dname(hd)+' '+A(Math.round(hd))+'°':'–';
+ document.getElementById('nvDs').textContent=A((GP.dist/1000).toFixed(2)).replace('.','٫');document.getElementById('nvMx').textContent=A(Math.round(GP.max))}
+function gpsCopy(){if(!GP.co)return;var t=GP.co.latitude.toFixed(6)+', '+GP.co.longitude.toFixed(6),b=document.getElementById('nvCp');(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){b.textContent='انسخت ✓';setTimeout(function(){b.textContent='انسخ الإحداثيات'},1500)}).catch(function(){prompt('انسخ الإحداثيات:',t)})}
 
 /* ================= الإشعارات وشاشة القفل ================= */
 (function(){var b=document.getElementById('ban'),y=null,d=0,moved=false;
