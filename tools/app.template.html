@@ -469,23 +469,44 @@ function openChat(id){var c=CH.find(function(x){return x.id===id}),b=document.ge
 /* ================= الهاتف والمكالمة ================= */
 var RECENTS=[{n:'المربعانية ❄️',s:'جوال',miss:false,id:'mur'}];
 function renderRecents(){document.getElementById('recents').innerHTML=RECENTS.map(function(r){return '<div class="crow" onclick="incoming(true)"><div class="cav" style="background:#1c2f4a">❄️</div><div class="t"><b style="'+(r.miss?'color:#ff6b5e':'')+'">'+r.n+'</b><span>'+(r.miss?'مكالمة فائتة':'جوال')+'</span></div><div class="r"><span>اليوم</span></div></div>'}).join('')}
-var callState=null,ringCtx=null,ringT=null,talkT=[];
-function ring(on){try{if(on){ringCtx=ringCtx||new (window.AudioContext||window.webkitAudioContext)();if(ringCtx.state==='suspended')ringCtx.resume();
-  var beep=function(){var o=ringCtx.createOscillator(),g=ringCtx.createGain();o.frequency.value=880;o.type='sine';g.gain.setValueAtTime(0,ringCtx.currentTime);g.gain.linearRampToValueAtTime(.08,ringCtx.currentTime+.05);g.gain.setValueAtTime(.08,ringCtx.currentTime+.35);g.gain.linearRampToValueAtTime(0,ringCtx.currentTime+.4);o.connect(g);g.connect(ringCtx.destination);o.start();o.stop(ringCtx.currentTime+.45);
-   var o2=ringCtx.createOscillator(),g2=ringCtx.createGain();o2.frequency.value=660;g2.gain.setValueAtTime(0,ringCtx.currentTime+.5);g2.gain.linearRampToValueAtTime(.08,ringCtx.currentTime+.55);g2.gain.linearRampToValueAtTime(0,ringCtx.currentTime+.9);o2.connect(g2);g2.connect(ringCtx.destination);o2.start(ringCtx.currentTime+.5);o2.stop(ringCtx.currentTime+.95)};
-  beep();ringT=setInterval(beep,2200);if(navigator.vibrate)navigator.vibrate([400,200,400])}else{clearInterval(ringT);if(navigator.vibrate)navigator.vibrate(0)}}catch(e){}}
-var CALL_LINES=function(){return ['هلا والله! معك <b>المربعانية</b> ❄️',(MUR.now?'أنا عندكم الحين، وباقي لي <b>'+A(MUR.left)+' '+daysWord(MUR.left)+'</b>.':'باقي لي <b>'+A(MUR.left)+' '+daysWord(MUR.left)+'</b> وأدخل عليكم.')+' وأنا أربعين يوم برد!','دفّ نفسك من الحين، واشترِ أغراض الشتاء 🔥','وإذا محتار.. أدلك على المنتجات اللي تحتاجها 😉']};
+var callState=null,talkT=[];
+/* نغمة الاتصال: ملف صوت يتولد بالمتصفح ويشتغل حتى والجوال صامت */
+var ringA=(function(){var sr=22050,dur=2.6,n=Math.floor(sr*dur),buf=new ArrayBuffer(44+n*2),v=new DataView(buf);
+ function w(o,s){for(var i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i))}
+ w(0,'RIFF');v.setUint32(4,36+n*2,true);w(8,'WAVE');w(12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,sr,true);v.setUint32(28,sr*2,true);v.setUint16(32,2,true);v.setUint16(34,16,true);w(36,'data');v.setUint32(40,n*2,true);
+ var notes=[[0,659],[.18,784],[.36,988],[.54,784],[.9,659],[1.08,784],[1.26,988],[1.44,1175]];
+ for(var i=0;i<n;i++){var t=i/sr,x=0;for(var k=0;k<notes.length;k++){var dt=t-notes[k][0];if(dt>=0&&dt<.7){var e=Math.exp(-dt*7)*Math.min(1,dt*200);x+=e*(Math.sin(2*Math.PI*notes[k][1]*dt)+.35*Math.sin(4*Math.PI*notes[k][1]*dt))}}
+  v.setInt16(44+i*2,Math.max(-1,Math.min(1,x*.38))*32767,true)}
+ var a=new Audio(URL.createObjectURL(new Blob([buf],{type:'audio/wav'})));a.loop=true;a.preload='auto';a.setAttribute('playsinline','');return a})();
+var voiceA=new Audio();voiceA.preload='auto';voiceA.setAttribute('playsinline','');
+var VOICE_URL='https://wasmii.com/assets/audio/murabbaniya.mp3',voiceOK=false;
+voiceA.addEventListener('canplaythrough',function(){voiceOK=true},{once:true});voiceA.addEventListener('error',function(){voiceOK=false});voiceA.src=VOICE_URL;
+var audioUnlocked=false;
+function unlockAudio(){if(audioUnlocked)return;audioUnlocked=true;[ringA,voiceA].forEach(function(a){try{a.muted=true;var p=a.play();if(p&&p.then)p.then(function(){a.pause();a.currentTime=0;a.muted=false}).catch(function(){a.muted=false});else{a.pause();a.muted=false}}catch(e){}})}
+document.addEventListener('touchend',unlockAudio,{once:true});document.addEventListener('click',unlockAudio,{once:true});
+function ring(on){try{if(on){ringA.currentTime=0;var p=ringA.play();if(p&&p.catch)p.catch(function(){});if(navigator.vibrate)navigator.vibrate([400,200,400,200,400])}else{ringA.pause();ringA.currentTime=0;if(navigator.vibrate)navigator.vibrate(0)}}catch(e){}}
+function numWord(n){var W={1:'يوم واحد',2:'يومين',3:'ثلاث أيام',4:'أربع أيام',5:'خمس أيام',6:'ست أيام',7:'سبع أيام',8:'ثمان أيام',9:'تسع أيام',10:'عشر أيام',11:'إحدعشر يوم',12:'اثنعشر يوم',13:'ثلطعش يوم',14:'أربعطعش يوم',15:'خمسطعش يوم',16:'ستطعش يوم',17:'سبعطعش يوم',18:'ثمنطعش يوم',19:'تسعطعش يوم',20:'عشرين يوم',30:'ثلاثين يوم',40:'أربعين يوم'};return W[n]||(A(n)+' '+daysWord(n))}
+var CALL_LINES=function(){var d=numWord(MUR.left);return [
+ ['ألو.. هلا والله! معك <b>المربعانية</b> ❄️','ألو.. هلا والله! معك المربعانية'],
+ MUR.now?['ترى أنا عندكم الحين، وباقي لي <b>'+d+'</b>.. ولا راح أرحم أحد 😏','ترى أنا عندكم الحين، وباقي لي '+d+'.. ولا راح أرحم أحد']:['باقي لي <b>'+d+'</b> وأدخل عليكم.. وأنا أربعين يوم برد، ولا راح أرحم أحد 😏','باقي لي '+d+' وأدخل عليكم.. وأنا أربعين يوم برد، ولا راح أرحم أحد'],
+ ['فدفّ نفسك من الحين، وجهّز أغراضك: الدفاية والفروة والبطانيات 🔥','فدفّ نفسك من الحين، وجهّز أغراضك.. الدفاية، والفروة، والبطانيات'],
+ ['وإذا محتار وش تجيب.. أنا أدلك 😉','وإذا محتار وش تجيب.. أنا أدلك']]};
 function incoming(manual){if(callState)return;callState='ring';var c=document.getElementById('call');c.className='on';document.getElementById('clWho').textContent=manual?'جاري الاتصال…':'مكالمة واردة…';
  document.getElementById('clSt').textContent='جوال';document.getElementById('clCap').innerHTML='';document.getElementById('clActs').style.display='flex';
  if(manual){document.querySelector('#call .acc').style.display='none';setTimeout(answer,1600)}else{document.querySelector('#call .acc').style.display='flex';ring(true)}}
-function speak(text,cb){try{if(!window.speechSynthesis){cb&&setTimeout(cb,2600);return}var u=new SpeechSynthesisUtterance(text.replace(/<[^>]+>/g,'').replace(/[❄️🔥😉]/g,''));u.lang='ar-SA';u.rate=.95;u.pitch=1;
+function speak(text,cb){try{if(!window.speechSynthesis){cb&&setTimeout(cb,2600);return}var u=new SpeechSynthesisUtterance(text);u.lang='ar-SA';u.rate=.95;u.pitch=1;
  var v=speechSynthesis.getVoices().filter(function(v){return /^ar/i.test(v.lang)});if(v.length)u.voice=v.find(function(x){return /SA/i.test(x.lang)})||v[0];
  var done=false,fin=function(){if(!done){done=true;cb&&cb()}};u.onend=fin;u.onerror=fin;speechSynthesis.speak(u);setTimeout(fin,Math.max(3200,text.length*95))}catch(e){cb&&setTimeout(cb,2600)}}
 function answer(){ring(false);callState='talk';var c=document.getElementById('call');c.className='on talk';document.querySelector('#call .acc').style.display='none';
  var t0=Date.now(),tmr=setInterval(function(){if(callState!=='talk'&&callState!=='done'){clearInterval(tmr);return}var s=Math.floor((Date.now()-t0)/1000);document.getElementById('clSt').textContent=('0'+Math.floor(s/60)).slice(-2)+':'+('0'+s%60).slice(-2)},500);
  document.getElementById('clWho').textContent='مكالمة';var L=CALL_LINES(),i=0,cap=document.getElementById('clCap');
- (function nx(){if(callState!=='talk')return;if(i>=L.length){callState='done';c.className='on talk done';return}cap.innerHTML=L[i];speak(L[i],function(){i++;nx()})})()}
-function endCall(shop){ring(false);try{speechSynthesis.cancel()}catch(e){}var was=callState;callState=null;document.getElementById('call').className='';
+ function fin(){if(callState==='talk'){callState='done';c.className='on talk done'}}
+ function nx(){if(callState!=='talk')return;if(i>=L.length)return fin();cap.innerHTML=L[i][0];speak(L[i][1],function(){i++;nx()})}
+ if(voiceOK){var vt;try{voiceA.currentTime=0}catch(e){}var vp=voiceA.play();cap.innerHTML=L[0][0];
+  vt=setInterval(function(){if(callState!=='talk'){clearInterval(vt);return}var per=(voiceA.duration||12)/L.length;cap.innerHTML=L[Math.min(L.length-1,Math.floor(voiceA.currentTime/per))][0]},300);
+  voiceA.onended=function(){clearInterval(vt);fin()};if(vp&&vp.catch)vp.catch(function(){clearInterval(vt);voiceOK=false;nx()})}
+ else nx()}
+function endCall(shop){ring(false);try{speechSynthesis.cancel()}catch(e){}try{voiceA.pause()}catch(e){}var was=callState;callState=null;document.getElementById('call').className='';
  if(was==='ring'){RECENTS[0].miss=true;BADGE.phoneapp=1;badges();setTimeout(function(){banner('phoneapp','الهاتف','مكالمة فائتة من المربعانية ❄️',function(){openApp('phoneapp')})},800)}
  if(shop){home();setTimeout(function(){gearOn='heat';go('gear')},150)}}
 
@@ -594,7 +615,7 @@ function afterUnlock(){BADGE.chats=unread();badges();
 seasons();moon();badges();
 var standalone=window.navigator.standalone||window.matchMedia('(display-mode: standalone)').matches;
 if(/iPhone|iPad/.test(navigator.userAgent)&&!standalone)document.getElementById('addHint').style.display='block';
-document.addEventListener('touchstart',function(){if(!ringCtx){try{ringCtx=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}},{once:true});
+
 </script>
 </body>
 </html>
