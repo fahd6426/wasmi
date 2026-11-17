@@ -215,6 +215,9 @@ a{color:inherit;text-decoration:none}
 #call .dec i{background:#ff3b30}#call .dec i svg{transform:rotate(135deg)}
 #call .shop{display:none;background:var(--honey);color:#fff;border:0;border-radius:999px;padding:15px 28px;font-family:inherit;font-size:17px;font-weight:800;margin-top:18px;cursor:pointer}
 #call.done .shop{display:inline-block;animation:cin .4s}
+#call .shr{display:none;background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.5);border-radius:999px;padding:13px 26px;font-family:inherit;font-size:16px;font-weight:700;margin-top:10px;cursor:pointer}
+#call.done .shr{display:inline-block;animation:cin .5s}
+.sharebtn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:rgba(250,243,230,.14);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(250,243,230,.18);color:var(--sand);border-radius:18px;padding:13px;font-family:inherit;font-size:15.5px;font-weight:800;cursor:pointer;margin:0 0 16px}
 
 /* سوالف (المحادثات) */
 .chl .crow{display:flex;gap:12px;align-items:center;padding:10px 0;cursor:pointer;border-bottom:1px solid var(--line)}
@@ -296,6 +299,7 @@ a{color:inherit;text-decoration:none}
       <div class="wg wbig" onclick="go('stars')"><div class="moon"><canvas id="wMoon" width="92" height="92"></canvas><div><b id="wMoonN">القمر</b><span id="wMoonP"></span></div></div></div>
     </div>
     <div class="grid" id="grid"></div>
+    <button class="sharebtn" onclick="shareApp(false)">📤 أرسل جوال وسمي لربعك</button>
     <div class="add" id="addHint">ضيف وسمي لشاشتك: اضغط <b>مشاركة</b> ثم <b>إضافة إلى الشاشة الرئيسية</b></div>
   </div>
   <div class="dock" id="dock"></div>
@@ -461,6 +465,7 @@ a{color:inherit;text-decoration:none}
   <div class="av" id="clAv">❄️</div>
   <div class="cap" id="clCap"></div>
   <button class="shop" onclick="endCall(true)">وريني أغراض الشتاء 🔥</button>
+  <button class="shr" onclick="shareApp(true)">📤 أرسل المكالمة لربعك</button>
   <div class="acts" id="clActs">
     <div class="cb dec" onclick="endCall(false)"><i><svg viewBox="0 0 24 24"><path d="M6.6 2.8l3.1 3.4c.4.5.4 1.2 0 1.7L8.2 9.6a12 12 0 0 0 6.2 6.2l1.7-1.5c.5-.4 1.2-.4 1.7 0l3.4 3.1c.5.5.5 1.2 0 1.7l-1.6 1.7C12 21.6 2.4 12 3.2 4.4l1.7-1.6c.5-.5 1.2-.5 1.7 0z"/></svg></i>رفض</div>
     <div class="cb acc" onclick="answer()"><i><svg viewBox="0 0 24 24"><path d="M6.6 2.8l3.1 3.4c.4.5.4 1.2 0 1.7L8.2 9.6a12 12 0 0 0 6.2 6.2l1.7-1.5c.5-.4 1.2-.4 1.7 0l3.4 3.1c.5.5.5 1.2 0 1.7l-1.6 1.7C12 21.6 2.4 12 3.2 4.4l1.7-1.6c.5-.5 1.2-.5 1.7 0z"/></svg></i>رد</div>
@@ -659,12 +664,12 @@ var CALL_LINES=function(){var d=numWord(MUR.left);return [
  ['فدفّ نفسك من الحين، وجهّز أغراضك: الدفاية والفروة والبطانيات 🔥','فدفّ نفسك من الحين، وجهّز أغراضك.. الدفاية، والفروة، والبطانيات'],
  ['وإذا محتار وش تجيب.. أنا أدلك 😉','وإذا محتار وش تجيب.. أنا أدلك']]};
 function incoming(manual){if(callState)return;callState='ring';var c=document.getElementById('call');c.className='on';document.getElementById('clWho').textContent=manual?'جاري الاتصال…':'مكالمة واردة…';
- document.getElementById('clSt').textContent='جوال';document.getElementById('clCap').innerHTML='';document.getElementById('clActs').style.display='flex';
+ document.getElementById('clSt').textContent='جوال';document.getElementById('clCap').innerHTML='';document.querySelector('#call .dec').lastChild.textContent='رفض';document.getElementById('clActs').style.display='flex';
  if(manual){document.querySelector('#call .acc').style.display='none';setTimeout(answer,1600)}else{document.querySelector('#call .acc').style.display='flex';ring(true)}}
 function speak(text,cb){try{if(!window.speechSynthesis){cb&&setTimeout(cb,2600);return}var u=new SpeechSynthesisUtterance(text);u.lang='ar-SA';u.rate=.95;u.pitch=1;
  var v=speechSynthesis.getVoices().filter(function(v){return /^ar/i.test(v.lang)});if(v.length)u.voice=v.find(function(x){return /SA/i.test(x.lang)})||v[0];
  var done=false,fin=function(){if(!done){done=true;cb&&cb()}};u.onend=fin;u.onerror=fin;speechSynthesis.speak(u);setTimeout(fin,Math.max(3200,text.length*95))}catch(e){cb&&setTimeout(cb,2600)}}
-function answer(){ring(false);callState='talk';var c=document.getElementById('call');c.className='on talk';document.querySelector('#call .acc').style.display='none';
+function answer(){ring(false);callState='talk';var c=document.getElementById('call');c.className='on talk';document.querySelector('#call .acc').style.display='none';document.querySelector('#call .dec').lastChild.textContent='إنهاء';
  var t0=Date.now(),tmr=setInterval(function(){if(callState!=='talk'&&callState!=='done'){clearInterval(tmr);return}var s=Math.floor((Date.now()-t0)/1000);document.getElementById('clSt').textContent=('0'+Math.floor(s/60)).slice(-2)+':'+('0'+s%60).slice(-2)},500);
  document.getElementById('clWho').textContent='مكالمة';var L=CALL_LINES(),i=0,cap=document.getElementById('clCap');
  function fin(){if(callState==='talk'){callState='done';c.className='on talk done'}}
@@ -676,6 +681,10 @@ function answer(){ring(false);callState='talk';var c=document.getElementById('ca
 function endCall(shop){ring(false);try{speechSynthesis.cancel()}catch(e){}try{voiceA.pause()}catch(e){}var was=callState;callState=null;document.getElementById('call').className='';
  if(was==='ring'){RECENTS[0].miss=true;BADGE.phoneapp=1;badges();setTimeout(function(){banner('phoneapp','الهاتف','مكالمة فائتة من المربعانية ❄️',function(){openApp('phoneapp')})},800)}
  if(shop){home();setTimeout(function(){gearOn='heat';go('gear')},150)}}
+
+/* ================= المشاركة ================= */
+function shareApp(fromCall){var u='https://wasmii.com/app',t=fromCall?'المربعانية اتصلت علي 😂❄️ جرّب وشوف وش قالت لك':'جوال وسمي 📱 دليلك بالبر: كم باقي على المربعانية، البوصلة والقبلة، أرسل موقعك.. وانتبه، ممكن يجيك اتصال 😏';
+ if(navigator.share){navigator.share({title:'جوال وسمي',text:t,url:u}).catch(function(){})}else{window.open('https://wa.me/?text='+encodeURIComponent(t+'\n'+u),'_blank')}}
 
 /* ================= الملاحظات ================= */
 var NOTES=LS.get('w_notes',null)||[{t:'قائمة الكشتة',b:'☐ حطب أو فحم (مو محلي)\n☐ دلة وهيل وتمر\n☐ فروة وبطانيات\n☐ دفاية غاز\n☐ كشاف وباور بانك\n☐ كيس زبالة 🗑️\n☐ تصريح التخييم إذا بنبات'},{t:'أرقام مهمة',b:'الطوارئ الموحد: 911\nالهلال الأحمر: 997\nالدفاع المدني: 998\nالشرطة: 999'}];
