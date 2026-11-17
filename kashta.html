@@ -4,18 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>نسّق كشتتكم 🔥 | وسمي</title>
-<meta name="description" content="افتح كشتة وأرسل الرابط للربع، وكل واحد يختار وش بيجيب. ما عاد يجي اثنين بدلّتين وما أحد جاب حطب 😂">
+<meta name="description" content="افتح كشتة وأرسل الرابط للربع، وكل واحد يختار وش بيجيب، والقائد يتابع الترتيب.">
 <link rel="canonical" href="https://wasmii.com/kashta.html">
 <meta name="theme-color" content="#5A331C">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ar_SA">
 <meta property="og:title" content="نسّق كشتتكم 🔥 وش بتجيب؟">
-<meta property="og:description" content="اختار وش بتجيب للكشتة، وشوف وش جاب الربع.. واللي ما جاب شي اسمه بيطلع بالأحمر 😂">
-<meta property="og:image" content="https://wasmii.com/assets/og/kashta.jpg">
+<meta property="og:description" content="اختار وش بتجيب للكشتة، وشوف وش بيجيب الربع، والقائد يتابع الترتيب 👑">
+<meta property="og:image" content="https://wasmii.com/assets/og/kashta2.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://wasmii.com/assets/og/kashta.jpg">
+<meta name="twitter:image" content="https://wasmii.com/assets/og/kashta2.jpg">
 <link rel="icon" href="/assets/logo/wasmi-app-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -84,7 +84,7 @@ input:focus{border-color:var(--honey)}
 
   <!-- إنشاء كشتة -->
   <div id="vCreate" class="hide">
-    <div class="hero"><small>تنسيق الكشتة</small><h1>نسّق كشتتكم 🔥</h1><p style="font-size:16px;opacity:.92">افتح كشتة، وأرسل الرابط للقروب، وكل واحد يختار وش بيجيب.<br>ما عاد يجي اثنين بدلّتين وما أحد جاب حطب 😂</p></div>
+    <div class="hero"><small>تنسيق الكشتة</small><h1>نسّق كشتتكم 🔥</h1><p style="font-size:16px;opacity:.92">افتح كشتة، وأرسل الرابط للقروب، وكل واحد يختار وش بيجيب.<br>والقائد يتابع الترتيب، وتعرفون وش الناقص قبل الطلعة.</p></div>
     <div class="card">
       <label for="cName">اسم الكشتة</label><input id="cName" maxlength="40" placeholder="مثال: كشتة الخميس">
       <label for="cLead">قائد الرحلة 👑 (اسمك)</label><input id="cLead" maxlength="24" placeholder="اسمك">
@@ -164,7 +164,7 @@ function render(){var t=DATA.trip,items=DATA.items;
  var ppl={};items.forEach(function(i){if(!ppl[i.who])ppl[i.who]={n:0,mine:false};if(i.item!=='__join')ppl[i.who].n++;if(i.mine)ppl[i.who].mine=true});
  if(!ppl[t.leader])ppl[t.leader]={n:0,mine:false};
  var names=Object.keys(ppl);
- document.getElementById('ppl').innerHTML=names.map(function(n){var p=ppl[n],cls=n===t.leader?'lead':p.n===0?'none':'';return '<span class="chip '+cls+(p.mine?' me':'')+'">'+(n===t.leader?'👑 ':'')+esc(n)+(p.n?' — '+AR(p.n)+(p.n>2?' أغراض':p.n==2?' غرضين':' غرض'):(n===t.leader?'':' — ما جاب شي 😅'))+'</span>'}).join('');
+ document.getElementById('ppl').innerHTML=names.map(function(n){var p=ppl[n],cls=n===t.leader?'lead':p.n===0?'none':'';return '<span class="chip '+cls+(p.mine?' me':'')+'">'+(n===t.leader?'👑 ':'')+esc(n)+(p.n?' — '+AR(p.n)+(p.n>2?' أغراض':p.n==2?' غرضين':' غرض'):(n===t.leader?'':' — ما اختار للحين'))+'</span>'}).join('');
  // الأغراض
  var by={};items.forEach(function(i){if(i.item==='__join')return;(by[i.item]=by[i.item]||[]).push(i)});
  var known={};CATS.forEach(function(c){c[1].forEach(function(x){known[x]=1})});
