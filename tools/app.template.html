@@ -193,6 +193,22 @@
   </div>
 </section>
 
+<!-- ================= وسمت أرضك؟ ================= -->
+<section class="scr" id="green">
+  <div class="safe"></div><div class="sb" data-sb></div>
+  <div class="top"><span class="back" onclick="back()">‹ وسمي</span><h2></h2><span style="min-width:74px"></span></div>
+  <div class="body">
+    <div class="ttl">وسمت أرضك؟</div>
+    <style>#gRes .big{font-family:Tajawal,sans-serif;font-weight:800}</style><div class="card hero" id="gRes"><small>الأرض حولك</small><div class="big" style="font-size:28px">🌱 شيك على أرضك</div><p>نقارن اخضرار الأرض حولك الحين باخضرارها قبل الوسم، من صور الأقمار الصناعية.</p></div>
+    <button class="b b1" id="gBtn" onclick="greenLoc()">📍 شيك على أرضي</button>
+    <div class="gbox" id="vG"><h3 id="vGt"></h3><p id="vGp"></p><ol class="guide" id="vGl"></ol></div>
+    <div class="ttl" style="font-size:22px;margin-top:22px">وين الربيع؟ 🗺️</div>
+    <p style="font-size:14px;color:var(--mut);margin:-8px 0 10px" id="gSub">أكثر الأماكن اللي اخضرت هالموسم</p>
+    <div id="gList"></div>
+    <div class="note" id="gNote"></div>
+  </div>
+</section>
+
 <!-- ================= سوالف ================= -->
 <section class="scr" id="chats">
   <div class="safe"></div><div class="sb" data-sb></div>
@@ -378,6 +394,7 @@ chats:['g1','<path d="M12 3.5a8.5 8.5 0 0 0-7.4 12.7L3.5 20.5l4.4-1.1A8.5 8.5 0 
 phoneapp:['g4','<path d="M6.6 2.8l3.1 3.4c.4.5.4 1.2 0 1.7L8.2 9.6a12 12 0 0 0 6.2 6.2l1.7-1.5c.5-.4 1.2-.4 1.7 0l3.4 3.1c.5.5.5 1.2 0 1.7l-1.6 1.7C12 21.6 2.4 12 3.2 4.4l1.7-1.6c.5-.5 1.2-.5 1.7 0z"/>','الهاتف'],
 notes:['g7','<path d="M6 3h12v18H6z"/><path d="M9 8h6M9 12h6M9 16h4"/>','الملاحظات'],
 calc:['g3','<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 12h.01M12 12h.01M16 12h.01M8 16h.01M12 16h.01M16 16h.01" stroke-width="2.4"/>','الحاسبة'],
+green:['g4','<path d="M12 21v-9"/><path d="M12 12c0-4 3-7 8-7 0 5-3 8-8 7z"/><path d="M12 14c0-3-2.5-5.5-7-5.5 0 4 2.5 6 7 5.5z"/>','وسمت أرضك؟'],
 compass:['g3','<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>','البوصلة والقبلة'],
 loc:['g6','<path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.6"/>','موقعي'],
 stars:['g5','<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/><path d="M17 3l.6 1.4L19 5l-1.4.6L17 7l-.6-1.4L15 5l1.4-.6z"/>','النجوم والقمر'],
@@ -390,7 +407,7 @@ var BADGE={chats:0,phoneapp:0};
 function icon(k,label){var c=IC[k];var lock=k==='kashif'?'<div class="lockb"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>':'';
  var st=k==='kashif'?' style="background:linear-gradient(160deg,#3b2212,#120803)"':'',sv=k==='kashif'?' style="stroke:var(--honey)"':'';
  return '<div class="app" onclick="openApp(\''+k+'\')"><div class="i '+c[0]+'"'+st+'><svg viewBox="0 0 24 24"'+sv+'>'+c[1]+'</svg>'+lock+'<div class="bd" data-b="'+k+'" style="display:none"></div></div>'+(label!==false?'<span>'+c[2]+'</span>':'')+'</div>'}
-document.getElementById('grid').innerHTML=['seasons','chats','notes','calc','compass','loc','stars','places','rules','birds','kashif'].map(function(k){return icon(k)}).join('');
+document.getElementById('grid').innerHTML=['seasons','green','chats','notes','calc','compass','loc','stars','places','rules','birds','kashif'].map(function(k){return icon(k)}).join('');
 document.getElementById('dock').innerHTML=['phoneapp','chats','compass','gear'].map(function(k){return icon(k,false)}).join('');
 function badges(){document.querySelectorAll('[data-b]').forEach(function(e){var n=BADGE[e.dataset.b];if(n){e.style.display='grid';e.textContent=A(n)}else e.style.display='none'})}
 function aiHtml(k){var c=IC[k];return '<div class="ai '+c[0]+'" style="'+(k==='kashif'?'background:#2a160a':'')+'"><svg viewBox="0 0 24 24">'+c[1]+'</svg></div>'}
@@ -398,7 +415,7 @@ function aiHtml(k){var c=IC[k];return '<div class="ai '+c[0]+'" style="'+(k==='k
 /* ================= التنقل ================= */
 var stack=[];
 function go(id){var s=document.getElementById(id);s.style.zIndex=10+stack.length;s.classList.add('on');stack.push(id);document.getElementById('home').classList.add('dim');history.pushState({s:id},'');
- if(id==='gear')loadGear();opened++;}
+ if(id==='gear')loadGear();if(id==='green')loadGreen();opened++;}
 function back(){var id=stack.pop();if(!id)return;var s=document.getElementById(id);s.classList.remove('on');if(!stack.length)document.getElementById('home').classList.remove('dim');
  if(id==='web')setTimeout(function(){document.getElementById('wF').src='about:blank'},350)}
 function home(){while(stack.length)back()}
@@ -579,6 +596,37 @@ function guide(px,title,hint,steps){var g=document.getElementById(px+'G');docume
  var ol=document.getElementById(px+'Gl');ol.innerHTML='';(steps||[]).forEach(function(s,i){var li=document.createElement('li'),b=document.createElement('b'),sp=document.createElement('span');b.textContent=A(i+1);
   if(typeof s==='string')sp.textContent=s;else{var ic=document.createElement('i');ic.className='ic';ic.innerHTML=s.icon;sp.append(ic,document.createTextNode(' '+s.text))}li.append(b,sp);ol.appendChild(li)});g.classList.add('on')}
 function unguide(px){document.getElementById(px+'G').classList.remove('on')}
+
+/* ================= وسمت أرضك؟ ================= */
+var GREEN=DATA.green||null,gPos=null;
+var TOWNS=[['حائل',27.52,41.69],['سكاكا',29.97,40.21],['عرعر',30.98,41.02],['تبوك',28.38,36.57],['تيماء',27.63,38.55],['العلا',26.62,37.92],['بريدة',26.33,43.97],['عنيزة',26.08,43.99],['الرس',25.87,43.5],['حفر الباطن',28.43,45.96],['رفحاء',29.63,43.5],['طريف',31.67,38.65],['القريات',31.33,37.34],['دومة الجندل',29.81,39.87],['طبرجل',30.5,38.22],['سميراء',26.51,42.11],['بقعاء',27.89,42.4],['الشنان',27.18,42.44],['الغزالة',26.8,41.33],['موقق',27.39,41.18],['جبة',28.02,40.92],['العويقيلة',30.34,42.25],['الزلفي',26.3,44.8],['المجمعة',25.9,45.34],['الأرطاوية',26.5,45.35],['الرياض',24.71,46.68],['القيصومة',28.31,46.13],['النعيرية',27.47,48.48],['الجبيل',27.0,49.66],['الهفوف',25.38,49.59],['الدمام',26.43,50.1],['المدينة',24.47,39.61],['خيبر',25.7,39.29],['الوجه',26.24,36.45],['ضباء',27.35,35.69],['حقل',29.29,34.94],['الحديثة',31.46,37.13]];
+function km(a,b,c,d){var R=6371,t=Math.PI/180,x=Math.sin((c-a)*t/2),y=Math.sin((d-b)*t/2),h=x*x+Math.cos(a*t)*Math.cos(c*t)*y*y;return 2*R*Math.asin(Math.sqrt(h))}
+function dir8(a,b,c,d){var t=Math.PI/180,y=Math.sin((d-b)*t)*Math.cos(c*t),x=Math.cos(a*t)*Math.sin(c*t)-Math.sin(a*t)*Math.cos(c*t)*Math.cos((d-b)*t);return DN[Math.round(((Math.atan2(y,x)/t+360)%360)/45)%8]}
+function nearTown(la,lo){var b=null,bd=1e9;TOWNS.forEach(function(t){var d=km(la,lo,t[1],t[2]);if(d<bd){bd=d;b=t}});return {n:b[0],d:Math.round(bd),dir:dir8(b[1],b[2],la,lo)}}
+function lvl(g){return g>=80?['وسمت زين 🌿','#5fbf6a']:g>=40?['بدأت تخضر 🌱','#a9c65a']:['اخضرار خفيف 🌾','#d9b26a']}
+function cellsArr(){return (GREEN&&GREEN.cells||[]).map(function(c){return {la:c[0]/10,lo:c[1]/10,g:c[2],mx:c[3]}})}
+function clusters(arr){var s=arr.slice().sort(function(a,b){return b.g-a.g}),out=[];s.forEach(function(c){if(!out.some(function(o){return km(o.la,o.lo,c.la,c.lo)<35}))out.push(c)});return out}
+function pctTxt(c){return c.g>=80?'بشكل واضح':c.g>=40?'بشكل متوسط':'شوي'}
+function renderGreen(){if(!GREEN){document.getElementById('gList').innerHTML='<p style="color:var(--mut)">ما قدرنا نحمّل بيانات الاخضرار الحين.</p>';return}
+ var cl=clusters(cellsArr());if(gPos){cl=cl.filter(function(c){c.dk=km(gPos.la,gPos.lo,c.la,c.lo);return c.dk<=400}).sort(function(a,b){return (a.dk/60-a.g/40)-(b.dk/60-b.g/40)});document.getElementById('gSub').textContent='أقرب الأماكن اللي اخضرت حولك (لين ٤٠٠ كم)'}
+ cl=cl.slice(0,8);
+ document.getElementById('gList').innerHTML=cl.length?cl.map(function(c){var t=nearTown(c.la,c.lo),L=lvl(c.g);
+  return '<div class="card"><span class="when" style="background:'+L[1]+'33;color:'+L[1]+'">'+L[0]+'</span><h3>'+(t.d<15?'قرب '+t.n:t.dir+' '+t.n+' بـ'+A(t.d)+' كم')+'</h3><p>الاخضرار زاد '+pctTxt(c)+' عن قبل الموسم'+(gPos?' · يبعد عنك '+A(Math.round(c.dk))+' كم':'')+'</p><a class="b b2" href="https://maps.google.com/?q='+c.la.toFixed(2)+','+c.lo.toFixed(2)+'" target="_blank" rel="noopener">افتح بالخرائط</a></div>'}).join(''):'<p style="color:var(--mut)">للحين ما فيه أماكن اخضرت بشكل واضح'+(gPos?' قريب منك':'')+'.</p>';
+ document.getElementById('gNote').textContent='من صور الأقمار الصناعية للاخضرار، والمزارع مستبعدة'+(GREEN.updated?' · آخر تحديث '+dF.format(new Date(GREEN.updated)):'')}
+function greenAt(la,lo){var b=GREEN.bbox;if(la<b[0]-.1||la>b[2]+.1||lo<b[1]-.1||lo>b[3]+.1)return {out:true};
+ var arr=cellsArr(),best=null,bd=1e9;arr.forEach(function(c){var d=km(la,lo,c.la,c.lo);if(d<bd){bd=d;best=c}});return {c:best,d:bd}}
+function greenLoc(){var b=document.getElementById('gBtn');b.textContent='جاري تحديد موقعك…';if(!navigator.geolocation){b.textContent='جرّب مرة ثانية';guide('v','متصفحك ما يدعم الموقع هنا','افتح الصفحة بسفاري أو كروم:',OPEN_SAFARI(device()));return}
+ navigator.geolocation.getCurrentPosition(function(p){unguide('v');b.textContent='📍 حدّث';gPos={la:p.coords.latitude,lo:p.coords.longitude};var r=GREEN?greenAt(gPos.la,gPos.lo):null,h=document.getElementById('gRes'),t=nearTown(gPos.la,gPos.lo);
+  var where=t.d<15?'حولك قرب '+t.n:'حولك ('+t.dir+' '+t.n+')';
+  if(!r)h.innerHTML='<small>الأرض حولك</small><div class="big" style="font-size:26px">ما وصلتنا البيانات</div><p>جرّب بعد شوي.</p>';
+  else if(r.out)h.innerHTML='<small>الأرض حولك</small><div class="big" style="font-size:24px">منطقتك برا تغطيتنا</div><p>نغطي الحين من خط ٢٤ لين حدود الشمال، ومن البحر الأحمر لين الخليج.</p>';
+  else if(r.d<=8){var L=lvl(r.c.g);h.innerHTML='<small>الأرض '+where+'</small><div class="big" style="font-size:30px;color:'+L[1]+'">'+L[0]+'</div><p>الاخضرار زاد '+pctTxt(r.c)+' عن قبل الموسم.</p>'}
+  else if(r.d<=40){var L2=lvl(r.c.g);h.innerHTML='<small>الأرض '+where+'</small><div class="big" style="font-size:26px">للحين ما وسمت 🏜️</div><p>بس فيه أرض '+L2[0].replace(/ .*/,'')+' على بعد '+A(Math.round(r.d))+' كم ('+dir8(gPos.la,gPos.lo,r.c.la,r.c.lo)+' منك).</p><a class="b b2" href="https://maps.google.com/?q='+r.c.la.toFixed(2)+','+r.c.lo.toFixed(2)+'" target="_blank" rel="noopener">افتحها بالخرائط</a>'}
+  else h.innerHTML='<small>الأرض '+where+'</small><div class="big" style="font-size:28px">للحين ما وسمت 🏜️</div><p>الأرض حولك مثل ما كانت قبل الموسم. شف تحت وين الربيع 👇</p>';
+  renderGreen()},
+ function(err){b.textContent='جرّب مرة ثانية';guide('v',err&&err.code===1?'نحتاج إذن الموقع':'ما وصلنا موقعك',err&&err.code===1?'عشان نشوف أرضك، سوّ هالخطوات وبعدها اضغط «جرّب مرة ثانية»:':'تأكد إن الموقع (GPS) شغال، وإذا تكرر:',locSteps(device()))},{enableHighAccuracy:false,timeout:20000,maximumAge:600000})}
+var greenFetched=false;
+function loadGreen(){renderGreen();if(greenFetched)return;greenFetched=true;fetch('https://wasmii.com/data/green.json',{cache:'no-cache'}).then(function(r){return r.json()}).then(function(j){if(j&&j.cells){GREEN=j;renderGreen()}}).catch(function(){})}
 
 /* ================= البوصلة ================= */
 (function(){var r=document.getElementById('rose'),h='';for(var i=0;i<72;i++)h+='<i style="transform:rotate('+(i*5)+'deg);'+(i%18===0?'height:18px;background:var(--honey)':i%2?'height:7px':'')+'"></i>';

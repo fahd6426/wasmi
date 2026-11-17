@@ -26,7 +26,8 @@ rules = re.sub(r'href="/', f'href="{S}/', rules)
 rules = re.sub(r'\s*(target|rel|style)="[^"]*"', '', rules)
 rules = rules.replace('<a ', '<a target="_blank" rel="noopener" ')
 prods = json.loads(rd('data/products.json'))['items']
-data = json.dumps(dict(places=places, birds=birds, seen=seen, rules=rules, prods=prods), ensure_ascii=False).replace('</', '<\\/')
+green = json.loads(rd('data/green.json')) if os.path.exists(os.path.join(R, 'data/green.json')) else None
+data = json.dumps(dict(green=green, places=places, birds=birds, seen=seen, rules=rules, prods=prods), ensure_ascii=False).replace('</', '<\\/')
 
 t = rd('tools/app.template.html')
 t = t.replace('/*BASECSS*/', rd('tools/app.base.css'))
