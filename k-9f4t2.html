@@ -120,7 +120,7 @@ async function loadDetector() {
         { x: 0, y: 0, w: vw, h: vh }
       ];
     }
-    MODEL.step = 0; MODEL.tracks = []; MODEL.sig = []; MODEL.signal = 0; MODEL.zoom = false;
+    MODEL.step = 0; MODEL.tracks = []; MODEL.sig = []; MODEL.signal = 0; MODEL.raw = []; MODEL.zoom = false;
     window.WASMI_DETECT = async (vid) => {
       if (MODEL.busy || !vid.videoWidth) return MODEL.last;
       MODEL.busy = true;
@@ -148,9 +148,9 @@ async function loadDetector() {
           const cx = d[i], cy = d[n + i], w = d[2 * n + i], h = d[3 * n + i];
           const b = { x: R.x + (cx - w / 2 - px) / scale, y: R.y + (cy - h / 2 - py) / scale, w: w / scale, h: h / scale, score: sc };
           const a = (b.w * b.h) / area, ar = b.w / b.h;
-          if (a < 0.004 || a > 0.25 || ar < 0.5 || ar > 2) continue;
-          MODEL.sig.push({ s: sc, t: now });
-          if (sc >= 0.6) cands.push(b);
+          if (a > 0.25) continue;
+          MODEL.sig.push({ s: sc, t: now, x: b.x, y: b.y, w: b.w, h: b.h });
+          if (sc >= 0.6 && a >= 0.0005 && ar >= 0.4 && ar <= 2.5) cands.push(b);
         }
         cands.sort((a, b) => b.score - a.score);
         const frame = [];
@@ -163,6 +163,9 @@ async function loadDetector() {
         MODEL.tracks = MODEL.tracks.filter(t => now - t.last < 2000);
         MODEL.sig = MODEL.sig.filter(g => now - g.t < 1200);
         MODEL.signal = MODEL.sig.reduce((m, g) => Math.max(m, g.s), 0);
+        const rk = [];
+        for (const g of MODEL.sig.filter(g => now - g.t < 800).sort((p, q) => q.s - p.s)) { if (rk.every(k => iou(k, g) < 0.4)) rk.push(g); if (rk.length >= 4) break; }
+        MODEL.raw = rk.map(g => ({ x: g.x, y: g.y, w: g.w, h: g.h, score: g.s, weak: true }));
         MODEL.last = MODEL.tracks
           .filter(t => t.hits >= 6 && t.sum / t.hits >= 0.75 && now - t.first >= 1500 && now - t.last < 1000)
           .map(t => ({ x: t.x, y: t.y, w: t.w, h: t.h, score: t.sum / t.hits }))
@@ -207,8 +210,8 @@ function draw(boxes) {
   const s = Math.max(sx, sy);
   const ox = (canvas.width - video.videoWidth * s) / 2, oy = (canvas.height - video.videoHeight * s) / 2;
   for (const b of boxes) {
-    ctx.strokeStyle = b.score > 0.75 ? '#A5552E' : '#C98F3E';
-    ctx.lineWidth = 4;
+    ctx.strokeStyle = b.weak ? '#C98F3E' : '#A5552E';
+    ctx.lineWidth = b.weak ? 2 : 4;
     ctx.strokeRect(ox + b.x * s, oy + b.y * s, b.w * s, b.h * s);
   }
 }
@@ -218,7 +221,7 @@ async function loop() {
     const boxes = await window.WASMI_DETECT(video);
     const best = boxes.reduce((m, b) => Math.max(m, b.score), 0);
     levelEl.style.width = boxes.length ? Math.round(best * 100) + '%' : '0%';
-    draw(boxes);
+    draw(boxes.length ? boxes : (MODEL.raw || []));
     const signal = Math.max(best, MODEL.signal || 0);
     if (signal >= 0.3) beep(signal);
     if (boxes.length) {
