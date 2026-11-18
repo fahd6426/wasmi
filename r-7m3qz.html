@@ -14,259 +14,221 @@
 :root{--sand:#FAF3E6;--dune:#EADBC0;--honey:#C98F3E;--clay:#A5552E;--earth:#5A331C;--ink:#2E1C12;--st:env(safe-area-inset-top,0px);--sb:env(safe-area-inset-bottom,0px)}
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
-body{font-family:"IBM Plex Sans Arabic","Geeza Pro",Tahoma,sans-serif;background:var(--ink);color:var(--sand);-webkit-font-smoothing:antialiased;overflow:hidden}
-#map{position:fixed;inset:0;background:#1d130c}
-.leaflet-container{font-family:inherit;background:#1d130c}
-.base{filter:brightness(.55) saturate(.8)}
+body{font-family:"IBM Plex Sans Arabic","Geeza Pro",Tahoma,sans-serif;background:var(--sand);color:var(--ink);-webkit-font-smoothing:antialiased;overflow:hidden}
+#map{position:fixed;inset:0;background:var(--dune)}
+.leaflet-container{font-family:inherit;background:var(--dune)}
+.base{filter:saturate(.6) contrast(.95)}
 .top{position:fixed;top:calc(var(--st) + 10px);right:12px;left:12px;display:flex;justify-content:space-between;align-items:center;z-index:500;pointer-events:none}
-.brand{font-family:"Reem Kufi",sans-serif;font-weight:700;font-size:26px;color:var(--sand);text-shadow:0 1px 6px rgba(0,0,0,.6)}
-.brand small{font-family:"IBM Plex Sans Arabic";font-weight:500;font-size:13px;color:var(--dune);margin-inline-start:6px}
-.chips{position:fixed;top:calc(var(--st) + 56px);right:12px;left:12px;display:flex;gap:8px;flex-wrap:wrap;z-index:500}
-.chip{border:1.5px solid rgba(250,243,230,.5);background:rgba(46,28,18,.72);color:var(--sand);border-radius:999px;padding:7px 14px;font:inherit;font-size:14px;cursor:pointer;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
-.chip.on{background:var(--honey);border-color:var(--honey);color:var(--ink);font-weight:600}
-.locbtn{position:fixed;left:12px;bottom:calc(var(--sb) + 196px);z-index:500;width:46px;height:46px;border-radius:50%;border:none;background:var(--sand);color:var(--earth);font-size:20px;box-shadow:0 2px 10px rgba(0,0,0,.4);cursor:pointer}
-.panel{position:fixed;right:10px;left:10px;bottom:calc(var(--sb) + 10px);z-index:500;background:rgba(46,28,18,.9);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid rgba(250,243,230,.15);border-radius:18px;padding:12px 14px}
+.brand{font-family:"Reem Kufi",sans-serif;font-weight:700;font-size:26px;color:var(--earth);background:rgba(250,243,230,.88);padding:2px 12px;border-radius:12px}
+.brand small{font-family:"IBM Plex Sans Arabic";font-weight:500;font-size:13px;color:var(--clay);margin-inline-start:6px}
+.chips{position:fixed;top:calc(var(--st) + 58px);right:12px;display:flex;gap:8px;z-index:500}
+.chip{border:1.5px solid var(--earth);background:rgba(250,243,230,.9);color:var(--earth);border-radius:999px;padding:6px 14px;font:inherit;font-size:14px;cursor:pointer}
+.chip.on{background:var(--earth);color:var(--sand)}
+.locbtn{position:fixed;left:12px;bottom:calc(var(--sb) + 190px);z-index:500;width:46px;height:46px;border-radius:50%;border:none;background:var(--earth);color:var(--sand);font-size:20px;box-shadow:0 2px 10px rgba(0,0,0,.3);cursor:pointer}
+.panel{position:fixed;right:10px;left:10px;bottom:calc(var(--sb) + 10px);z-index:500;background:rgba(46,28,18,.92);color:var(--sand);border-radius:18px;padding:12px 14px}
 .here{font-size:15px;line-height:1.7;min-height:26px}
 .here b{color:var(--honey)}
 .row{display:flex;align-items:center;gap:10px;margin-top:8px}
 .play{width:40px;height:40px;border-radius:50%;border:none;background:var(--honey);color:var(--ink);font-size:16px;cursor:pointer;flex:none}
 input[type=range]{flex:1;accent-color:var(--honey)}
-.time{font-size:13px;color:var(--dune);min-width:92px;text-align:left;direction:rtl}
-.legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;font-size:12px;color:var(--dune)}
-.legend span{display:inline-flex;align-items:center;gap:5px}
-.sw{width:14px;height:10px;border-radius:3px;display:inline-block}
-.load{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:600;pointer-events:none;font-size:15px;color:var(--sand);text-shadow:0 1px 6px #000}
-.leaflet-control-attribution{font-size:9px;background:rgba(46,28,18,.6)!important;color:var(--dune)!important}
-.leaflet-control-attribution a{color:var(--dune)!important}
+.time{font-size:13px;color:var(--dune);min-width:110px;text-align:left}
+.scale{display:flex;margin-top:10px;border-radius:6px;overflow:hidden;font-size:11px;text-align:center}
+.scale span{flex:1;padding:3px 0;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.6)}
+.load{position:fixed;top:45%;left:0;right:0;text-align:center;z-index:600;pointer-events:none;font-size:15px}
+.load span{background:rgba(46,28,18,.85);color:var(--sand);padding:8px 16px;border-radius:12px}
+.leaflet-control-attribution{font-size:9px}
 </style>
 </head>
 <body>
 <div id="map"></div>
 <div class="top"><div class="brand">وسمي<small>الرادار</small></div></div>
 <div class="chips">
-  <button class="chip on" data-l="ir">السحب</button>
   <button class="chip on" data-l="rain">المطر</button>
-  <button class="chip on" data-l="li">البرق</button>
-  <button class="chip" data-l="geo">صورة القمر</button>
+  <button class="chip on" data-l="cloud">السحب</button>
 </div>
 <button class="locbtn" id="loc" aria-label="موقعي">◎</button>
 <div class="panel">
   <div class="here" id="here">اضغط ◎ عشان يقولك وش الوضع عندك.</div>
   <div class="row">
     <button class="play" id="play">▶</button>
-    <input type="range" id="slider" min="0" max="11" value="11">
+    <input type="range" id="slider" min="0" max="5" value="5">
     <div class="time" id="time">…</div>
   </div>
-  <div class="legend">
-    <span><i class="sw" style="background:rgba(250,243,230,.75)"></i>سحب خفيفة</span>
-    <span><i class="sw" style="background:#C98F3E"></i>متوسطة</span>
-    <span><i class="sw" style="background:#A5552E"></i>قوية</span>
-    <span><i class="sw" style="background:#7a1f4a"></i>رعدية</span>
-    <span><i class="sw" style="background:#3d8bd9"></i>مطر</span>
-    <span><i class="sw" style="background:#ffe24a"></i>برق</span>
+  <div class="scale">
+    <span style="background:#8fc4ff;color:#1a2a40;text-shadow:none">رذاذ</span>
+    <span style="background:#3c78ff">خفيفة</span>
+    <span style="background:#7a46e6">متوسطة</span>
+    <span style="background:#d23cc8">غزيرة</span>
+    <span style="background:#ff9a2e">غزيرة جداً</span>
+    <span style="background:#e01e1e">برد محتمل</span>
   </div>
 </div>
-<div class="load" id="load">يحمّل صور القمر…</div>
+<div class="load" id="load"><span>يحمّل الرادار…</span></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
 const WMS = 'https://view.eumetsat.int/geoserver/mtg_fd/';
-const B = { w: 34, e: 56, s: 15.5, n: 33.5 };   // lon/lat box
-const IMG_W = 1100, IMG_H = 1040, FRAMES = 12, STEP = 10 * 60000;
-const R = 6378137;
-const mx = lon => lon * Math.PI / 180 * R;
-const my = lat => Math.log(Math.tan(Math.PI / 4 + lat * Math.PI / 360)) * R;
-const X0 = mx(B.w), X1 = mx(B.e), Y0 = my(B.s), Y1 = my(B.n);
-const bounds = [[B.s, B.w], [B.n, B.e]];
+const FRAMES = 6, STEP = 10 * 60000, R = 6378137, HALF = Math.PI * R;
 
-const map = L.map('map', { zoomControl: false, attributionControl: true, minZoom: 4, maxBounds: [[10, 28], [38, 62]] }).setView([27.5, 43], 5);
-L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 12, className: 'base', attribution: 'Esri · EUMETSAT' }).addTo(map);
-map.createPane('labels'); map.getPane('labels').style.zIndex = 450; map.getPane('labels').style.pointerEvents = 'none';
-L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', { maxZoom: 12, pane: 'labels', opacity: 0.8 }).addTo(map);
+// rain classes from the satellite product (mm/h) -> radar-style colours
+const RAIN = {
+  '204,255,204': [143, 196, 255, 200, 1],  // <2 رذاذ
+  '153,230,153': [60, 120, 255, 215, 2],   // 2-4 خفيفة
+  '102,204,102': [60, 120, 255, 225, 2],   // 4-7
+  '51,179,51':   [122, 70, 230, 230, 3],   // 7-10 متوسطة
+  '51,153,204':  [122, 70, 230, 235, 3],   // 10-15
+  '51,102,255':  [210, 60, 200, 240, 4],   // 15-20 غزيرة
+  '0,0,255':     [210, 60, 200, 245, 4],   // 20-25
+  '102,0,204':   [255, 154, 46, 250, 5],   // 25-30 غزيرة جداً
+  '153,51,204':  [255, 154, 46, 250, 5],   // 30-40
+  '204,0,153':   [224, 30, 30, 255, 6],    // 40-50 برد محتمل
+  '128,0,128':   [224, 30, 30, 255, 6]     // 50+
+};
+const RAIN_NAME = ['', 'رذاذ', 'مطر خفيف', 'مطر متوسط', 'مطر غزير', 'مطر غزير جداً', 'مطر غزير جداً وبرد محتمل'];
 
-const show = { ir: true, rain: true, li: true, geo: false };
-const frames = [];          // {t, ir, rain, li, geo, irData, rainData, liPts}
-let idx = FRAMES - 1, timer = null, me = null, meMarker = null;
-const overlays = {};
-for (const k of ['geo', 'ir', 'rain', 'li']) overlays[k] = L.imageOverlay('data:image/gif;base64,R0lGODlhAQABAAAAACw=', bounds, { opacity: k === 'geo' ? 0.85 : 1, interactive: false });
-
-function url(layer, t) {
-  return WMS + layer + '/ows?service=WMS&request=GetMap&version=1.3.0&layers=' + layer + '&styles=&crs=EPSG:3857&bbox=' +
-    [X0, Y0, X1, Y1].join(',') + '&width=' + IMG_W + '&height=' + IMG_H + '&format=image/png&transparent=true&time=' + new Date(t).toISOString().replace('.000', '');
+function wmsUrl(layer, t, bbox, w, h) {
+  return WMS + layer + '/ows?service=WMS&request=GetMap&version=1.3.0&layers=' + layer + '&styles=&crs=EPSG:3857&bbox=' + bbox.join(',') +
+    '&width=' + w + '&height=' + h + '&format=image/png&transparent=true&time=' + new Date(t).toISOString().replace('.000', '');
 }
-async function getImg(layer, t) {
-  const r = await fetch(url(layer, t));
-  if (!r.ok) throw new Error(layer);
-  return await createImageBitmap(await r.blob());
+async function pixels(layer, t, bbox, w, h) {
+  const r = await fetch(wmsUrl(layer, t, bbox, w, h)); if (!r.ok) throw 0;
+  const bmp = await createImageBitmap(await r.blob());
+  const c = document.createElement('canvas'); c.width = w; c.height = h;
+  const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(bmp, 0, 0, w, h);
+  return [c, x, x.getImageData(0, 0, w, h)];
 }
-function toCanvas(bmp) {
-  const c = document.createElement('canvas'); c.width = IMG_W; c.height = IMG_H;
-  const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(bmp, 0, 0, IMG_W, IMG_H);
-  return [c, x, x.getImageData(0, 0, IMG_W, IMG_H)];
-}
-// cloud strength: brighter IR = colder, higher tops = stronger
-function colorIR(bmp) {
-  const [c, x, im] = toCanvas(bmp), d = im.data, g = new Uint8Array(IMG_W * IMG_H);
-  for (let i = 0, p = 0; p < d.length; i++, p += 4) {
-    const v = d[p]; g[i] = v;
-    let r = 0, gg = 0, b = 0, a = 0;
-    if (v >= 225) { r = 122; gg = 31; b = 74; a = 235; }
-    else if (v >= 200) { r = 165; gg = 85; b = 46; a = 225; }
-    else if (v >= 170) { r = 201; gg = 143; b = 62; a = 200; }
-    else if (v >= 125) { r = 250; gg = 243; b = 230; a = Math.round((v - 125) / 45 * 150) + 30; }
-    d[p] = r; d[p + 1] = gg; d[p + 2] = b; d[p + 3] = a;
-  }
-  x.putImageData(im, 0, 0);
-  return { src: c.toDataURL(), data: g };
-}
-function colorRain(bmp) {
-  const [c, x, im] = toCanvas(bmp), d = im.data, g = new Uint8Array(IMG_W * IMG_H);
-  for (let i = 0, p = 0; p < d.length; i++, p += 4) {
+function paintRain(d) {
+  for (let p = 0; p < d.length; p += 4) {
     if (d[p + 3] < 20) { d[p + 3] = 0; continue; }
-    const lvl = 255 - Math.min(d[p], d[p + 2]);       // darker green = heavier
-    const k = Math.min(1, lvl / 160);
-    g[i] = 1 + Math.round(k * 254);
-    d[p] = 90 - 60 * k; d[p + 1] = 170 - 80 * k; d[p + 2] = 245 - 40 * k; d[p + 3] = 150 + 90 * k;
+    const m = RAIN[d[p] + ',' + d[p + 1] + ',' + d[p + 2]];
+    if (!m) { d[p + 3] = 0; continue; }
+    d[p] = m[0]; d[p + 1] = m[1]; d[p + 2] = m[2]; d[p + 3] = m[3];
   }
-  x.putImageData(im, 0, 0);
-  return { src: c.toDataURL(), data: g };
 }
-function colorLi(bmp) {
-  const [c, x, im] = toCanvas(bmp), d = im.data, pts = [];
-  for (let i = 0, p = 0; p < d.length; i++, p += 4) {
-    if (d[p + 3] < 20) { d[p + 3] = 0; continue; }
-    d[p] = 255; d[p + 1] = 226; d[p + 2] = 74; d[p + 3] = 255;
-    if (i % 3 === 0) pts.push(i);
+// clouds: brighter infrared = colder / thicker cloud
+function paintCloud(d) {
+  for (let p = 0; p < d.length; p += 4) {
+    const v = d[p];
+    if (v < 115) { d[p + 3] = 0; continue; }
+    const k = Math.min(1, (v - 115) / 110);
+    const g = Math.round(175 - 85 * k);
+    d[p] = g; d[p + 1] = g + 4; d[p + 2] = g + 14; d[p + 3] = Math.round(90 + 120 * k);
   }
-  x.putImageData(im, 0, 0);
-  return { src: c.toDataURL(), pts };
 }
-function pxToLatLng(i) {
-  const px = i % IMG_W, py = Math.floor(i / IMG_W);
-  const X = X0 + (px + 0.5) / IMG_W * (X1 - X0), Y = Y1 - (py + 0.5) / IMG_H * (Y1 - Y0);
-  return [(2 * Math.atan(Math.exp(Y / R)) - Math.PI / 2) * 180 / Math.PI, X / R * 180 / Math.PI];
+
+const SatLayer = L.GridLayer.extend({
+  createTile(c, done) {
+    const tile = document.createElement('canvas'); tile.width = tile.height = 256;
+    const size = 2 * HALF / Math.pow(2, c.z), x0 = -HALF + c.x * size, y1 = HALF - c.y * size;
+    pixels(this.options.layer, this.options.time, [x0, y1 - size, x0 + size, y1], 256, 256).then(([cv, x, im]) => {
+      (this.options.layer === 'h40b' ? paintRain : paintCloud)(im.data);
+      tile.getContext('2d').putImageData(im, 0, 0); done(null, tile);
+    }).catch(() => done(null, tile));
+    return tile;
+  }
+});
+
+const map = L.map('map', { zoomControl: false, minZoom: 5, maxZoom: 11, maxBounds: [[10, 28], [38, 62]] }).setView([27.4, 42.8], 7);
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 11, className: 'base', attribution: '© OpenStreetMap · EUMETSAT' }).addTo(map);
+
+const show = { rain: true, cloud: true };
+let frames = [], idx = 0, timer = null, me = null, meMarker = null;
+const fmt = new Intl.DateTimeFormat('ar-SA-u-nu-latn', { hour: 'numeric', minute: '2-digit', timeZone: 'Asia/Riyadh' });
+
+function applyFrame() {
+  frames.forEach((f, i) => {
+    f.cloud.setOpacity(i === idx && show.cloud ? 1 : 0);
+    f.rain.setOpacity(i === idx && show.rain ? 1 : 0);
+  });
+  const f = frames[idx]; if (!f) return;
+  const ago = Math.round((Date.now() - f.t) / 60000);
+  document.getElementById('time').textContent = fmt.format(f.t) + ' · قبل ' + ago + ' د';
 }
-function latLngToPx(lat, lon) {
-  const px = Math.floor((mx(lon) - X0) / (X1 - X0) * IMG_W), py = Math.floor((Y1 - my(lat)) / (Y1 - Y0) * IMG_H);
-  if (px < 0 || py < 0 || px >= IMG_W || py >= IMG_H) return -1;
-  return py * IMG_W + px;
+
+async function latest(layer) {
+  try {
+    const r = await fetch(WMS + layer + '/ows?service=WMS&request=GetCapabilities');
+    const m = (await r.text()).match(/\/(\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d)\.000Z\/PT10M/);
+    if (m) return Date.parse(m[1] + 'Z');
+  } catch (e) {}
+  return Math.floor((Date.now() - 35 * 60000) / STEP) * STEP;
 }
+
+async function build() {
+  document.getElementById('load').style.display = 'block';
+  const end = Math.min(await latest('h40b'), await latest('ir105_hrfi'));
+  for (const f of frames) { map.removeLayer(f.cloud); map.removeLayer(f.rain); }
+  frames = [];
+  for (let k = FRAMES - 1; k >= 0; k--) {
+    const t = end - k * STEP;
+    frames.push({ t,
+      cloud: new SatLayer({ layer: 'ir105_hrfi', time: t, opacity: 0, zIndex: 3, updateWhenIdle: true, keepBuffer: 1 }).addTo(map),
+      rain: new SatLayer({ layer: 'h40b', time: t, opacity: 0, zIndex: 4, updateWhenIdle: true, keepBuffer: 1 }).addTo(map) });
+  }
+  idx = frames.length - 1;
+  const sl = document.getElementById('slider'); sl.max = idx; sl.value = idx;
+  applyFrame();
+  frames[idx].rain.once('load', () => document.getElementById('load').style.display = 'none');
+  setTimeout(() => document.getElementById('load').style.display = 'none', 8000);
+  if (me) updateHere();
+}
+
 function km(a, b) {
   const t = Math.PI / 180, dl = (b[0] - a[0]) * t, dn = (b[1] - a[1]) * t;
   const h = Math.sin(dl / 2) ** 2 + Math.cos(a[0] * t) * Math.cos(b[0] * t) * Math.sin(dn / 2) ** 2;
   return 12742 * Math.asin(Math.sqrt(h));
 }
 function dirName(from, to) {
-  const ang = (Math.atan2(to[1] - from[1], to[0] - from[0]) * 180 / Math.PI + 360) % 360;
+  const ang = (Math.atan2(to[1] - from[1], (to[0] - from[0])) * 180 / Math.PI + 360) % 360;
   return ['شمالك', 'شمال شرقك', 'شرقك', 'جنوب شرقك', 'جنوبك', 'جنوب غربك', 'غربك', 'شمال غربك'][Math.round(ang / 45) % 8];
 }
-
-async function latestTime() {
-  try {
-    const r = await fetch(WMS + 'ir105_hrfi/ows?service=WMS&request=GetCapabilities');
-    const m = (await r.text()).match(/\/(\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d)\.000Z\/PT10M/);
-    if (m) return Date.parse(m[1] + 'Z');
-  } catch (e) {}
-  return Math.floor((Date.now() - 30 * 60000) / STEP) * STEP;
-}
-
-async function loadFrame(t) {
-  const f = { t };
-  const [ir, rain, li, geo] = await Promise.allSettled([getImg('ir105_hrfi', t), getImg('h40b', t), getImg('li_afa', t), show.geo ? getImg('rgb_geocolour', t) : Promise.reject()]);
-  if (ir.status === 'fulfilled') { const o = colorIR(ir.value); f.ir = o.src; f.irData = o.data; }
-  if (rain.status === 'fulfilled') { const o = colorRain(rain.value); f.rain = o.src; f.rainData = o.data; }
-  if (li.status === 'fulfilled') { const o = colorLi(li.value); f.li = o.src; f.liPts = o.pts; }
-  if (geo.status === 'fulfilled') { const [c] = toCanvas(geo.value); f.geo = c.toDataURL('image/jpeg', 0.85); }
-  return f;
-}
-
-const fmt = new Intl.DateTimeFormat('ar-SA-u-nu-latn', { hour: 'numeric', minute: '2-digit', timeZone: 'Asia/Riyadh' });
-function render() {
-  const f = frames[idx]; if (!f) return;
-  for (const k of ['geo', 'ir', 'rain', 'li']) {
-    const on = show[k] && f[k];
-    if (on) { overlays[k].setUrl(f[k]); if (!map.hasLayer(overlays[k])) overlays[k].addTo(map); }
-    else if (map.hasLayer(overlays[k])) map.removeLayer(overlays[k]);
-  }
-  const ago = Math.round((Date.now() - f.t) / 60000);
-  document.getElementById('time').textContent = fmt.format(f.t) + (idx === frames.length - 1 ? ' · آخر صورة' : '');
-  document.getElementById('time').title = 'قبل ' + ago + ' دقيقة';
-  updateHere();
-}
-
-function updateHere() {
-  const el = document.getElementById('here');
-  if (!me) return;
-  const f = frames[frames.length - 1]; if (!f) return;
+async function updateHere() {
+  const el = document.getElementById('here'); const f = frames[frames.length - 1]; if (!f || !me) return;
+  el.textContent = 'يشوف الوضع عندك…';
+  const N = 200, span = 220000;
+  const cx = me[1] * Math.PI / 180 * R, cy = Math.log(Math.tan(Math.PI / 4 + me[0] * Math.PI / 360)) * R;
+  const bbox = [cx - span, cy - span, cx + span, cy + span];
+  const toLL = (px, py) => { const X = bbox[0] + (px + .5) / N * 2 * span, Y = bbox[3] - (py + .5) / N * 2 * span; return [(2 * Math.atan(Math.exp(Y / R)) - Math.PI / 2) * 180 / Math.PI, X / R * 180 / Math.PI]; };
   const parts = [];
-  const i = latLngToPx(me[0], me[1]);
-  if (i < 0) { el.textContent = 'موقعك برا منطقة الرادار.'; return; }
-  // cloud over you
-  if (f.irData) {
-    const v = f.irData[i];
-    parts.push(v >= 225 ? 'فوقك <b>سحب رعدية</b>' : v >= 200 ? 'فوقك <b>سحب قوية</b>' : v >= 170 ? 'فوقك سحب متوسطة' : v >= 125 ? 'فوقك سحب خفيفة' : 'السما صافية فوقك');
-  }
-  // rain
-  if (f.rainData) {
-    if (f.rainData[i]) parts.push('<b>فيه مطر عندك الحين</b>');
+  try {
+    const [, , ci] = await pixels('ir105_hrfi', f.t, bbox, N, N);
+    const v = ci.data[((N / 2) * N + N / 2) * 4];
+    parts.push(v >= 215 ? 'فوقك <b>سحب كثيفة</b>' : v >= 170 ? 'فوقك سحب متوسطة' : v >= 125 ? 'فوقك سحب خفيفة' : 'السما صافية فوقك');
+  } catch (e) {}
+  try {
+    const [, , ri] = await pixels('h40b', f.t, bbox, N, N), d = ri.data;
+    const at = (px, py) => { const p = (py * N + px) * 4; const m = d[p + 3] > 20 && RAIN[d[p] + ',' + d[p + 1] + ',' + d[p + 2]]; return m ? m[4] : 0; };
+    const here = at(N / 2, N / 2);
+    if (here) parts.push('<b>' + RAIN_NAME[here] + ' عندك الحين</b>');
     else {
-      let best = 1e9, bp = null;
-      for (let p = 0; p < f.rainData.length; p += 2) if (f.rainData[p]) { const ll = pxToLatLng(p); const d = km(me, ll); if (d < best) { best = d; bp = ll; } }
-      if (bp && best < 300) parts.push('أقرب مطر <b>' + Math.round(best) + ' كم</b> ' + dirName(me, bp));
-      else parts.push('ما فيه مطر قريب');
+      let best = 1e9, bl = null, bc = 0;
+      for (let py = 0; py < N; py++) for (let px = 0; px < N; px++) { const c = at(px, py); if (c) { const ll = toLL(px, py), dd = km(me, ll); if (dd < best) { best = dd; bl = ll; bc = c; } } }
+      parts.push(bl ? 'أقرب ' + RAIN_NAME[bc] + ' <b>' + Math.round(best) + ' كم</b> ' + dirName(me, bl) : 'ما فيه مطر قريب منك');
     }
-  }
-  // lightning in the last ~30 min
-  let best = 1e9, bp = null;
-  for (const fr of frames.slice(-3)) for (const p of fr.liPts || []) { const ll = pxToLatLng(p); const d = km(me, ll); if (d < best) { best = d; bp = ll; } }
-  if (bp && best < 40) parts.push('<b>برق قريب منك ' + Math.round(best) + ' كم</b> — انتبه');
-  else if (bp && best < 300) parts.push('أقرب برق <b>' + Math.round(best) + ' كم</b> ' + dirName(me, bp));
-  else parts.push('ما فيه برق قريب');
-  el.innerHTML = parts.join(' · ');
+  } catch (e) {}
+  el.innerHTML = parts.join(' · ') || 'ما قدرت أجيب الوضع عندك، جرب بعد شوي.';
 }
 
-async function loadAll() {
-  const load = document.getElementById('load'); load.style.display = 'flex';
-  const end = await latestTime();
-  const times = []; for (let k = FRAMES - 1; k >= 0; k--) times.push(end - k * STEP);
-  // newest first so the map shows something quickly
-  frames.length = 0;
-  const got = new Array(FRAMES);
-  const newest = await loadFrame(times[FRAMES - 1]); got[FRAMES - 1] = newest;
-  frames.push(newest); idx = 0; render(); load.style.display = 'none';
-  for (let k = FRAMES - 2; k >= 0; k--) { got[k] = await loadFrame(times[k]); }
-  frames.length = 0; for (const f of got) if (f) frames.push(f);
-  const sl = document.getElementById('slider'); sl.max = frames.length - 1; sl.value = idx = frames.length - 1;
-  render();
-}
-
-document.getElementById('slider').addEventListener('input', e => { stop(); idx = +e.target.value; render(); });
+document.getElementById('slider').addEventListener('input', e => { stop(); idx = +e.target.value; applyFrame(); });
 function stop() { if (timer) { clearInterval(timer); timer = null; document.getElementById('play').textContent = '▶'; } }
 document.getElementById('play').addEventListener('click', () => {
   if (timer) return stop();
-  if (frames.length < 2) return;
   document.getElementById('play').textContent = '❚❚';
-  timer = setInterval(() => { idx = (idx + 1) % frames.length; document.getElementById('slider').value = idx; render(); if (idx === frames.length - 1) { stop(); } }, 550);
   if (idx === frames.length - 1) idx = -1;
+  timer = setInterval(() => { idx++; if (idx >= frames.length) idx = 0; document.getElementById('slider').value = idx; applyFrame(); if (idx === frames.length - 1) stop(); }, 700);
 });
-document.querySelectorAll('.chip').forEach(b => b.addEventListener('click', async () => {
-  const k = b.dataset.l; show[k] = !show[k]; b.classList.toggle('on', show[k]);
-  if (k === 'geo' && show.geo) {
-    for (const f of frames) if (!f.geo) { try { const [c] = toCanvas(await getImg('rgb_geocolour', f.t)); f.geo = c.toDataURL('image/jpeg', 0.85); if (f === frames[idx]) render(); } catch (e) {} }
-  }
-  render();
-}));
+document.querySelectorAll('.chip').forEach(b => b.addEventListener('click', () => { const k = b.dataset.l; show[k] = !show[k]; b.classList.toggle('on', show[k]); applyFrame(); }));
 document.getElementById('loc').addEventListener('click', () => {
   document.getElementById('here').textContent = 'يحدد موقعك…';
   navigator.geolocation.getCurrentPosition(p => {
     me = [p.coords.latitude, p.coords.longitude];
     if (meMarker) meMarker.setLatLng(me); else meMarker = L.circleMarker(me, { radius: 8, color: '#FAF3E6', weight: 3, fillColor: '#A5552E', fillOpacity: 1 }).addTo(map);
-    map.setView(me, 8); updateHere();
+    map.setView(me, 9); updateHere();
   }, () => { document.getElementById('here').textContent = 'ما قدرت أحدد موقعك، تأكد إن الموقع مسموح للمتصفح.'; }, { enableHighAccuracy: true, timeout: 15000 });
 });
 
-loadAll();
-setInterval(() => { if (!timer) loadAll(); }, 10 * 60000);
+build();
+setInterval(() => { if (!timer) build(); }, 10 * 60000);
 </script>
 </body>
 </html>
