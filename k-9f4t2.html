@@ -120,7 +120,7 @@ async function loadDetector() {
         { x: 0, y: 0, w: vw, h: vh }
       ];
     }
-    MODEL.step = 0; MODEL.recent = []; MODEL.zoom = false;
+    MODEL.step = 0; MODEL.tracks = []; MODEL.zoom = false;
     window.WASMI_DETECT = async (vid) => {
       if (MODEL.busy || !vid.videoWidth) return MODEL.last;
       MODEL.busy = true;
@@ -140,20 +140,30 @@ async function loadDetector() {
         const out = (await MODEL.session.run(feeds))[MODEL.session.outputNames[0]];
         const d = out.data, n = out.dims[2];
         const now = performance.now();
+        const area = vw * vh;
+        const cands = [];
         for (let i = 0; i < n; i++) {
           const sc = d[4 * n + i];
-          if (sc < 0.3) continue;
+          if (sc < 0.6) continue;
           const cx = d[i], cy = d[n + i], w = d[2 * n + i], h = d[3 * n + i];
-          const b = { x: R.x + (cx - w / 2 - px) / scale, y: R.y + (cy - h / 2 - py) / scale, w: w / scale, h: h / scale, score: sc, t: now };
-          const seenBefore = MODEL.recent.some(r => now - r.t < 3000 && now - r.t > 50 && iou(r, b) > 0.25);
-          b.confirmed = seenBefore;
-          MODEL.recent.push(b);
+          const b = { x: R.x + (cx - w / 2 - px) / scale, y: R.y + (cy - h / 2 - py) / scale, w: w / scale, h: h / scale, score: sc };
+          const a = (b.w * b.h) / area, ar = b.w / b.h;
+          if (a < 0.004 || a > 0.25 || ar < 0.5 || ar > 2) continue;
+          cands.push(b);
         }
-        MODEL.recent = MODEL.recent.filter(r => now - r.t < 3000);
-        const live = MODEL.recent.filter(r => now - r.t < 1800).sort((a, b) => b.score - a.score);
-        const keep = [];
-        for (const b of live) { if (keep.every(k => iou(k, b) < 0.4)) keep.push(b); if (keep.length >= 5) break; }
-        MODEL.last = keep.map(b => ({ x: b.x, y: b.y, w: b.w, h: b.h, score: b.score * (b.confirmed ? 1 : 0.6) }));
+        cands.sort((a, b) => b.score - a.score);
+        const frame = [];
+        for (const b of cands) if (frame.every(k => iou(k, b) < 0.4)) frame.push(b);
+        for (const b of frame) {
+          const t = MODEL.tracks.find(t => now - t.last < 2000 && iou(t, b) > 0.3);
+          if (t) { t.x = (t.x + b.x) / 2; t.y = (t.y + b.y) / 2; t.w = (t.w + b.w) / 2; t.h = (t.h + b.h) / 2; t.hits++; t.sum += b.score; t.last = now; }
+          else MODEL.tracks.push({ x: b.x, y: b.y, w: b.w, h: b.h, hits: 1, sum: b.score, first: now, last: now });
+        }
+        MODEL.tracks = MODEL.tracks.filter(t => now - t.last < 2000);
+        MODEL.last = MODEL.tracks
+          .filter(t => t.hits >= 6 && t.sum / t.hits >= 0.75 && now - t.first >= 1500 && now - t.last < 1000)
+          .map(t => ({ x: t.x, y: t.y, w: t.w, h: t.h, score: t.sum / t.hits }))
+          .sort((a, b) => b.score - a.score).slice(0, 3);
       } catch (e) { MODEL.last = []; }
       MODEL.busy = false;
       return MODEL.last;
@@ -202,14 +212,14 @@ function draw(boxes) {
 
 async function loop() {
   if (window.WASMI_DETECT) {
-    const boxes = (await window.WASMI_DETECT(video)).filter(b => b.score >= 0.3);
+    const boxes = await window.WASMI_DETECT(video);
     const best = boxes.reduce((m, b) => Math.max(m, b.score), 0);
-    levelEl.style.width = Math.round(best * 100) + '%';
+    levelEl.style.width = boxes.length ? Math.round(best * 100) + '%' : '0%';
     draw(boxes);
-    if (best >= 0.3) {
+    if (boxes.length) {
       beep(best);
-      if (best > 0.75) markSign();
-      statusEl.textContent = best > 0.75 ? 'فيه علامة فقعة قدامك' : 'يشك بشي… قرّب شوي';
+      markSign();
+      statusEl.textContent = 'فيه علامة فقعة قدامك';
     } else {
       statusEl.textContent = 'يدوّر…';
     }
