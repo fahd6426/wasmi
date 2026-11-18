@@ -120,7 +120,7 @@ async function loadDetector() {
         { x: 0, y: 0, w: vw, h: vh }
       ];
     }
-    MODEL.step = 0; MODEL.tracks = []; MODEL.zoom = false;
+    MODEL.step = 0; MODEL.tracks = []; MODEL.sig = []; MODEL.signal = 0; MODEL.zoom = false;
     window.WASMI_DETECT = async (vid) => {
       if (MODEL.busy || !vid.videoWidth) return MODEL.last;
       MODEL.busy = true;
@@ -144,12 +144,13 @@ async function loadDetector() {
         const cands = [];
         for (let i = 0; i < n; i++) {
           const sc = d[4 * n + i];
-          if (sc < 0.6) continue;
+          if (sc < 0.3) continue;
           const cx = d[i], cy = d[n + i], w = d[2 * n + i], h = d[3 * n + i];
           const b = { x: R.x + (cx - w / 2 - px) / scale, y: R.y + (cy - h / 2 - py) / scale, w: w / scale, h: h / scale, score: sc };
           const a = (b.w * b.h) / area, ar = b.w / b.h;
           if (a < 0.004 || a > 0.25 || ar < 0.5 || ar > 2) continue;
-          cands.push(b);
+          MODEL.sig.push({ s: sc, t: now });
+          if (sc >= 0.6) cands.push(b);
         }
         cands.sort((a, b) => b.score - a.score);
         const frame = [];
@@ -160,6 +161,8 @@ async function loadDetector() {
           else MODEL.tracks.push({ x: b.x, y: b.y, w: b.w, h: b.h, hits: 1, sum: b.score, first: now, last: now });
         }
         MODEL.tracks = MODEL.tracks.filter(t => now - t.last < 2000);
+        MODEL.sig = MODEL.sig.filter(g => now - g.t < 1200);
+        MODEL.signal = MODEL.sig.reduce((m, g) => Math.max(m, g.s), 0);
         MODEL.last = MODEL.tracks
           .filter(t => t.hits >= 6 && t.sum / t.hits >= 0.75 && now - t.first >= 1500 && now - t.last < 1000)
           .map(t => ({ x: t.x, y: t.y, w: t.w, h: t.h, score: t.sum / t.hits }))
@@ -216,8 +219,9 @@ async function loop() {
     const best = boxes.reduce((m, b) => Math.max(m, b.score), 0);
     levelEl.style.width = boxes.length ? Math.round(best * 100) + '%' : '0%';
     draw(boxes);
+    const signal = Math.max(best, MODEL.signal || 0);
+    if (signal >= 0.3) beep(signal);
     if (boxes.length) {
-      beep(best);
       markSign();
       statusEl.textContent = 'فيه علامة فقعة قدامك';
     } else {
