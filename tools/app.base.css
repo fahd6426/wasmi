@@ -112,7 +112,7 @@ a{color:inherit;text-decoration:none}
 /* المنتجات */
 .prods{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .pr{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
-.pr .im{background:#fff;aspect-ratio:1;display:grid;place-items:center}.pr img{max-width:84%;max-height:84%;object-fit:contain}
+.pr .im{background:#fff;aspect-ratio:1;position:relative;overflow:hidden}.pr img{position:absolute;top:8%;left:8%;width:84%;height:84%;object-fit:contain}
 .pr .tx{padding:9px 10px 11px;font-size:13px;line-height:1.5;flex:1;display:flex;flex-direction:column;gap:6px}
 .pr .tx p{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .pr .pz{color:var(--honey);font-weight:800;font-size:15px}.pr .pz s{color:var(--mut);font-weight:400;font-size:12px;margin-inline-start:4px}
