@@ -863,7 +863,8 @@ function unlockAudio(){if(audioUnlocked)return;audioUnlocked=true;
 document.addEventListener('touchend',unlockAudio,{once:true});document.addEventListener('click',unlockAudio,{once:true});
 function ring(on){try{if(on&&OPT.ring===false)return;if(on){ringA.currentTime=0;var p=ringA.play();if(p&&p.catch)p.catch(function(){});if(navigator.vibrate)navigator.vibrate([400,200,400,200,400])}else{ringA.pause();ringA.currentTime=0;if(navigator.vibrate)navigator.vibrate(0)}}catch(e){}}
 function numWord(n){var W={1:'يوم واحد',2:'يومين',3:'ثلاث أيام',4:'أربع أيام',5:'خمس أيام',6:'ست أيام',7:'سبع أيام',8:'ثمان أيام',9:'تسع أيام',10:'عشر أيام',11:'إحدعشر يوم',12:'اثنعشر يوم',13:'ثلطعش يوم',14:'أربعطعش يوم',15:'خمسطعش يوم',16:'ستطعش يوم',17:'سبعطعش يوم',18:'ثمنطعش يوم',19:'تسعطعش يوم',20:'عشرين يوم',30:'ثلاثين يوم',40:'أربعين يوم'};return W[n]||(A(n)+' '+daysWord(n))}
-var VOICE_LINES=[['ألو.. هلا والله! معك <b>المربعانية</b> ❄️'],['أنا أربعين يوم برد.. ولا راح أرحم أحد 😏'],['فدفّ نفسك من الحين، وجهّز أغراضك: الدفاية والفروة والبطانيات 🔥'],['وإذا محتار وش تجيب.. أنا أدلك 😉']];
+/* كل سطر ومتى يبدأ بالثواني بتسجيل فهد */
+var VOICE_LINES=[['ألو.. هلا والله! معك <b>المربعانية</b> ❄️',0],['أنا أربعين يوم برد.. ولا راح أرحم أحد 😏',4.0],['فدفّ نفسك من الحين، وجهّز أغراضك: الدفاية والفروة والبطانيات، وضبّط أمورك 🔥',6.9],['وإذا محتار وش تجيب.. أنا أدلك 😉',13.7]];
 var CALL_LINES=function(){var d=numWord(MUR.left);return [
  ['ألو.. هلا والله! معك <b>المربعانية</b> ❄️','ألو.. هلا والله! معك المربعانية'],
  MUR.now?['ترى أنا عندكم الحين، وباقي لي <b>'+d+'</b>.. ولا راح أرحم أحد 😏','ترى أنا عندكم الحين، وباقي لي '+d+'.. ولا راح أرحم أحد']:['باقي لي <b>'+d+'</b> وأدخل عليكم.. وأنا أربعين يوم برد، ولا راح أرحم أحد 😏','باقي لي '+d+' وأدخل عليكم.. وأنا أربعين يوم برد، ولا راح أرحم أحد'],
@@ -880,8 +881,8 @@ function answer(){ring(false);callState='talk';var c=document.getElementById('ca
  document.getElementById('clWho').textContent='مكالمة';var L=CALL_LINES(),i=0,cap=document.getElementById('clCap');
  function fin(){if(callState==='talk'){callState='done';c.className='on talk done'}}
  function nx(){if(callState!=='talk')return;if(i>=L.length)return fin();cap.innerHTML=L[i][0];speak(L[i][1],function(){i++;nx()})}
- if(voiceOK){var vt,VL=VOICE_LINES,W=VL.map(function(x){return x[0].replace(/<[^>]+>/g,'').length}),WS=W.reduce(function(a,b){return a+b},0);if(!voiceA.src)voiceA.src=VOICE_URL;try{voiceA.currentTime=0}catch(e){}var vp=voiceA.play();cap.innerHTML=VL[0][0];
-  vt=setInterval(function(){if(callState!=='talk'){clearInterval(vt);return}var f=voiceA.currentTime/(voiceA.duration||12),acc=0,k=0;for(;k<VL.length-1;k++){acc+=W[k]/WS;if(f<acc)break}cap.innerHTML=VL[k][0]},250);
+ if(voiceOK){var vt,VL=VOICE_LINES;if(!voiceA.src)voiceA.src=VOICE_URL;try{voiceA.currentTime=0}catch(e){}var vp=voiceA.play();cap.innerHTML=VL[0][0];
+  vt=setInterval(function(){if(callState!=='talk'){clearInterval(vt);return}var ct=voiceA.currentTime,k=0;for(var j=0;j<VL.length;j++)if(ct>=VL[j][1])k=j;cap.innerHTML=VL[k][0]},200);
   voiceA.onended=function(){clearInterval(vt);fin()};if(vp&&vp.catch)vp.catch(function(){clearInterval(vt);voiceOK=false;nx()})}
  else nx()}
 function endCall(shop){ring(false);try{speechSynthesis.cancel()}catch(e){}try{voiceA.pause()}catch(e){}var was=callState;callState=null;document.getElementById('call').className='';
