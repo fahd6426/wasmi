@@ -101,3 +101,4 @@ a.pc{text-decoration:none}
 .tp p{font-size:14.5px;line-height:1.75;margin:0}
 .tp .cr{font-size:10.5px;color:var(--muted);margin-top:8px;direction:ltr;text-align:left}
 .tp .cr a{color:var(--muted)}
+.tpm{grid-column:1/-1}.pml{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:7px}.pml li{line-height:1.7}.pml i{font-style:normal;font-weight:800;color:var(--brown)}
