@@ -1108,7 +1108,9 @@ LK.addEventListener('click',function(){if(!unlocked&&Math.abs(dy)<6){LK.classLis
 /* بعد الفتح: إشعار سوالف ثم اتصال المربعانية */
 var called=false;
 /* اتصال المربعانية بعد ١٥ ثانية من دخول الموقع */
-setTimeout(function(){if(!called&&!callState&&OPT.call!==false){called=true;incoming(false)}},15000);
+/* المربعانية تتصل مرة وحدة بس على كل جوال */
+var murDone=false;try{murDone=localStorage.getItem('w_mur_called')==='1'}catch(e){}
+setTimeout(function(){if(!murDone&&!called&&!callState&&OPT.call!==false){called=true;try{localStorage.setItem('w_mur_called','1')}catch(e){}incoming(false)}},15000);
 function afterUnlock(){BADGE.chats=unread();badges();
  setTimeout(function(){if(!stack.length||stack[stack.length-1]!=='chat')banner('chats','سوالف · المربعانية','ترى قربت 😏 جهّزت نفسك؟',function(){openApp('chats');setTimeout(function(){openChat('mur')},350)})},7000);
  }
