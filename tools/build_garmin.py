@@ -30,6 +30,12 @@ page=f'''<!doctype html>
 <meta property="og:title" content="قارمن وسمي 🧭 امشِ على نفس الجرة">
 <meta property="og:description" content="خريطة بر بالأقمار الصناعية، وش حولك من جبال وشعبان، وسجّل جرتك وشاركها.">
 <link rel="icon" href="/assets/logo/wasmi-app-icon.png">
+<link rel="manifest" href="/garmin.webmanifest">
+<link rel="apple-touch-icon" href="/assets/logo/wasmi-app-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="قارمن وسمي">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>

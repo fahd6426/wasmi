@@ -527,12 +527,14 @@
   .nvmk{display:flex;flex-direction:column;gap:4px;margin-top:6px;background:rgba(18,13,9,.86);border:1px solid rgba(201,143,62,.35);border-radius:12px;padding:4px}
   .nvmk button{display:grid;place-items:center;width:34px;height:30px;padding:0;border:0;border-radius:9px;background:none;font-size:17px;align-self:center}
   .nvmk button.on{background:var(--honey)}
+  .nvtools{display:flex;flex-direction:column;gap:4px;margin-top:6px;background:rgba(18,13,9,.86);border:1px solid rgba(201,143,62,.35);border-radius:12px;padding:4px}.nvtools button{display:grid;place-items:center;width:34px;height:32px;padding:0;border:0;border-radius:9px;background:none;font-size:17px;align-self:center;color:#fff}.nvtools button.on{background:var(--honey)}#nvCmpI{transition:transform .3s}
   .nvlay .nvmsb{margin-top:6px}.nvlay .nvmsb.on{background:#ff9f0a;color:#fff}.nvturn.ms{background:#3d3a36}
   .nvme2{transition:transform .4s}
   .nvfol #nvBt{display:none}
   .nvnm span{position:absolute;transform:translate(-50%,-50%);white-space:nowrap;font:700 12.5px Tajawal,sans-serif;color:#fff;text-shadow:0 0 3px #000,0 0 2px #000,0 0 6px rgba(0,0,0,.6);pointer-events:auto;padding:4px 6px;cursor:pointer}
   .nvnm .c-wadi{color:#a9d6ff}.nvnm .c-peak{color:#ffd7a3}.nvnm .c-water{color:#8ff3ff}.nvnm .c-place{font-size:13.5px;font-weight:800}.nvnm .c-sand{color:#ffe28a}.nvnm .c-qa{color:#d9f2b0}
   .nvlt .nvnm span{color:#3a2414;text-shadow:0 0 3px #fff,0 0 2px #fff}.nvlt .nvnm .c-wadi{color:#1d5fa8}.nvlt .nvnm .c-peak{color:#6b3d1c}.nvlt .nvnm .c-water{color:#0f7c90}.nvlt .nvnm .c-sand{color:#8a6312}.nvlt .nvnm .c-qa{color:#4f6b22}
+  .nvpwa{display:none;position:relative;margin:12px 0 4px;padding:12px 14px;border-radius:14px;background:rgba(201,143,62,.12);border:1px solid rgba(201,143,62,.4);font-size:13.5px;line-height:1.7}.nvpwa.on{display:block}.nvpwa b{display:block;color:var(--honey);font-size:15px}.nvpwa span{display:block;color:rgba(250,243,230,.85)}.nvpwa button{display:none;margin-top:8px;border:0;border-radius:10px;padding:8px 14px;background:var(--honey);color:#fff;font:800 14px Tajawal,sans-serif}.nvpwa i{position:absolute;top:8px;left:10px;font-style:normal;opacity:.6;cursor:pointer}
   .nvturn{display:none;position:absolute;left:8px;right:8px;top:8px;z-index:600;background:#0b7a4b;color:#fff;border-radius:16px;padding:10px 12px;align-items:center;gap:12px;box-shadow:0 6px 18px rgba(0,0,0,.35)}
   .nvw:has(.nvturn.on) .nvlay,.nvw:has(.nvturn.on) .nvme{top:122px}
   .nvturn .x{display:none;flex:none;width:34px;height:34px;border-radius:50%;border:0;background:rgba(255,255,255,.18);color:#fff;font-size:16px}.nvturn.tgt{background:#7a4a12}.nvturn.tgt .x{display:block}
@@ -544,7 +546,7 @@
   <div class="nvw">
     <div id="nvMap"></div>
     <div class="nvbar"><div><small>السرعة</small><b><span id="nvSp">–</span><i>كم/س</i></b></div><div><small>الاتجاه</small><b id="nvHd">–</b></div><div><small>الارتفاع</small><b><span id="nvAl">–</span><i>م</i></b></div><div><small>المسافة</small><b><span id="nvDs">٠</span><i>كم</i></b></div></div>
-    <div class="nvlay"><button data-l="sat" class="on" onclick="nvLayer('sat')">قمر صناعي</button><button data-l="topo" onclick="nvLayer('topo')">تضاريس</button><button data-l="osm" onclick="nvLayer('osm')">خريطة</button><div class="nvmk" id="nvMk"><button data-m="dot" onclick="nvMark('dot')" aria-label="دائرة"><i class="nvdot" style="display:block;width:14px;height:14px;box-shadow:none;border-width:2px"></i></button><button data-m="arrow" onclick="nvMark('arrow')" aria-label="سهم"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 2l7 19-7-4-7 4z" fill="#2f8cff" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg></button><button data-m="car" onclick="nvMark('car')" aria-label="سيارة">🚙</button></div></div>
+    <div class="nvlay"><button data-l="sat" class="on" onclick="nvLayer('sat')">قمر صناعي</button><button data-l="topo" onclick="nvLayer('topo')">تضاريس</button><button data-l="osm" onclick="nvLayer('osm')">خريطة</button><div class="nvmk" id="nvMk"><button data-m="dot" onclick="nvMark('dot')" aria-label="دائرة"><i class="nvdot" style="display:block;width:14px;height:14px;box-shadow:none;border-width:2px"></i></button><button data-m="arrow" onclick="nvMark('arrow')" aria-label="سهم"><svg viewBox="0 0 24 24" width="18" height="18"><path d="M12 2l7 19-7-4-7 4z" fill="#2f8cff" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></svg></button><button data-m="car" onclick="nvMark('car')" aria-label="سيارة">🚙</button></div><div class="nvtools"><button id="nvCmp" onclick="nvRotT()" aria-label="البوصلة"><svg viewBox="0 0 24 24" width="22" height="22" id="nvCmpI"><path d="M12 2l4 10h-8z" fill="#ff453a"/><path d="M12 22l-4-10h8z" fill="#e8e0d4"/></svg></button><button id="nvVo" onclick="nvVoT()" aria-label="الصوت">🔊</button></div></div>
     <button class="nvme" onclick="nvCenter()" aria-label="موقعي">◎</button>
     <div class="nvturn" id="nvTurn"><div class="ar" id="nvTa"></div><div class="tx"><b id="nvTd"></b><span id="nvTt"></span><small id="nvTr"></small></div><button class="x" onclick="nvTgtOff()" aria-label="إلغاء">✕</button></div>
     <div class="nvsh" id="nvSh">
@@ -562,6 +564,7 @@
       <div class="nvhd"><div><h3>وش حولك</h3><span id="nvCnt">نحدد موقعك…</span></div></div>
       <div class="nvch" id="nvCh"></div>
       <div class="nvls" id="nvLs"></div>
+      <div class="nvpwa" id="nvPwa"><b>📲 خلّه تطبيق بجوالك</b><span id="nvPwaT"></span><button id="nvPwaB" onclick="nvInstall()">ثبّت قارمن وسمي</button><i onclick="nvPwaX()">✕</i></div>
       <div class="gbox" id="pG"><h3 id="pGt"></h3><p id="pGp"></p><ol class="guide" id="pGl"></ol></div>
       </div>
     </div>
@@ -996,13 +999,13 @@ function copyLoc(){var t=pos.latitude.toFixed(6)+', '+pos.longitude.toFixed(6);(
 var NV={map:null,me:null,acc:null,trk:null,lay:{},cur:'sat',sh:null,shL:null,w:null,co:null,fix:false,rec:false,last:null,dist:0,t0:0,ac:0,tick:null,pts:[],items:[],cat:'all',grp:null,q:null,big:false};
 var NVC={peak:['⛰️','#8a5a33','جبل'],wadi:['〰️','#2f7fd1','وادي / شعيب'],water:['💧','#1f9bb5','بئر / عين / مويه'],place:['🏘️','#a5552e','قرية / هجرة'],sand:['🏜️','#c98f3e','نفود / كثبان'],other:['📍','#6b5d50','معلم']};
 function nvLoadLeaflet(cb){if(window.L)return cb();var l=document.createElement('link');l.rel='stylesheet';l.href='https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';document.head.appendChild(l);
- var s=document.createElement('script');s.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';s.onload=cb;s.onerror=function(){document.getElementById('nvCnt').textContent='ما قدرنا نحمّل الخريطة، تأكد من النت'};document.head.appendChild(s)}
+ var s=document.createElement('script');s.src='https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';s.onload=function(){var r=document.createElement('script');r.src='/assets/js/leaflet-rotate.js';r.onload=r.onerror=cb;document.head.appendChild(r)};s.onerror=function(){document.getElementById('nvCnt').textContent='ما قدرنا نحمّل الخريطة، تأكد من النت'};document.head.appendChild(s)}
 function nvOpen(){go('gps');nvLoadLeaflet(function(){if(!NV.map){nvInit()}else setTimeout(function(){NV.map.invalidateSize()},350);nvWatch()})}
-function nvInit(){var m=L.map('nvMap',{zoomControl:false,attributionControl:true}).setView([26.3,43.97],6);NV.map=m;
+function nvInit(){var m=L.map('nvMap',{zoomControl:false,attributionControl:true,rotate:true,rotateControl:false,touchRotate:false,bearing:0}).setView([26.3,43.97],6);NV.map=m;
  NV.lay.topo=L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',{maxZoom:19,maxNativeZoom:17,subdomains:'abc',attribution:'© OpenStreetMap · OpenTopoMap'});
  NV.lay.sat=L.layerGroup([L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:19,maxNativeZoom:17,attribution:'© Esri · أسماء: GeoNames'}),L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',{maxZoom:10})]);
  NV.lay.osm=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'});
- NV.lay.sat.addTo(m);m.on('click',function(e){if(NV.ms)nvMsAdd([e.latlng.lat,e.latlng.lng])});m.on('moveend',nvLabels);m.on('dragstart',function(){NV.follow=false;var sh=document.getElementById('nvSh');if(NV.sheetTo&&sh&&sh.offsetHeight>sh.parentNode.clientHeight*.6)NV.sheetTo(1)});NV.grp=L.layerGroup().addTo(m);nvSheetInit();NV.trk=L.polyline(NV.pts,{color:'#e9a640',weight:4}).addTo(m);nvDrawShared();nvMark(NV.mk);if(NV.toPt)setTimeout(function(){nvTarget(NV.toPt[0],NV.toPt[1],'الموقع المرسل لك','other')},300);if(NV.sh){var _w=document.getElementById('nvSh');_w&&_w.parentNode.classList.add('nvfol');NV.trk.setLatLngs([])}
+ NV.lay.sat.addTo(m);m.on('click',function(e){if(NV.ms)nvMsAdd([e.latlng.lat,e.latlng.lng])});m.on('moveend',nvLabels);m.on('dragstart',function(){NV.follow=false;var sh=document.getElementById('nvSh');if(NV.sheetTo&&sh&&sh.offsetHeight>sh.parentNode.clientHeight*.6)NV.sheetTo(1)});NV.grp=L.layerGroup().addTo(m);nvSheetInit();NV.trk=L.polyline(NV.pts,{color:'#e9a640',weight:4}).addTo(m);nvDrawShared();nvMark(NV.mk);nvVoUI();nvPwa();try{if(localStorage.getItem('w_rot')==='1')setTimeout(nvRotT,200)}catch(e){}m.on('rotate',nvCmpUI);if(NV.toPt)setTimeout(function(){nvTarget(NV.toPt[0],NV.toPt[1],'الموقع المرسل لك','other')},300);if(NV.sh){var _w=document.getElementById('nvSh');_w&&_w.parentNode.classList.add('nvfol');NV.trk.setLatLngs([])}
  L.control.zoom({position:'bottomleft'}).addTo(m);nvChips();setTimeout(function(){m.invalidateSize()},350)}
 function nvLayer(k){if(!NV.map)return;NV.map.getContainer().classList.toggle('nvlt',k!=='sat');NV.map.removeLayer(NV.lay[NV.cur]);NV.lay[k].addTo(NV.map);NV.cur=k;document.querySelectorAll('.nvlay button').forEach(function(b){b.classList.toggle('on',b.dataset.l===k)})}
 function nvBig(){NV.big=!NV.big;document.getElementById('nvSh').classList.toggle('big',NV.big);document.getElementById('nvTg').textContent=NV.big?'صغّر القائمة':'كبّر القائمة';setTimeout(function(){NV.map&&NV.map.invalidateSize()},200)}
@@ -1011,7 +1014,8 @@ function nvIcon(){var h;if(NV.mk==='arrow')h='<div class="nvme2" style="width:34
  else if(NV.mk==='car')h='<div class="nvme2" style="width:34px;height:34px"><svg viewBox="0 0 24 40" width="22" height="36" style="display:block;margin:-1px auto 0;filter:drop-shadow(0 1px 3px rgba(0,0,0,.6))"><rect x="2" y="2" width="20" height="36" rx="7" fill="#e9a640" stroke="#fff" stroke-width="1.6"/><path d="M5 12q7-4 14 0v5H5z" fill="#2a1a0e"/><path d="M5 30h14v4q-7 2-14 0z" fill="#2a1a0e"/><rect x="4" y="18" width="2" height="9" rx="1" fill="#2a1a0e"/><rect x="18" y="18" width="2" height="9" rx="1" fill="#2a1a0e"/></svg></div>';
  else return L.divIcon({className:'',html:'<div class="nvdot"></div>',iconSize:[16,16],iconAnchor:[8,8]});
  return L.divIcon({className:'',html:h,iconSize:[34,34],iconAnchor:[17,17]})}
-function nvRot(){if(!NV.me||NV.mk==='dot')return;var e=NV.me.getElement();e=e&&e.querySelector('.nvme2');if(e)e.style.transform='rotate('+NV.hd+'deg)'}
+function nvBr(){return NV.map&&NV.map.getBearing?NV.map.getBearing():0}
+function nvRot(){if(!NV.me||NV.mk==='dot')return;var e=NV.me.getElement();e=e&&e.querySelector('.nvme2');if(e)e.style.transform='rotate('+(NV.hd+nvBr())+'deg)'}
 function nvMark(k){NV.mk=k;try{localStorage.setItem('w_mk',k)}catch(e){}document.querySelectorAll('#nvMk button').forEach(function(b){b.classList.toggle('on',b.dataset.m===k)});if(NV.me){NV.me.setIcon(nvIcon());nvRot()}}
 function nvSheetInit(){var sh=document.getElementById('nvSh'),g=document.getElementById('nvGrab'),w=sh.parentNode;if(!g||sh._d)return;sh._d=1;
  function snaps(){var H=w.clientHeight,top=sh.querySelector('.nvst'),mn=top?Math.round(top.getBoundingClientRect().bottom-sh.getBoundingClientRect().top)+6:150;return [mn,Math.round(H*.46),Math.round(H*.82)]}
@@ -1042,7 +1046,7 @@ function nvTarget(la,lo,n,k){if(!NV.map)return;if(NV.ms){nvMsAdd([la,lo]);return
  NV.tgL=L.layerGroup([NV.rtL,NV.tgLine,L.marker([la,lo],{icon:L.divIcon({className:'',html:'<div class="nvpin" style="background:'+c[1]+';width:28px;height:28px;font-size:15px">'+c[0]+'</div>',iconSize:[28,28],iconAnchor:[14,14]}),zIndexOffset:900})]).addTo(NV.map);
  if(NV.sheetTo)NV.sheetTo(0);
  if(NV.co)NV.map.fitBounds(L.latLngBounds([[la,lo],[NV.co.latitude,NV.co.longitude]]).pad(.35),{maxZoom:15});else NV.map.setView([la,lo],14);
- nvTgtUpd();nvRoute()}
+ nvTgtUpd();nvRoute();nvWake();nvSay('التوجيه إلى '+n)}
 /* المسار على الطرق والردميات (Valhalla / OpenStreetMap) */
 function nvPl6(s){var i=0,la=0,lo=0,o=[];while(i<s.length){var b,sh=0,r=0;do{b=s.charCodeAt(i++)-63;r|=(b&31)<<sh;sh+=5}while(b>=32);la+=(r&1)?~(r>>1):(r>>1);sh=0;r=0;do{b=s.charCodeAt(i++)-63;r|=(b&31)<<sh;sh+=5}while(b>=32);lo+=(r&1)?~(r>>1):(r>>1);o.push([la/1e6,lo/1e6])}return o}
 function nvRoute(re){var t=NV.tgt;if(!t||!NV.co)return;if(re&&Date.now()-(NV._rtT||0)<60000)return;NV._rtT=Date.now();
@@ -1061,11 +1065,12 @@ function nvTgtUpd(){var t=NV.tgt;if(!t)return;var bx=document.getElementById('nv
  if(NV.ms)return;
  if(NV.rt&&d>=40){nvGuideT(me,NV.rt,'الطريق');bx.classList.add('tgt');var sm=document.getElementById('nvTr');sm.textContent=(sm.textContent?sm.textContent+' · ':'')+'خط مستقيم '+nvFmt(d);return}
  bx.className='nvturn on tgt';
- document.getElementById('nvTa').innerHTML='<svg viewBox="0 0 24 24" style="transform:rotate('+Math.round(b)+'deg)" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">'+NV_AR.st+'</svg>';
+ document.getElementById('nvTa').innerHTML='<svg viewBox="0 0 24 24" style="transform:rotate('+Math.round(b+nvBr())+'deg)" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">'+NV_AR.st+'</svg>';
+ if(d<40)nvSay1('arr'+t.la+t.lo,'وصلت '+t.n);
  document.getElementById('nvTd').textContent=d<40?'وصلت':nvFmt(d);
  document.getElementById('nvTt').textContent=t.n;
  document.getElementById('nvTr').textContent=d<40?'':'اتجاهه '+dname(b)+' · '+A(Math.round(b))+'°'+(NV.co.speed>1?' · توصله بعد '+A(Math.max(1,Math.round(d/NV.co.speed/60)))+' د':'')}
-function nvTgtOff(){if(NV.ms){nvMsOff();return}NV.tgt=null;NV.rt=null;if(NV.tgL&&NV.map)NV.map.removeLayer(NV.tgL);NV.tgL=null;document.getElementById('nvTurn').className='nvturn';if(NV.co&&NV.sh)nvGuide({la:NV.co.latitude,lo:NV.co.longitude})}
+function nvTgtOff(){if(NV.ms){nvMsOff();return}NV.tgt=null;setTimeout(nvWake,50);NV.rt=null;if(NV.tgL&&NV.map)NV.map.removeLayer(NV.tgL);NV.tgL=null;document.getElementById('nvTurn').className='nvturn';if(NV.co&&NV.sh)nvGuide({la:NV.co.latitude,lo:NV.co.longitude})}
 /* 📏 قياس أي مسافة: اضغط نقاط على الخريطة */
 function nvMs(){if(NV.ms){nvMsOff();return}NV.ms=[];document.getElementById('nvMsB').classList.add('on');if(!NV.msL)NV.msL=L.layerGroup();NV.msL.clearLayers().addTo(NV.map);
  NV.msLine=L.polyline([],{color:'#fff',weight:3,dashArray:'2 6'}).addTo(NV.msL);if(NV.sheetTo)NV.sheetTo(0);nvMsShow()}
@@ -1080,6 +1085,31 @@ function nvShareLoc(){if(!NV.co){alert('ننتظر نحدد موقعك… جرّ
  u='https://wasmii.com/garmin.html#to='+la+','+lo,tx='هذا موقعي بالبر 📍 افتح الرابط ويوديك لي من قارمن وسمي:';
  if(navigator.share){navigator.share({title:'موقعي',text:tx,url:u}).catch(function(){})}else{window.open('https://wa.me/?text='+encodeURIComponent(tx+'\n'+u),'_blank')}}
 (function(){var m=/[#&]to=(-?[\d.]+),(-?[\d.]+)/.exec(location.hash);if(m)NV.toPt=[+m[1],+m[2]]})();
+/* 🧭 الخريطة تلف مع اتجاهك */
+function nvCmpUI(){var i=document.getElementById('nvCmpI');if(i)i.style.transform='rotate('+nvBr()+'deg)';var b=document.getElementById('nvCmp');b&&b.classList.toggle('on',!!NV.rotH)}
+function nvRotT(){if(!NV.map||!NV.map.setBearing)return;NV.rotH=!NV.rotH;if(NV.rotH){NV.follow=true;NV.map.setBearing(-(NV.hd||0));if(NV.co)NV.map.panTo([NV.co.latitude,NV.co.longitude])}else NV.map.setBearing(0);nvCmpUI();nvRot();try{localStorage.setItem('w_rot',NV.rotH?'1':'0')}catch(e){}}
+/* 🔊 صوت التوجيه */
+NV.voice=(function(){try{return localStorage.getItem('w_voice')!=='0'}catch(e){return true}})();NV.said={};
+function nvVoUI(){var b=document.getElementById('nvVo');if(b){b.textContent=NV.voice?'🔊':'🔇';b.classList.toggle('on',NV.voice)}}
+function nvSay(t){if(!NV.voice||!window.speechSynthesis)return;try{var u=new SpeechSynthesisUtterance(t);u.lang='ar-SA';var v=speechSynthesis.getVoices().filter(function(x){return /^ar/i.test(x.lang)});if(v.length)u.voice=v.find(function(x){return /SA/i.test(x.lang)})||v[0];u.rate=1;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
+function nvSay1(k,t){if(NV.said[k])return;NV.said[k]=1;nvSay(t)}
+function nvVoT(){NV.voice=!NV.voice;try{localStorage.setItem('w_voice',NV.voice?'1':'0')}catch(e){}nvVoUI();if(NV.voice)nvSay('تم تشغيل صوت التوجيه')}
+document.addEventListener('touchend',function u0(){document.removeEventListener('touchend',u0);try{var u=new SpeechSynthesisUtterance(' ');u.volume=0;speechSynthesis.speak(u)}catch(e){}},{once:true});
+function nvSpk(m){return m<1000?(Math.round(m/50)*50||50)+' متر':(m/1000).toFixed(1).replace('.0','')+' كيلو'}
+/* ☀️ الشاشة ما تطفي وقت التسجيل والتوجيه */
+function nvWake(){if(!('wakeLock' in navigator))return;var need=!!(NV.rec||NV.tgt||NV.sh)&&document.visibilityState==='visible';
+ if(need&&!NV.wl&&!NV._wlp){NV._wlp=1;navigator.wakeLock.request('screen').then(function(l){NV.wl=l;NV._wlp=0;l.addEventListener('release',function(){NV.wl=null})}).catch(function(){NV._wlp=0})}
+ else if(!need&&NV.wl){NV.wl.release().catch(function(){});NV.wl=null}}
+document.addEventListener('visibilitychange',function(){NV.wl=null;nvWake()});
+/* 📲 أيقونة على الشاشة الرئيسية */
+var nvBIP=null;window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();nvBIP=e;nvPwa()});
+function nvPwa(){var c=document.getElementById('nvPwa');if(!c||!document.body.classList.contains('gpage'))return;
+ var sa=matchMedia('(display-mode: standalone)').matches||navigator.standalone;try{if(sa||localStorage.getItem('w_pwax'))return}catch(e){}
+ var ios=/iP(hone|ad|od)/.test(navigator.userAgent);
+ document.getElementById('nvPwaT').textContent=nvBIP?'تفتحه من الشاشة الرئيسية بأيقونة وسمي، بدون شريط المتصفح.':ios?'اضغط زر المشاركة ⬆︎ بسفاري، وبعدين «إضافة إلى الشاشة الرئيسية». يطلع لك بأيقونة وسمي ويفتح كأنه تطبيق.':'من قائمة المتصفح ⋮ اختار «إضافة إلى الشاشة الرئيسية» أو «تثبيت التطبيق».';
+ document.getElementById('nvPwaB').style.display=nvBIP?'inline-block':'none';c.classList.add('on')}
+function nvInstall(){if(!nvBIP)return;nvBIP.prompt();nvBIP.userChoice.finally(function(){nvBIP=null;document.getElementById('nvPwa').classList.remove('on')})}
+function nvPwaX(){try{localStorage.setItem('w_pwax','1')}catch(e){}document.getElementById('nvPwa').classList.remove('on')}
 function nvCenter(){NV.follow=true;if(NV.co&&NV.map)NV.map.setView([NV.co.latitude,NV.co.longitude],Math.max(NV.map.getZoom(),13))}
 function nvWatch(){if(NV.w!==null)return;if(!navigator.geolocation){guide('p','متصفحك ما يدعم الموقع هنا','افتح الصفحة بسفاري أو كروم:',OPEN_SAFARI(device()));return}
  NV.w=navigator.geolocation.watchPosition(gpsOn,function(err){if(err&&err.code!==1&&NV.co){document.getElementById('nvSt').textContent='يدوّر على إشارة…';return}
@@ -1091,7 +1121,7 @@ function gpsTime(){var s=Math.floor((NV.ac+(NV.rec&&NV.t0?Date.now()-NV.t0:0))/1
  document.getElementById('nvTm').textContent=(NV.rec||s)?'⏱ '+A(h?h+':'+p(m)+':'+p(x):p(m)+':'+p(x)):''}
 function nvRecUI(st){var b=document.getElementById('nvBtn');b.classList.toggle('on',st==='on');document.getElementById('nvBi').innerHTML=st==='on'?'<svg viewBox="0 0 24 24"><rect x="7" y="6" width="3.5" height="12" rx="1" fill="#fff"/><rect x="13.5" y="6" width="3.5" height="12" rx="1" fill="#fff"/></svg>':'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6.5" fill="#ff453a"/></svg>';document.getElementById('nvBl').textContent=st==='on'?'وقّف':st==='pause'?'كمّل':'سجّل'}
 function gpsToggle(){if(NV.rec){NV.rec=false;NV.ac+=Date.now()-NV.t0;NV.t0=0;clearInterval(NV.tick);gpsTime();nvRecUI('pause');return}
- NV.rec=true;NV.t0=Date.now();NV.last=null;NV.tick=setInterval(gpsTime,1000);nvRecUI('on');nvWatch()}
+ NV.rec=true;NV.t0=Date.now();NV.last=null;NV.tick=setInterval(gpsTime,1000);nvRecUI('on');nvWatch();nvWake()}
 function gpsReset(){NV.dist=0;NV.ac=0;NV.t0=NV.rec?Date.now():0;NV.last=null;NV.pts=[];NV.trk&&NV.trk.setLatLngs([]);nvSave();document.getElementById('nvDs').textContent=A(0);gpsTime();if(!NV.rec)nvRecUI('off')}
 function gpsOn(p){var c=p.coords,pt={la:c.latitude,lo:c.longitude,t:p.timestamp},first=!NV.fix;unguide('p');NV.co=c;NV.fix=true;
  document.getElementById('nvSt').textContent=c.latitude.toFixed(5)+', '+c.longitude.toFixed(5)+' · ± '+A(Math.round(c.accuracy))+' م';
@@ -1104,7 +1134,8 @@ function gpsOn(p){var c=p.coords,pt={la:c.latitude,lo:c.longitude,t:p.timestamp}
  var kmh=sp!=null?sp*3.6:0;if(kmh<1)kmh=0;
  document.getElementById('nvSp').textContent=sp!=null?A(Math.round(kmh)):'–';
  document.getElementById('nvHd').textContent=(hd!=null&&kmh>=2)?dname(hd):'–';
- if(hd!=null&&kmh>=2){NV.hd=hd;nvRot()}
+ if(hd!=null&&kmh>=2){NV.hd=hd;if(NV.rotH&&NV.map.setBearing){NV.map.setBearing(-hd);nvCmpUI()}nvRot()}
+ nvWake();
  document.getElementById('nvDs').textContent=A((NV.dist/1000).toFixed(NV.dist<10000?2:1)).replace('.','٫');
  if(!NV.q||gpsHav(NV.q,pt)>4000)nvAround(pt);else nvList()}
 function gpsCopy(){if(!NV.co)return;var t=NV.co.latitude.toFixed(6)+', '+NV.co.longitude.toFixed(6),b=document.getElementById('nvCl');(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){b.textContent='انسخ ✓';setTimeout(function(){b.textContent='انسخ'},1500)}).catch(function(){prompt('انسخ الإحداثيات:',t)})}
@@ -1145,13 +1176,15 @@ function nvGuideT(pt,T,W){var k=111320*Math.cos(pt.la*Math.PI/180),best=1e12,bp=
  for(var i=1;i<T.sh.length;i++){var a=T.sh[i-1],b=T.sh[i],ax=(a[1]-pt.lo)*k,ay=(a[0]-pt.la)*110540,bx=(b[1]-pt.lo)*k,by=(b[0]-pt.la)*110540,dx=bx-ax,dy=by-ay,l=dx*dx+dy*dy,u=l?Math.max(0,Math.min(1,-(ax*dx+ay*dy)/l)):0,x=ax+u*dx,y=ay+u*dy,dd=Math.hypot(x,y);
   if(dd<best){best=dd;bp={la:pt.la+y/110540,lo:pt.lo+x/k};bs=T.shc[i-1]+u*(T.shc[i]-T.shc[i-1])}}
  if(!bp)return;var el=document.getElementById('nvSt'),bx=document.getElementById('nvTurn'),left=T.shT-bs;
+ var mute=NV.ms||(NV.tgt&&T!==NV.rt),pre=(T===NV.rt?'r':'s');function say(k,t){if(!mute)nvSay1(pre+k,t)}
  function show(cls,ic,big,line,small){if(NV.ms||(NV.tgt&&T!==NV.rt))return;bx.className='nvturn on '+cls;document.getElementById('nvTa').innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">'+NV_AR[ic]+'</svg>';document.getElementById('nvTd').textContent=big;document.getElementById('nvTt').textContent=line;document.getElementById('nvTr').textContent=small}
- if(best>(T===NV.rt?60:40)){if(T===NV.rt&&best>150)nvRoute(true);var dn=dname(gpsBrg(pt,bp));show('off','back',nvFmt(best),'ارجع لل'+W.slice(2)+'، اتجه '+dn,'طول '+W+' '+nvFmt(T.shT));if(T!==NV.rt)el.textContent='↩︎ '+W+' تبعد '+nvFmt(best)+' '+dn;return}
- if(left<30){show('fin','fin','وصلت',T===NV.rt?NV.tgt.n+' 🏁':'نهاية الجرة 🏁','');if(T!==NV.rt)el.textContent='🏁 وصلت نهاية الجرة';return}
+ if(best>(T===NV.rt?60:40)){say('off'+Math.floor(Date.now()/60000),'ارجع لل'+W.slice(2));if(T===NV.rt&&best>150)nvRoute(true);var dn=dname(gpsBrg(pt,bp));show('off','back',nvFmt(best),'ارجع لل'+W.slice(2)+'، اتجه '+dn,'طول '+W+' '+nvFmt(T.shT));if(T!==NV.rt)el.textContent='↩︎ '+W+' تبعد '+nvFmt(best)+' '+dn;return}
+ if(left<30){say('fin',T===NV.rt?'وصلت':'وصلت نهاية الجرة');show('fin','fin','وصلت',T===NV.rt?NV.tgt.n+' 🏁':'نهاية الجرة 🏁','');if(T!==NV.rt)el.textContent='🏁 وصلت نهاية الجرة';return}
  var nt=null;for(var j=0;j<T.turns.length;j++){if(T.turns[j].s>bs+8){nt=T.turns[j];break}}
- if(!nt){show('','st',nvFmt(left),T===NV.rt?'كمّل سيدا لين '+NV.tgt.n:'كمّل سيدا لين نهاية الجرة','');if(T!==NV.rt)el.textContent='✅ أنت على الجرة · باقي '+nvFmt(left);return}
+ if(!nt){if(left>300)say('st'+Math.round(left/1000),'كمّل سيدا '+nvSpk(left));show('','st',nvFmt(left),T===NV.rt?'كمّل سيدا لين '+NV.tgt.n:'كمّل سيدا لين نهاية الجرة','');if(T!==NV.rt)el.textContent='✅ أنت على الجرة · باقي '+nvFmt(left);return}
  var dd2=nt.s-bs,side=nt.r?'يمين':'يسار',ic=nt.t==='u'?(nt.r?'ur':'ul'):nt.t==='s'?(nt.r?'sr':'sl'):(nt.r?'r':'l'),
   act=nt.t==='u'?'لف ورا ('+side+')':nt.t==='s'?'خفّف '+side:'لف '+side;
+ var spd=(NV.co&&NV.co.speed)||0,far=spd>14?800:spd>7?400:250,tid=Math.round(nt.s);if(dd2<=far&&dd2>90)say('f'+tid,'بعد '+nvSpk(dd2)+'، '+act);if(dd2<=60)say('n'+tid,'الحين، '+act);
  show('',ic,dd2<30?'الحين':nvFmt(dd2),dd2<30?act:'بعدها '+act,'باقي '+nvFmt(left)+(T===NV.rt?' لين '+NV.tgt.n:' لين نهاية الجرة'));
  if(T!==NV.rt)el.textContent='✅ أنت على الجرة · باقي '+nvFmt(left)}
 /* وش حولك: معالم بالأسماء من خريطة OpenStreetMap */
