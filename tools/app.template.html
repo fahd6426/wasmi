@@ -128,43 +128,59 @@
 .cday{align-self:center;font-size:12.5px;color:var(--mut);margin:4px 0}
 
 
-/* الواتس: شكل داخلي زي الواتساب (داكن) */
-#chats,#chat{background:#0b141a;font-family:-apple-system,'SF Arabic',system-ui,'Segoe UI',Tahoma,sans-serif}
-#chats .top{background:#0b141a}
-#chats .top .back{color:#00a884}
-#chats .ttl{font-family:-apple-system,'SF Arabic',system-ui,'Segoe UI',Tahoma,sans-serif;font-weight:700;font-size:32px}
-.wsrch{display:flex;align-items:center;gap:8px;background:#1f2c34;border-radius:12px;padding:9px 12px;color:#8696a0;font-size:16px;margin:0 0 6px}
-.wsrch svg{width:16px;height:16px;fill:none;stroke:#8696a0;stroke-width:2}
-#chats .chl .crow{border-bottom:0;padding:9px 0;position:relative}
-#chats .chl .crow:after{content:'';position:absolute;bottom:0;right:66px;left:0;height:1px;background:#1f2c34}
-#chats .crow .cav{width:52px;height:52px}
-#chats .crow .t b{font-size:16.5px;font-weight:600;color:#e9edef}
-#chats .crow .t span{color:#8696a0;font-size:14.5px}
-#chats .crow .r{color:#8696a0;font-size:13px}
-#chats .crow .r .nw{color:#00a884}
-#chats .crow .r i{background:#00a884;color:#0b141a;font-weight:700;border-radius:999px;min-width:21px;height:21px;font-size:12.5px}
-#chat .ctop{background:#1f2c34;border-bottom:0;padding:8px 12px 10px}
-#chat .ctop b{color:#e9edef;font-weight:600}
-#chat .ctop span{color:#8696a0}
-#chat .ctop .back{color:#00a884!important}
-.cic{margin-right:auto;display:flex;gap:22px;color:#00a884}
-.cic svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-#chat .cbody{background:#0b141a url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%27120%27%20height%3D%27120%27%20fill%3D%27none%27%20stroke%3D%27%23fff%27%20stroke-opacity%3D%27.05%27%20stroke-width%3D%271.4%27%20stroke-linecap%3D%27round%27%3E%3Cpath%20d%3D%27M14%2020l8-8%208%208-8%208z%27/%3E%3Ccircle%20cx%3D%2770%27%20cy%3D%2718%27%20r%3D%277%27/%3E%3Cpath%20d%3D%27M100%2030c6-10%2014-10%2014%200%27/%3E%3Cpath%20d%3D%27M20%2070h18M29%2061v18%27/%3E%3Cpath%20d%3D%27M62%2064l10%2014%2010-14%27/%3E%3Ccircle%20cx%3D%27104%27%20cy%3D%2776%27%20r%3D%274%27/%3E%3Cpath%20d%3D%27M12%20104c8-6%2016%206%2024%200%27/%3E%3Cpath%20d%3D%27M60%20100l6%2012%206-12%206%2012%27/%3E%3Cpath%20d%3D%27M96%20104h16v10H96z%27/%3E%3C/svg%3E") 0 0/120px 120px;gap:3px;padding:10px 12px 14px}
-#chat .cday{background:#1f2c34;color:#8696a0;border-radius:8px;padding:4px 10px;font-size:12.5px;margin:6px 0 8px}
-#chat .bub{position:relative;max-width:82%;padding:6px 9px 7px;border-radius:8px;font-size:15.5px;line-height:1.45;color:#e9edef;box-shadow:0 1px .5px rgba(0,0,0,.25)}
-#chat .bub.in{background:#202c33;border-bottom-right-radius:8px}
-#chat .bub.in.tl{border-top-right-radius:0;margin-top:6px}
-#chat .bub.in.tl:before{content:'';position:absolute;top:0;right:-8px;width:0;height:0;border-left:9px solid #202c33;border-bottom:11px solid transparent}
-#chat .bub .tm{float:left;font-size:11px;color:rgba(233,237,239,.6);margin:8px 10px 0 0;line-height:1}
-#chat .bub .who{font-size:13px;font-weight:600}
-#chat .bub.act{background:#202c33;border:0;color:#00a884;font-weight:600;text-align:center;align-self:flex-start;min-width:60%;border-radius:8px;padding:10px 12px;margin-top:2px}
-#chat .typing{background:#202c33;border-radius:8px}
-#chat .typing i{background:#8696a0}
-.cinp{display:flex;align-items:center;gap:10px;background:#1f2c34;padding:8px 10px calc(10px + env(safe-area-inset-bottom));flex:none;color:#8696a0}
-.cinp .fld{flex:1;background:#2a3942;border-radius:20px;padding:8px 14px;font-size:16px;color:#8696a0}
-.cinp svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
-.cinp .mic{width:40px;height:40px;border-radius:50%;background:#00a884;display:grid;place-items:center;color:#0b141a;flex:none}
-.cinp .mic svg{width:20px;height:20px}
+/* الواتس: نفس تصميم الواتساب بالآيفون (داكن) */
+#chats,#chat{background:#000;font-family:-apple-system,'SF Arabic',system-ui,'Segoe UI',Tahoma,sans-serif;color:#fff}
+#chats .top{display:none}
+#chats .body{padding-top:6px;padding-bottom:110px}
+.wtop{display:flex;align-items:center;justify-content:space-between;padding:4px 0 12px}
+.wtop .g{display:flex;gap:10px}
+.wbtn{height:44px;min-width:44px;border-radius:999px;background:#1c1c1e;display:grid;place-items:center;color:#fff;border:0;padding:0 12px;font:600 15px -apple-system,'SF Arabic',system-ui,'Segoe UI',Tahoma,sans-serif;cursor:pointer}
+.wbtn svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.wbtn.gr{background:#25d366;color:#000}
+#chats .ttl{font-family:-apple-system,'SF Arabic',system-ui,'Segoe UI',Tahoma,sans-serif;font-weight:700;font-size:34px;margin:0 0 12px;color:#fff}
+.wsrch{display:flex;align-items:center;gap:8px;background:#1c1c1e;border-radius:999px;padding:11px 16px;color:#8e8e93;font-size:17px;margin:0 0 8px}
+.wsrch svg{width:19px;height:19px;fill:none;stroke:#8e8e93;stroke-width:2}
+#chats .chl .crow{border-bottom:0;padding:12px 0;position:relative;align-items:flex-start;gap:14px}
+#chats .chl .crow:after{content:'';position:absolute;bottom:0;right:66px;left:0;height:.5px;background:#2c2c2e}
+#chats .crow .cav{width:52px;height:52px;font-size:24px}
+#chats .crow .t b{font-size:17px;font-weight:600;color:#fff;margin-bottom:2px}
+#chats .crow .t span{color:#8e8e93;font-size:15.5px;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.35}
+#chats .crow .r{color:#8e8e93;font-size:15px;gap:8px;padding-top:2px}
+#chats .crow .r .nw{color:#25d366}
+#chats .crow .r i{background:#25d366;color:#000;font-weight:600;border-radius:999px;min-width:22px;height:22px;font-size:13.5px}
+.wtab{position:absolute;bottom:calc(10px + env(safe-area-inset-bottom));left:12px;right:12px;height:66px;border-radius:999px;background:rgba(28,28,30,.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;justify-content:space-around;align-items:center;padding:0 6px;z-index:5;box-shadow:0 0 0 .5px rgba(255,255,255,.08)}
+.wtab div{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;color:#fff;position:relative;padding:6px 0;border-radius:999px;cursor:pointer}
+.wtab div.on{background:rgba(255,255,255,.1)}
+.wtab svg{width:25px;height:25px;fill:none;stroke:#fff;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.wtab i{position:absolute;top:2px;left:calc(50% - 26px);background:#25d366;color:#000;font-style:normal;font-weight:600;font-size:12px;border-radius:999px;min-width:20px;height:20px;display:grid;place-items:center;padding:0 5px}
+#chat .ctop{background:rgba(18,18,18,.92);border-bottom:0;padding:6px 10px 10px;gap:10px}
+#chat .ctop .bkp{height:42px;border-radius:999px;background:#1c1c1e;display:flex;align-items:center;gap:2px;padding:0 12px;font-size:17px;color:#fff;cursor:pointer;flex:none}
+#chat .ctop .bkp b{font-size:26px;font-weight:400;line-height:1}
+#chat .ctop .cav{width:42px;height:42px}
+#chat .ctop .nm{flex:1;min-width:0}
+#chat .ctop .nm b{color:#fff;font-weight:600;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#chat .ctop .nm span{color:#8e8e93;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.cic{display:flex;gap:26px;background:#1c1c1e;border-radius:999px;height:42px;align-items:center;padding:0 16px;color:#fff;flex:none}
+.cic svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;cursor:pointer}
+#chat .cbody{background:#0b0b0b url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20width%3D%27160%27%20height%3D%27160%27%20fill%3D%27none%27%20stroke%3D%27%23fff%27%20stroke-opacity%3D%27.075%27%20stroke-width%3D%271.5%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M18%2026l9-9%209%209-9%209z%27/%3E%3Ccircle%20cx%3D%2778%27%20cy%3D%2722%27%20r%3D%278%27/%3E%3Cpath%20d%3D%27M120%2034c7-12%2017-12%2017%200%27/%3E%3Cpath%20d%3D%27M24%2084h20M34%2074v20%27/%3E%3Cpath%20d%3D%27M70%2078l11%2015%2011-15%27/%3E%3Ccircle%20cx%3D%27132%27%20cy%3D%2788%27%20r%3D%275%27/%3E%3Cpath%20d%3D%27M14%20136c9-7%2018%207%2027%200%27/%3E%3Cpath%20d%3D%27M68%20130l7%2013%207-13%207%2013%27/%3E%3Crect%20x%3D%27118%27%20y%3D%27126%27%20width%3D%2722%27%20height%3D%2715%27%20rx%3D%273%27/%3E%3Cpath%20d%3D%27M100%2058l6-6%206%206M52%20112c4-6%2010-6%2014%200%27/%3E%3Cpath%20d%3D%27M140%2060v10h10%27/%3E%3Ccircle%20cx%3D%2752%27%20cy%3D%2752%27%20r%3D%273%27/%3E%3C/svg%3E") 0 0/160px 160px;gap:3px;padding:10px 10px 14px}
+#chat .cday{background:#1c1c1e;color:#fff;border-radius:10px;padding:5px 26px;font-size:14px;margin:8px 0 10px}
+#chat .bub{position:relative;max-width:80%;padding:7px 12px 8px;border-radius:18px;font-size:16.5px;line-height:1.4;color:#fff}
+#chat .bub.in{background:#262628}
+#chat .bub.out{background:#144d37}
+#chat .bub.in.tl{margin-top:6px}
+#chat .bub.in.lt{border-bottom-right-radius:6px}
+#chat .bub.in.lt:after{content:'';position:absolute;bottom:0;right:-6px;width:12px;height:14px;background:#262628;clip-path:path('M0 0 C2 8 6 12 12 14 L0 14 Z')}
+#chat .bub .tm{float:left;font-size:12px;color:rgba(255,255,255,.55);margin:10px 12px 0 0;line-height:1}
+#chat .bub .who{font-size:14px;font-weight:600;display:block}
+#chat .bub.act{background:#262628;border:0;color:#25d366;font-weight:600;text-align:center;align-self:flex-start;min-width:62%;border-radius:18px;padding:12px;margin-top:4px}
+#chat .typing{background:#262628;border-radius:18px}
+#chat .typing i{background:#8e8e93}
+.cinp{display:flex;align-items:center;gap:12px;background:#121212;padding:8px 12px calc(12px + env(safe-area-inset-bottom));flex:none;color:#fff}
+.cinp .fld{flex:1;background:#1c1c1e;border-radius:999px;padding:9px 14px;font-size:16px;color:#8e8e93;display:flex;justify-content:flex-start;align-items:center}
+.cinp .fld svg{margin-right:auto;width:22px;height:22px}
+.cinp svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.cinp .mic{width:42px;height:42px;border-radius:50%;background:#25d366;display:grid;place-items:center;color:#000;flex:none}
+.cinp .mic svg{width:21px;height:21px}
 /* الملاحظات */
 .nlist .nrow{padding:12px 0;border-bottom:1px solid var(--line);cursor:pointer}
 .nrow b{display:block;font-size:17px}.nrow span{font-size:14px;color:var(--mut);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -383,13 +399,14 @@
 <section class="scr" id="chats">
   <div class="safe"></div><div class="sb" data-sb></div>
   <div class="top"><span class="back" onclick="back()">‹ وسمي</span><h2></h2><span style="min-width:74px"></span></div>
-  <div class="body"><div class="ttl">الدردشات</div><div class="wsrch"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>بحث</div><div class="chl" id="chl"></div></div>
+  <div class="body"><div class="wtop"><button class="wbtn" onclick="back()">‹ وسمي</button><div class="g"><button class="wbtn"><svg viewBox="0 0 24 24"><path d="M4 8.5h3l1.5-2.5h7L17 8.5h3v10H4z"/><circle cx="12" cy="13" r="3.2"/></svg></button><button class="wbtn gr"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button></div></div><div class="ttl">الدردشات</div><div class="wsrch"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>ابحث</div><div class="chl" id="chl"></div></div>
+  <div class="wtab"><div><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5" stroke-dasharray="3 2.2"/><circle cx="12" cy="12" r="5"/></svg>التحديثات</div><div onclick="openApp('phoneapp')"><svg viewBox="0 0 24 24"><path d="M5 4.5h3.5l1.8 4.3-2.2 1.4a11 11 0 0 0 5.7 5.7l1.4-2.2 4.3 1.8V19a1.5 1.5 0 0 1-1.6 1.5C10.6 20 4 13.4 3.5 6.1A1.5 1.5 0 0 1 5 4.5z"/></svg>المكالمات</div><div><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><circle cx="5.5" cy="10" r="2.3"/><circle cx="18.5" cy="10" r="2.3"/><path d="M6.5 19c.6-3 2.8-5 5.5-5s4.9 2 5.5 5M2 18c.3-2 1.6-3.4 3.5-3.4M22 18c-.3-2-1.6-3.4-3.5-3.4"/></svg>المجتمعات</div><div class="on"><i id="wtabN"></i><svg viewBox="0 0 24 24"><path d="M4 12a7 7 0 0 1 11-5.7A7 7 0 0 1 8 17.6L4.5 18.5l1-3A7 7 0 0 1 4 12z"/><path d="M15 9.2a5.5 5.5 0 0 1 4.6 8.4l.9 2.6-2.9-.8A5.5 5.5 0 0 1 10 18"/></svg>الدردشات</div><div><svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="3.5"/><path d="M5 20c.8-3.6 3.6-5.5 7-5.5s6.2 1.9 7 5.5"/></svg>أنت</div></div>
 </section>
 <section class="scr" id="chat" style="z-index:12">
   <div class="safe"></div><div class="sb" data-sb></div>
-  <div class="ctop"><span class="back" style="min-width:auto;font-size:26px" onclick="back()">‹</span><div class="cav" id="cAv"></div><div><b id="cNm"></b><span id="cSt">متصل</span></div><div class="cic"><svg viewBox="0 0 24 24"><rect x="2.5" y="6.5" width="13" height="11" rx="2.5"/><path d="M15.5 10.5l6-3.5v10l-6-3.5"/></svg><svg viewBox="0 0 24 24" onclick="incoming(true)"><path d="M5 4.5h3.5l1.8 4.3-2.2 1.4a11 11 0 0 0 5.7 5.7l1.4-2.2 4.3 1.8V19a1.5 1.5 0 0 1-1.6 1.5C10.6 20 4 13.4 3.5 6.1A1.5 1.5 0 0 1 5 4.5z"/></svg></div></div>
+  <div class="ctop"><div class="bkp" onclick="back()"><b>‹</b><span id="cBk"></span></div><div class="cav" id="cAv"></div><div class="nm"><b id="cNm"></b><span id="cSt">متصل</span></div><div class="cic"><svg viewBox="0 0 24 24"><rect x="2.5" y="6.5" width="13" height="11" rx="2.5"/><path d="M15.5 10.5l6-3.5v10l-6-3.5"/></svg><svg viewBox="0 0 24 24" onclick="incoming(true)"><path d="M5 4.5h3.5l1.8 4.3-2.2 1.4a11 11 0 0 0 5.7 5.7l1.4-2.2 4.3 1.8V19a1.5 1.5 0 0 1-1.6 1.5C10.6 20 4 13.4 3.5 6.1A1.5 1.5 0 0 1 5 4.5z"/></svg></div></div>
   <div class="cbody" id="cBody"></div>
-  <div class="cinp"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><div class="fld">رسالة</div><svg viewBox="0 0 24 24"><path d="M4 8.5h3l1.5-2.5h7L17 8.5h3v10H4z"/><circle cx="12" cy="13" r="3.2"/></svg><div class="mic"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg></div></div>
+  <div class="cinp"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><div class="fld"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-8-8h8z"/><path d="M20 12h-5a3 3 0 0 1-3-3V4"/></svg></div><svg viewBox="0 0 24 24"><path d="M4 8.5h3l1.5-2.5h7L17 8.5h3v10H4z"/><circle cx="12" cy="13" r="3.2"/></svg><div class="mic"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg></div></div>
 </section>
 
 <!-- ================= الهاتف ================= -->
@@ -721,7 +738,7 @@ var CH=[
  {id:'wasmi',n:'وسمي',av:'و',bg:'#C98F3E',st:'الحساب الرسمي',m:[['in','حياك في جوال وسمي 👋'],['in','اليوم '+CUR.n+'، وباقي '+A(X.left)+' '+daysWord(X.left)+' على '+NXT.n],['in','والقمر الليلة '+MOON.nm+' 🌙'],['in','والكاشف 🔒 يفتح مع موسم الفقع'],['act','سجّل وكن أول من يعرف','kashif']]}];
 var READ=LS.get('w_read',{});
 function unread(){var n=0;CH.forEach(function(c){if(!READ[c.id])n+=c.m.filter(function(m){return m[0]==='in'}).length});return n}
-function renderChats(){document.getElementById('chl').innerHTML=CH.map(function(c){var last=c.m.filter(function(m){return m[0]==='in'}).slice(-1)[0],u=READ[c.id]?0:c.m.filter(function(m){return m[0]==='in'}).length;
+function renderChats(){var wn=document.getElementById('wtabN');if(wn){var un=unread();wn.textContent=A(un);wn.style.display=un?'grid':'none'}document.getElementById('chl').innerHTML=CH.map(function(c){var last=c.m.filter(function(m){return m[0]==='in'}).slice(-1)[0],u=READ[c.id]?0:c.m.filter(function(m){return m[0]==='in'}).length;
  return '<div class="crow" onclick="openChat(\''+c.id+'\')"><div class="cav" style="background:'+c.bg+(c.id==='wasmi'?';font-family:Reem Kufi;font-weight:700;color:#fff':'')+'">'+c.av+'</div><div class="t"><b>'+c.n+'</b><span>'+(last[2]?last[2]+': ':'')+last[1]+'</span></div><div class="r">'+(u?'<span class="nw">'+wTime(0)+'</span><i>'+A(u)+'</i>':'<span>'+wTime(0)+'</span>')+'</div></div>'}).join('')}
 function wTime(ago){var d=new Date(Date.now()-ago*60000),h=d.getHours(),m=d.getMinutes(),ap=h<12?'ص':'م';h=h%12||12;return A(h+':'+('0'+m).slice(-2))+' '+ap}
 function wColor(n){var C=['#53bdeb','#f5a623','#25d366','#ff7eb6','#a78bfa','#fc9775'],s=0;for(var i=0;i<n.length;i++)s+=n.charCodeAt(i);return C[s%C.length]}
@@ -729,10 +746,10 @@ var chatTimers=[];
 function openChat(id){var c=CH.find(function(x){return x.id===id}),b=document.getElementById('cBody'),first=!READ[id];
  document.getElementById('cAv').textContent=c.av;document.getElementById('cAv').style.background=c.bg;document.getElementById('cNm').textContent=c.n;document.getElementById('cSt').textContent=c.st;
  chatTimers.forEach(clearTimeout);chatTimers=[];b.innerHTML='<div class="cday">اليوم</div>';
- var prev=null,NI=0;function add(m){var d=document.createElement('div');if(m[0]==='act'){d.className='bub act';d.textContent=m[1];d.onclick=function(){if(m[2]==='kashif')openApp('kashif');else openApp(m[2])}}else{var tl=prev!==(m[2]||'_');prev=m[2]||'_';d.className='bub '+m[0]+(tl?' tl':'');d.innerHTML=(m[2]&&tl?'<span class="who" style="color:'+wColor(m[2])+'">'+m[2]+'</span>':'')+esc(m[1])+'<span class="tm">'+wTime(0)+'</span>'}b.appendChild(d);b.scrollTop=b.scrollHeight}
+ var prev=null,NI=0,lastB=null;function add(m){var d=document.createElement('div');if(m[0]==='act'){d.className='bub act';d.textContent=m[1];d.onclick=function(){if(m[2]==='kashif')openApp('kashif');else openApp(m[2])}}else{var tl=prev!==(m[2]||'_');prev=m[2]||'_';if(tl&&lastB)lastB.classList.add('lt');d.className='bub '+m[0]+(tl?' tl':'');lastB=d;d.innerHTML=(m[2]&&tl?'<span class="who" style="color:'+wColor(m[2])+'">'+m[2]+'</span>':'')+esc(m[1])+'<span class="tm">'+wTime(0)+'</span>'}if(m[0]==='act'&&lastB)lastB.classList.add('lt');b.appendChild(d);b.scrollTop=b.scrollHeight;if(m===c.m[c.m.length-1]&&lastB)lastB.classList.add('lt')}
  if(first){var t=300;c.m.forEach(function(m){chatTimers.push(setTimeout(function(){var ty=document.createElement('div');ty.className='typing';ty.innerHTML='<i></i><i></i><i></i>';b.appendChild(ty);b.scrollTop=b.scrollHeight;
    chatTimers.push(setTimeout(function(){ty.remove();add(m)},650))},t));t+=1100})}else c.m.forEach(add);
- READ[id]=1;LS.set('w_read',READ);BADGE.chats=unread();badges();renderChats();go('chat')}
+ READ[id]=1;LS.set('w_read',READ);BADGE.chats=unread();badges();renderChats();var bk=document.getElementById('cBk');bk.textContent=BADGE.chats?A(BADGE.chats):'';go('chat')}
 
 /* ================= الهاتف والمكالمة ================= */
 var RECENTS=[{n:'المربعانية ❄️',s:'جوال',miss:false,id:'mur'}];
