@@ -57,4 +57,7 @@ for l in open(src,encoding='utf-8'):
 d=os.path.join(R,'data','names');os.makedirs(d,exist_ok=True)
 for fn in os.listdir(d):os.remove(os.path.join(d,fn))
 for k,v in cells.items():json.dump(v,open(os.path.join(d,k+'.json'),'w'),ensure_ascii=False,separators=(',',':'))
+# فهرس البحث: كل الأسماء بملف واحد (يتحمّل أول ما تبحث)
+idx=[[x[2],x[0],x[1],x[3]] for v in cells.values() for x in v]
+json.dump(idx,open(os.path.join(R,'data','names-index.json'),'w'),ensure_ascii=False,separators=(',',':'))
 print('names',n,'arabic-native',na,'cells',len(cells))
