@@ -63,6 +63,9 @@ body{background:var(--dark);color:var(--sand);font-family:'Tajawal',system-ui,sa
   .nvmk button.on{background:var(--honey)}
   .nvme2{transition:transform .4s}
   .nvfol #nvBt{display:none}
+  .nvnm span{position:absolute;transform:translate(-50%,-50%);white-space:nowrap;font:700 12.5px Tajawal,sans-serif;color:#fff;text-shadow:0 0 3px #000,0 0 2px #000,0 0 6px rgba(0,0,0,.6);pointer-events:none}
+  .nvnm .c-wadi{color:#a9d6ff}.nvnm .c-peak{color:#ffd7a3}.nvnm .c-water{color:#8ff3ff}.nvnm .c-place{font-size:13.5px;font-weight:800}.nvnm .c-sand{color:#ffe28a}.nvnm .c-qa{color:#d9f2b0}
+  .nvlt .nvnm span{color:#3a2414;text-shadow:0 0 3px #fff,0 0 2px #fff}.nvlt .nvnm .c-wadi{color:#1d5fa8}.nvlt .nvnm .c-peak{color:#6b3d1c}.nvlt .nvnm .c-water{color:#0f7c90}.nvlt .nvnm .c-sand{color:#8a6312}.nvlt .nvnm .c-qa{color:#4f6b22}
   .nvturn{display:none;position:absolute;left:8px;right:8px;top:8px;z-index:600;background:#0b7a4b;color:#fff;border-radius:16px;padding:10px 12px;align-items:center;gap:12px;box-shadow:0 6px 18px rgba(0,0,0,.35)}
   .nvw:has(.nvturn.on) .nvlay,.nvw:has(.nvturn.on) .nvme{top:122px}
   .nvturn.on{display:flex}.nvturn.off{background:#b3541e}.nvturn.fin{background:#1f5fbf}
@@ -109,11 +112,11 @@ function nvLoadLeaflet(cb){if(window.L)return cb();var l=document.createElement(
 function nvOpen(){nvLoadLeaflet(function(){if(!NV.map){nvInit()}else setTimeout(function(){NV.map.invalidateSize()},350);nvWatch()})}
 function nvInit(){var m=L.map('nvMap',{zoomControl:false,attributionControl:true}).setView([26.3,43.97],6);NV.map=m;
  NV.lay.topo=L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',{maxZoom:17,subdomains:'abc',attribution:'© OpenStreetMap · OpenTopoMap'});
- NV.lay.sat=L.layerGroup([L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:18,attribution:'© Esri'}),L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',{maxZoom:18})]);
+ NV.lay.sat=L.layerGroup([L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:18,attribution:'© Esri · أسماء: GeoNames'}),L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',{maxZoom:10})]);
  NV.lay.osm=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'});
- NV.lay.sat.addTo(m);m.on('dragstart',function(){NV.follow=false});NV.grp=L.layerGroup().addTo(m);NV.trk=L.polyline(NV.pts,{color:'#e9a640',weight:4}).addTo(m);nvDrawShared();nvMark(NV.mk);if(NV.sh){var _w=document.getElementById('nvSh');_w&&_w.parentNode.classList.add('nvfol');NV.trk.setLatLngs([])}
+ NV.lay.sat.addTo(m);m.on('moveend',nvLabels);m.on('dragstart',function(){NV.follow=false});NV.grp=L.layerGroup().addTo(m);NV.trk=L.polyline(NV.pts,{color:'#e9a640',weight:4}).addTo(m);nvDrawShared();nvMark(NV.mk);if(NV.sh){var _w=document.getElementById('nvSh');_w&&_w.parentNode.classList.add('nvfol');NV.trk.setLatLngs([])}
  L.control.zoom({position:'bottomleft'}).addTo(m);nvChips();setTimeout(function(){m.invalidateSize()},350)}
-function nvLayer(k){if(!NV.map)return;NV.map.removeLayer(NV.lay[NV.cur]);NV.lay[k].addTo(NV.map);NV.cur=k;document.querySelectorAll('.nvlay button').forEach(function(b){b.classList.toggle('on',b.dataset.l===k)})}
+function nvLayer(k){if(!NV.map)return;NV.map.getContainer().classList.toggle('nvlt',k!=='sat');NV.map.removeLayer(NV.lay[NV.cur]);NV.lay[k].addTo(NV.map);NV.cur=k;document.querySelectorAll('.nvlay button').forEach(function(b){b.classList.toggle('on',b.dataset.l===k)})}
 function nvBig(){NV.big=!NV.big;document.getElementById('nvSh').classList.toggle('big',NV.big);document.getElementById('nvTg').textContent=NV.big?'صغّر القائمة':'كبّر القائمة';setTimeout(function(){NV.map&&NV.map.invalidateSize()},200)}
 NV.mk=(function(){try{return localStorage.getItem('w_mk')||'dot'}catch(e){return 'dot'}})();NV.hd=0;
 function nvIcon(){var h;if(NV.mk==='arrow')h='<div class="nvme2" style="width:34px;height:34px"><svg viewBox="0 0 24 24" width="34" height="34" style="filter:drop-shadow(0 1px 3px rgba(0,0,0,.6))"><path d="M12 2l7 19-7-4-7 4z" fill="#2f8cff" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg></div>';
@@ -199,20 +202,32 @@ var NV_OV=['https://overpass-api.de/api/interpreter','https://overpass.kumi.syst
 function nvCat(t){if(t.natural==='peak'||t.natural==='hill'||t.natural==='ridge'||t.natural==='saddle'||t.natural==='cliff')return 'peak';
  if(t.waterway||t.natural==='valley')return 'wadi';if(t.man_made==='water_well'||t.natural==='spring'||t.natural==='water'||t.amenity==='drinking_water')return 'water';
  if(t.place)return 'place';if(t.natural==='dune'||t.natural==='sand')return 'sand';return 'other'}
+/* أسماء البر (GeoNames): جبال وشعبان وقيعان وآبار وقرى، مقسّمة بمربعات درجة */
+NVC.qa=NVC.qa||['🟫','#9b7b4f','قاع / روضة / سبخة'];var NVP={};
+function nvCell(k){if(!NVP[k])NVP[k]=fetch('/data/names/'+k+'.json').then(function(r){return r.ok?r.json():[]}).catch(function(){return []});return NVP[k]}
+function nvCells(s,w,n,e){var ks=[];for(var a=Math.floor(s);a<=Math.floor(n);a++)for(var o=Math.floor(w);o<=Math.floor(e);o++)ks.push(a+'_'+o);return Promise.all(ks.slice(0,9).map(nvCell)).then(function(r){return [].concat.apply([],r)})}
+function nvLabels(){if(!NV.map)return;var m=NV.map,z=m.getZoom();if(!NV.lbl)NV.lbl=L.layerGroup().addTo(m);
+ if(z<11){NV.lbl.clearLayers();return}var b=m.getBounds(),tk=NV._lt=(NV._lt||0)+1;
+ nvCells(b.getSouth(),b.getWest(),b.getNorth(),b.getEast()).then(function(all){if(tk!==NV._lt)return;var c=m.getCenter(),cap=z>=14?400:z>=13?300:z>=12?220:150;
+  var arr=all.filter(function(x){return b.contains([x[0],x[1]])&&(NV.cat==='all'||NV.cat===x[3])});
+  arr.sort(function(p,q){return (Math.abs(p[0]-c.lat)+Math.abs(p[1]-c.lng))-(Math.abs(q[0]-c.lat)+Math.abs(q[1]-c.lng))});
+  NV.lbl.clearLayers();arr.slice(0,cap).forEach(function(x){L.marker([x[0],x[1]],{interactive:false,keyboard:false,icon:L.divIcon({className:'nvnm',html:'<span class="c-'+x[3]+'">'+esc(x[2])+'</span>',iconSize:[0,0]})}).addTo(NV.lbl)})})}
 function nvAround(pt){NV.q={la:pt.la,lo:pt.lo};var r=15000,a='(around:'+r+','+pt.la.toFixed(4)+','+pt.lo.toFixed(4)+')';
  var q='[out:json][timeout:25];(node'+a+'["natural"~"^(peak|hill|saddle|spring|dune)$"]["name"];way'+a+'["natural"~"^(ridge|valley|cliff|water|sand|dune)$"]["name"];way'+a+'["waterway"~"^(wadi|stream|river|canal|drain)$"]["name"];node'+a+'["man_made"="water_well"];node'+a+'["place"~"^(town|village|hamlet|isolated_dwelling|locality|farm)$"]["name"];);out tags geom(qt) 400;';
  document.getElementById('nvCnt').textContent='ندوّر وش حولك…';
- (function tryN(i){if(i>=NV_OV.length){document.getElementById('nvCnt').textContent='ما قدرنا نجيب المعالم الحين، تأكد من النت';return}
-  fetch(NV_OV[i],{method:'POST',body:'data='+encodeURIComponent(q),headers:{'Content-Type':'application/x-www-form-urlencoded'}}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){nvParse(j.elements||[])}).catch(function(){tryN(i+1)})})(0)}
+ NV.gn=[];nvCells(pt.la-.15,pt.lo-.15,pt.la+.15,pt.lo+.15).then(function(all){NV.gn=all.filter(function(x){return gpsHav(pt,{la:x[0],lo:x[1]})<=r}).map(function(x){return {k:x[3],n:x[2],pts:[[x[0],x[1]]],lines:[],sub:'',gn:1}});nvParse(NV.ovEls||[])});
+ (function tryN(i){if(i>=NV_OV.length){NV.ovEls=[];nvParse([]);return}
+  fetch(NV_OV[i],{method:'POST',body:'data='+encodeURIComponent(q),headers:{'Content-Type':'application/x-www-form-urlencoded'}}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){NV.ovEls=j.elements||[];nvParse(NV.ovEls)}).catch(function(){tryN(i+1)})})(0)}
 function nvParse(els){var seen={},out=[];els.forEach(function(e){var t=e.tags||{},nm=t['name:ar']||t.name||(t.man_made==='water_well'?'بئر':'');if(!nm)return;var k=nvCat(t),pts=[];
   if(e.type==='node')pts=[[e.lat,e.lon]];else if(e.geometry)pts=e.geometry.map(function(g){return [g.lat,g.lon]});if(!pts.length)return;
   var key=k+'|'+nm;if(seen[key]&&k==='wadi'){seen[key].pts=seen[key].pts.concat(pts);seen[key].lines.push(pts);return}
   if(seen[key]&&k!=='water')return;var it={k:k,n:nm,pts:pts,lines:e.type==='way'?[pts]:[],sub:t.ele?'ارتفاعه '+A(Math.round(+t.ele))+' م':''};seen[key]=it;out.push(it)});
+ (NV.gn||[]).forEach(function(it){var key=it.k+'|'+it.n;if(!seen[key]){seen[key]=it;out.push(it)}});
  NV.items=out;nvDraw();nvList()}
 function nvNear(it){var me={la:NV.co.latitude,lo:NV.co.longitude},best=1e12,bp=it.pts[0];it.pts.forEach(function(p){var d=gpsHav(me,{la:p[0],lo:p[1]});if(d<best){best=d;bp=p}});it.d=best;it.b=gpsBrg(me,{la:bp[0],lo:bp[1]});it.bp=bp}
 function nvDraw(){if(!NV.map)return;NV.grp.clearLayers();NV.items.forEach(function(it){if(NV.cat!=='all'&&it.k!==NV.cat)return;var c=NVC[it.k];
   it.lines.forEach(function(ln){if(ln.length>1)L.polyline(ln,{color:c[1],weight:it.k==='wadi'?4:2,opacity:.85}).addTo(NV.grp)});
-  if(!NV.co)return;nvNear(it);var mk=L.marker(it.bp,{icon:L.divIcon({className:'',html:'<div class="nvpin" style="background:'+c[1]+'">'+c[0]+'</div>',iconSize:[22,22],iconAnchor:[11,11]})}).addTo(NV.grp);
+  if(!NV.co||it.gn)return;nvNear(it);var mk=L.marker(it.bp,{icon:L.divIcon({className:'',html:'<div class="nvpin" style="background:'+c[1]+'">'+c[0]+'</div>',iconSize:[22,22],iconAnchor:[11,11]})}).addTo(NV.grp);
   mk.bindTooltip(esc(it.n),{permanent:it.k!=='water',direction:'top',offset:[0,-10],className:'nvlbl'});it.mk=mk})}
 function nvList(){if(!NV.co)return;var ls=document.getElementById('nvLs');NV.items.forEach(nvNear);
  var arr=NV.items.filter(function(it){return NV.cat==='all'||it.k===NV.cat}).sort(function(a,b){return a.d-b.d}).slice(0,80);
@@ -220,9 +235,9 @@ function nvList(){if(!NV.co)return;var ls=document.getElementById('nvLs');NV.ite
  ls.innerHTML=arr.map(function(it,i){var c=NVC[it.k],d=it.d<1000?A(Math.round(it.d/10)*10)+' م':A((it.d/1000).toFixed(1)).replace('.','٫')+' كم';
   return '<div class="nvit" onclick="nvGo('+NV.items.indexOf(it)+')"><div class="e" style="background:'+c[1]+'33">'+c[0]+'</div><div class="t"><b>'+esc(it.n)+'</b><small>'+c[2]+(it.sub?' · '+it.sub:'')+'</small></div><div class="d">'+d+'<br><small style="color:var(--mut);font-weight:500">'+dname(it.b)+'</small></div></div>'}).join('')}
 function nvGo(i){var it=NV.items[i];if(!it||!NV.map)return;NV.map.setView(it.bp,Math.max(NV.map.getZoom(),14));it.mk&&it.mk.openTooltip()}
-function nvChips(){var cs=[['all','الكل'],['peak','⛰️ جبال'],['wadi','〰️ أودية وشعبان'],['water','💧 مويه'],['place','🏘️ قرى'],['sand','🏜️ نفود']];
+function nvChips(){var cs=[['all','الكل'],['peak','⛰️ جبال'],['wadi','〰️ أودية وشعبان'],['water','💧 مويه'],['place','🏘️ قرى'],['sand','🏜️ نفود'],['qa','🟫 قيعان وروضات']];
  document.getElementById('nvCh').innerHTML=cs.map(function(c){return '<button data-c="'+c[0]+'" class="'+(c[0]===NV.cat?'on':'')+'" onclick="nvSetCat(\''+c[0]+'\')">'+c[1]+'</button>'}).join('')}
-function nvSetCat(k){NV.cat=k;nvChips();nvDraw();nvList()}
+function nvSetCat(k){NV.cat=k;nvChips();nvDraw();nvList();nvLabels()}
 nvOpen();
 </script>
 </body>
