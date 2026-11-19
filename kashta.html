@@ -87,7 +87,7 @@ input:focus{border-color:var(--honey)}
     <div class="hero"><small>تنسيق الكشتة</small><h1>نسّق كشتتكم 🔥</h1><p style="font-size:16px;opacity:.92">افتح كشتة، وأرسل الرابط للقروب، وكل واحد يختار وش بيجيب.<br>والقائد يتابع الترتيب، وتعرفون وش الناقص قبل الطلعة.</p></div>
     <div class="card">
       <label for="cName">اسم الكشتة</label><input id="cName" maxlength="40" placeholder="مثال: كشتة الخميس">
-      <label for="cLead">قائد الرحلة 👑 (اسمك)</label><input id="cLead" maxlength="24" placeholder="اسمك">
+      <label for="cLead">قائد الرحلة 👑 (اسمك)</label><input id="cLead" maxlength="24" placeholder="مثال: خالد">
       <div class="row2"><div><label for="cDate">الموعد</label><input id="cDate" maxlength="24" placeholder="الخميس العصر"></div><div><label for="cPlace">المكان</label><input id="cPlace" maxlength="50" placeholder="اختياري"></div></div>
       <button class="btn b1" id="cBtn" onclick="createTrip()">افتح الكشتة 🔥</button>
       <p class="note">قائد الرحلة يقدر يشيل أي غرض، والباقي كل واحد يشيل اللي كتبه بس.</p>
@@ -100,7 +100,7 @@ input:focus{border-color:var(--honey)}
 
     <div class="card hide" id="whoBox">
       <h2>أنت مين؟ 👋</h2>
-      <input id="myName" maxlength="24" placeholder="اكتب اسمك">
+      <input id="myName" maxlength="24" placeholder="مثال: خالد">
       <button class="btn b1" onclick="saveName()">أنا جاي ✋</button>
     </div>
 
@@ -197,7 +197,7 @@ function shareWa(){var t=DATA?DATA.trip:{name:'كشتتنا'};var msg='🔥 '+t.
 function copyLink(){(navigator.clipboard?navigator.clipboard.writeText(link()):Promise.reject()).then(function(){toast('انسخ الرابط ✓')}).catch(function(){prompt('انسخ الرابط:',link())})}
 
 if(TID){document.getElementById('vTrip').classList.remove('hide');load();setInterval(function(){if(!document.hidden)load(true)},15000);document.addEventListener('visibilitychange',function(){if(!document.hidden)load(true)})}
-else{document.getElementById('vCreate').classList.remove('hide');if(ME)document.getElementById('cLead').value=ME}
+else{document.getElementById('vCreate').classList.remove('hide')}
 </script>
 </body>
 </html>
