@@ -90,3 +90,12 @@ a.pc{text-decoration:none}
 .xico{width:64px;height:64px;border-radius:18px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);display:grid;place-items:center;color:#fff}
 .xico svg{width:34px;height:34px}
 @media(max-width:720px){.xtra{grid-template-columns:1fr}.xc{padding:18px}.xi img{width:44px;height:44px}.xi img+img{margin-left:-14px}.xico{width:54px;height:54px}}
+.tps{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-top:10px}
+.tp{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.tp img{width:100%;aspect-ratio:3/2;object-fit:cover;display:block}
+.tp div{padding:12px 14px 14px}
+.tp h3{font-size:17px;margin:0 0 2px;color:var(--brown)}
+.tp i{font-size:12.5px;color:var(--muted);display:block;margin-bottom:6px}
+.tp p{font-size:14.5px;line-height:1.75;margin:0}
+.tp .cr{font-size:10.5px;color:var(--muted);margin-top:8px;direction:ltr;text-align:left}
+.tp .cr a{color:var(--muted)}
