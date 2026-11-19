@@ -728,6 +728,7 @@ places:['g4','<path d="M3 20l6-11 4 6 2-3 6 8z"/><circle cx="17" cy="6" r="2"/>'
 rules:['g8','<path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6z"/><path d="M9 12l2 2 4-4"/>','أنظمة البر'],
 birds:['g2','<path d="M2 12c3-1 5-4 6-7 1 3 2 5 4 6 2-1 4-1 6 0 1 0 2 1 4 1-2 1-4 3-7 3-2 3-6 5-10 5 2-2 3-4 3-6-2 0-4-1-6-2z"/>','الطيور'],
 gear:['g7','<path d="M3 20l9-15 9 15z"/><path d="M12 5v15M9 20l3-5 3 5"/>','عدة البر'],
+kashta:['g2','<rect x="5" y="3.5" width="14" height="17.5" rx="2.5"/><path d="M9 3.5h6v2.5H9z"/><path d="M8.5 11l1.4 1.4L12.5 10M8.5 16l1.4 1.4L12.5 15M14.5 11.5H16M14.5 16.5H16"/>','الكشتة'],
 kashif:['g3','<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/><path d="M8.5 12.5c.6-1.6 1.6-2.4 3-2.4s2.2.6 2.4 1.6"/>','الكاشف']};
 /* أيقونات واقعية بتصميم وسمي */
 var FULL={
@@ -746,7 +747,7 @@ var BADGE={chats:0,phoneapp:0};
 function icon(k,label){if(FULL[k]){return '<div class="app" onclick="openApp(\''+k+'\')"><div class="i full" style="'+FULL[k][0]+'"><svg viewBox="0 0 60 60" class="fs">'+FULL[k][1]+'</svg><div class="bd" data-b="'+k+'" style="display:none"></div></div>'+(label!==false?'<span>'+LABEL[k]+'</span>':'')+'</div>'}var c=IC[k];var lock=k==='kashif'?'<div class="lockb"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>':'';
  var st=k==='kashif'?' style="background:linear-gradient(160deg,#3b2212,#120803)"':'',sv=k==='kashif'?' style="stroke:var(--honey)"':'';
  return '<div class="app" onclick="openApp(\''+k+'\')"><div class="i '+c[0]+'"'+st+'><svg viewBox="0 0 24 24"'+sv+'>'+c[1]+'</svg>'+lock+'<div class="bd" data-b="'+k+'" style="display:none"></div></div>'+(label!==false?'<span>'+c[2]+'</span>':'')+'</div>'}
-document.getElementById('grid').innerHTML=['seasons','green','chats','notes','camera','maps','clock','calc','compass','loc','gps','stars','settings','places','rules','birds','kashif'].map(function(k){return icon(k)}).join('');
+document.getElementById('grid').innerHTML=['seasons','green','chats','notes','camera','maps','clock','calc','compass','loc','gps','stars','settings','places','rules','birds','kashta','kashif'].map(function(k){return icon(k)}).join('');
 document.getElementById('dock').innerHTML=['phoneapp','web','chats','gear'].map(function(k){return icon(k,false)}).join('');
 function badges(){document.querySelectorAll('[data-b]').forEach(function(e){var n=BADGE[e.dataset.b];if(n){e.style.display='grid';e.textContent=A(n)}else e.style.display='none'})}
 function aiHtml(k){var c=IC[k];return '<div class="ai '+c[0]+'" style="'+(k==='kashif'?'background:#2a160a':'')+'"><svg viewBox="0 0 24 24">'+c[1]+'</svg></div>'}
@@ -760,7 +761,7 @@ function back(){var id=stack.pop();if(!id)return;var s=document.getElementById(i
 function home(){while(stack.length)back()}
 window.addEventListener('popstate',function(){back()});
 function openWeb(u,t){document.getElementById('wT').textContent=t;document.getElementById('wU').textContent=u.replace('https://','');document.getElementById('wF').src=u;go('web')}
-function openApp(k){if(k==='kashif')return openWeb('https://wasmii.com/camera.html','كاشف الفقع');if(k==='web')return openWeb('https://wasmii.com/','وسمي');if(k==='clock'){clockApp();return go('clockapp')}if(k==='camera')return go('camapp');if(k==='maps'){if(!document.getElementById('mapF').src)mapSet(28.2,41.5,4,false);return go('mapapp')}if(k==='settings'){loadSettings();return go('settingsapp')}if(k==='gps')return nvOpen();if(k==='chats'){renderChats()}if(k==='phoneapp'){BADGE.phoneapp=0;badges();renderRecents()}if(k==='notes')renderNotes();go(k)}
+function openApp(k){if(k==='kashif')return openWeb('https://wasmii.com/camera.html','كاشف الفقع');if(k==='kashta')return openWeb('https://wasmii.com/kashta.html','نسّق كشتتكم');if(k==='web')return openWeb('https://wasmii.com/','وسمي');if(k==='clock'){clockApp();return go('clockapp')}if(k==='camera')return go('camapp');if(k==='maps'){if(!document.getElementById('mapF').src)mapSet(28.2,41.5,4,false);return go('mapapp')}if(k==='settings'){loadSettings();return go('settingsapp')}if(k==='gps')return nvOpen();if(k==='chats'){renderChats()}if(k==='phoneapp'){BADGE.phoneapp=0;badges();renderRecents()}if(k==='notes')renderNotes();go(k)}
 
 /* ================= المواسم ================= */
 var SL={'الوسم':'wasm','المربعانية':'murabbaniya','الشبط':'shabt','العقارب':'aqarib','الحميمين':'hamimain','الذراعين':'thiraain','الثريا':'thurayya','التويبع':'tuwaibi','الجوزاء':'jawza','المرزم':'mirzam','الكليبين':'kulaibain','سهيل':'suhail'};
@@ -862,6 +863,7 @@ function unlockAudio(){if(audioUnlocked)return;audioUnlocked=true;
 document.addEventListener('touchend',unlockAudio,{once:true});document.addEventListener('click',unlockAudio,{once:true});
 function ring(on){try{if(on&&OPT.ring===false)return;if(on){ringA.currentTime=0;var p=ringA.play();if(p&&p.catch)p.catch(function(){});if(navigator.vibrate)navigator.vibrate([400,200,400,200,400])}else{ringA.pause();ringA.currentTime=0;if(navigator.vibrate)navigator.vibrate(0)}}catch(e){}}
 function numWord(n){var W={1:'يوم واحد',2:'يومين',3:'ثلاث أيام',4:'أربع أيام',5:'خمس أيام',6:'ست أيام',7:'سبع أيام',8:'ثمان أيام',9:'تسع أيام',10:'عشر أيام',11:'إحدعشر يوم',12:'اثنعشر يوم',13:'ثلطعش يوم',14:'أربعطعش يوم',15:'خمسطعش يوم',16:'ستطعش يوم',17:'سبعطعش يوم',18:'ثمنطعش يوم',19:'تسعطعش يوم',20:'عشرين يوم',30:'ثلاثين يوم',40:'أربعين يوم'};return W[n]||(A(n)+' '+daysWord(n))}
+var VOICE_LINES=[['ألو.. هلا والله! معك <b>المربعانية</b> ❄️'],['أنا أربعين يوم برد.. ولا راح أرحم أحد 😏'],['فدفّ نفسك من الحين، وجهّز أغراضك: الدفاية والفروة والبطانيات 🔥'],['وإذا محتار وش تجيب.. أنا أدلك 😉']];
 var CALL_LINES=function(){var d=numWord(MUR.left);return [
  ['ألو.. هلا والله! معك <b>المربعانية</b> ❄️','ألو.. هلا والله! معك المربعانية'],
  MUR.now?['ترى أنا عندكم الحين، وباقي لي <b>'+d+'</b>.. ولا راح أرحم أحد 😏','ترى أنا عندكم الحين، وباقي لي '+d+'.. ولا راح أرحم أحد']:['باقي لي <b>'+d+'</b> وأدخل عليكم.. وأنا أربعين يوم برد، ولا راح أرحم أحد 😏','باقي لي '+d+' وأدخل عليكم.. وأنا أربعين يوم برد، ولا راح أرحم أحد'],
@@ -878,8 +880,8 @@ function answer(){ring(false);callState='talk';var c=document.getElementById('ca
  document.getElementById('clWho').textContent='مكالمة';var L=CALL_LINES(),i=0,cap=document.getElementById('clCap');
  function fin(){if(callState==='talk'){callState='done';c.className='on talk done'}}
  function nx(){if(callState!=='talk')return;if(i>=L.length)return fin();cap.innerHTML=L[i][0];speak(L[i][1],function(){i++;nx()})}
- if(voiceOK){var vt;if(!voiceA.src)voiceA.src=VOICE_URL;try{voiceA.currentTime=0}catch(e){}var vp=voiceA.play();cap.innerHTML=L[0][0];
-  vt=setInterval(function(){if(callState!=='talk'){clearInterval(vt);return}var per=(voiceA.duration||12)/L.length;cap.innerHTML=L[Math.min(L.length-1,Math.floor(voiceA.currentTime/per))][0]},300);
+ if(voiceOK){var vt,VL=VOICE_LINES,W=VL.map(function(x){return x[0].replace(/<[^>]+>/g,'').length}),WS=W.reduce(function(a,b){return a+b},0);if(!voiceA.src)voiceA.src=VOICE_URL;try{voiceA.currentTime=0}catch(e){}var vp=voiceA.play();cap.innerHTML=VL[0][0];
+  vt=setInterval(function(){if(callState!=='talk'){clearInterval(vt);return}var f=voiceA.currentTime/(voiceA.duration||12),acc=0,k=0;for(;k<VL.length-1;k++){acc+=W[k]/WS;if(f<acc)break}cap.innerHTML=VL[k][0]},250);
   voiceA.onended=function(){clearInterval(vt);fin()};if(vp&&vp.catch)vp.catch(function(){clearInterval(vt);voiceOK=false;nx()})}
  else nx()}
 function endCall(shop){ring(false);try{speechSynthesis.cancel()}catch(e){}try{voiceA.pause()}catch(e){}var was=callState;callState=null;document.getElementById('call').className='';
