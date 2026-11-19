@@ -56,7 +56,7 @@ body{{background:var(--dark);color:var(--sand);font-family:'Tajawal',system-ui,s
 .gbox{{display:none;background:rgba(201,143,62,.1);border:1px solid rgba(201,143,62,.35);border-radius:20px;padding:14px 16px;margin-top:12px}}
 .gbox.on{{display:block}}.gbox h3{{font-size:17px;color:var(--honey)}}.gbox p{{font-size:14.5px;color:rgba(250,243,230,.85)}}
 {css}
-@media(min-width:900px){{.nvw{{flex-direction:row}}.nvsh{{max-height:none!important;height:auto!important;margin-top:0!important;border-radius:0!important;box-shadow:none!important;width:380px;border-top:0;border-right:1px solid var(--line)}}.nvgrab{{display:none!important}}#nvMap{{order:2}}.nvbar{{right:396px}}.nvlay{{right:396px}}}}
+@media(min-width:900px){{.nvw{{flex-direction:row}}.nvsh{{max-height:none!important;height:auto!important;margin-top:0!important;border-radius:0!important;box-shadow:none!important;width:380px;border-top:0;border-right:1px solid var(--line)}}.nvgrab{{display:none!important}}#nvMap{{order:2}}.nvbar{{right:396px}}.nvlay{{right:396px}}.nvturn{{right:396px}}.nvsr{{right:396px}}.nvrc{{left:calc((100% - 380px)/2)}}}}
 </style>
 </head>
 <body class="gpage">
