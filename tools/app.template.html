@@ -175,6 +175,19 @@
 #chat .bub.act{background:#262628;border:0;color:#25d366;font-weight:600;text-align:center;align-self:flex-start;min-width:62%;border-radius:18px;padding:12px;margin-top:4px}
 #chat .typing{background:#262628;border-radius:18px}
 #chat .typing i{background:#8e8e93}
+#chat .bub.im{padding:4px 4px 6px;width:72%;cursor:pointer}
+#chat .bub.im .who{padding:2px 8px 4px}
+#chat .bub.im img{display:block;width:100%;border-radius:14px;max-height:340px;object-fit:cover;object-position:top}
+#chat .bub.im .tm{float:none;display:block;text-align:left;margin:5px 8px 0 0}
+#chat .bub.lk{padding:4px 4px 8px;width:76%}
+#chat .bub.lk .who{padding:2px 8px 4px}
+#chat .lkc{background:#1c1c1e;border-radius:14px;overflow:hidden;cursor:pointer}
+#chat .lkc img{display:block;width:100%;aspect-ratio:1.91;object-fit:cover}
+#chat .lkt{padding:8px 10px 10px}
+#chat .lkt b{display:block;font-size:15px;font-weight:600}
+#chat .lkt span{display:block;font-size:13.5px;color:#aeaeb2;margin-top:2px;line-height:1.35}
+#chat .lkt small{display:block;font-size:12.5px;color:#8e8e93;margin-top:4px;direction:ltr;text-align:right}
+#chat .lku{display:block;color:#53bdeb;font-size:15px;direction:ltr;text-align:right;padding:6px 8px 0;cursor:pointer;text-decoration:underline}
 .cinp{display:flex;align-items:center;gap:12px;background:#121212;padding:8px 12px calc(12px + env(safe-area-inset-bottom));flex:none;color:#fff}
 .cinp .fld{flex:1;background:#1c1c1e;border-radius:999px;padding:9px 14px;font-size:16px;color:#8e8e93;display:flex;justify-content:flex-start;align-items:center}
 .cinp .fld svg{margin-right:auto;width:22px;height:22px}
@@ -733,20 +746,31 @@ function pfil(b,r){document.querySelectorAll('#pfil button').forEach(function(x)
 var murTxt=MUR.now?'أنا عندكم الحين، وباقي لي '+A(MUR.left)+' '+daysWord(MUR.left):'باقي لي '+A(MUR.left)+' '+daysWord(MUR.left)+' وأوصلكم';
 var CH=[
  {id:'mur',n:'المربعانية',av:'❄️',bg:'#1c2f4a',st:'متصلة',m:[['in','هلا والله 👋 معك المربعانية'],['in',murTxt+' 😏'],['in','أربعين يوم برد، وفيني أطول ليلة بالسنة 🌙'],['in','جهّزت الفروة والدفاية؟'],['act','وريني أغراض الشتاء 🔥','gear']]},
- {id:'kashta',n:'قروب الكشتة 🏕️',av:'🏕️',bg:'#5a331c',st:'سعد، ماجد، عبدالله، أنت',m:[['in','وين طلعتنا الخميس؟','سعد'],['in','نروح الصمان؟ 😍','ماجد'],['in','الكشتة العادية برّا المحميات ما تبي تصريح 👌','عبدالله'],['in','بس الصمان والدهناء داخل محمية الملك عبدالعزيز الملكية، تبي تصريح حتى لو كشتة يوم، تطلبه من موقع الهيئة karrda.gov.sa قبلها بيومي عمل ☝️','عبدالله'],['in','وإذا بنبات برّا المحميات، تصريح تخييم من منصة نباتي، ومجاني لين ١٠ أيام','عبدالله'],['in','والاحتطاب ممنوع وغرامته كبيرة.. لا أحد يقطع شجرة 😅','سعد'],['act','شف أنظمة البر','rules']]},
+ {id:'kashta',n:'قروب الكشتة 🏕️',av:'🏕️',bg:'#5a331c',st:'سعد، ماجد، عبدالله، أنت',m:[['in','وين طلعتنا الخميس؟','سعد'],['in','نروح الصمان؟ 😍','ماجد'],['in','الكشتة العادية برّا المحميات ما تبي تصريح 👌','عبدالله'],['in','بس الصمان والدهناء داخل محمية الملك عبدالعزيز الملكية، تبي تصريح حتى لو كشتة يوم، تطلبه من موقع الهيئة karrda.gov.sa قبلها بيومي عمل ☝️','عبدالله'],['in','وإذا بنبات برّا المحميات، تصريح تخييم من منصة نباتي، ومجاني لين ١٠ أيام','عبدالله'],['in','والاحتطاب ممنوع وغرامته كبيرة.. لا أحد يقطع شجرة 😅','سعد'],['act','شف أنظمة البر','rules'],
+ ['in','طيب وش وضع الأغراض؟ مين يضبطنا وينسق؟ 🤔','ماجد'],
+ ['in','عندي 👌 فتحت لنا كشتة بوسمي، كل واحد يدخل ويختار وش بيجيب','عبدالله'],
+ ['in','https://wasmii.com/kashta.html','عبدالله',{link:1}],
+ ['in','','عبدالله',{img:'/assets/app/kashta-demo1.jpg'}],
+ ['in','','عبدالله',{img:'/assets/app/kashta-demo2.jpg'}],
+ ['in','تم دخلت وأخذت الدلة والقهوة والتمر ☕','سعد'],
+ ['in','وأنا علي اللحم والخبز والماء 🍖','ماجد'],
+ ['act','افتح تنسيق الكشتة 🔥','kashta']]},
  {id:'suhail',n:'سهيل',av:'⭐',bg:'#2d3a5e',st:'آخر ظهور من فترة',m:[['in','أنا اللي فتحت لكم الموسم 😎'],['in','وقلت لكم: إذا طلع سهيل لا تأمن السيل'],['in','لا تنصبون مخيمكم ببطون الأودية ومجاري السيول ⚠️'],['act','وين أطلع؟ شف أماكن البر','places']]},
  {id:'wasmi',n:'وسمي',av:'و',bg:'#C98F3E',st:'الحساب الرسمي',m:[['in','حياك في جوال وسمي 👋'],['in','اليوم '+CUR.n+'، وباقي '+A(X.left)+' '+daysWord(X.left)+' على '+NXT.n],['in','والقمر الليلة '+MOON.nm+' 🌙'],['in','والكاشف 🔒 يفتح مع موسم الفقع'],['act','سجّل وكن أول من يعرف','kashif']]}];
 var READ=LS.get('w_read',{});
 function unread(){var n=0;CH.forEach(function(c){if(!READ[c.id])n+=c.m.filter(function(m){return m[0]==='in'}).length});return n}
 function renderChats(){var wn=document.getElementById('wtabN');if(wn){var un=unread();wn.textContent=A(un);wn.style.display=un?'grid':'none'}document.getElementById('chl').innerHTML=CH.map(function(c){var last=c.m.filter(function(m){return m[0]==='in'}).slice(-1)[0],u=READ[c.id]?0:c.m.filter(function(m){return m[0]==='in'}).length;
- return '<div class="crow" onclick="openChat(\''+c.id+'\')"><div class="cav" style="background:'+c.bg+(c.id==='wasmi'?';font-family:Reem Kufi;font-weight:700;color:#fff':'')+'">'+c.av+'</div><div class="t"><b>'+c.n+'</b><span>'+(last[2]?last[2]+': ':'')+last[1]+'</span></div><div class="r">'+(u?'<span class="nw">'+wTime(0)+'</span><i>'+A(u)+'</i>':'<span>'+wTime(0)+'</span>')+'</div></div>'}).join('')}
+ return '<div class="crow" onclick="openChat(\''+c.id+'\')"><div class="cav" style="background:'+c.bg+(c.id==='wasmi'?';font-family:Reem Kufi;font-weight:700;color:#fff':'')+'">'+c.av+'</div><div class="t"><b>'+c.n+'</b><span>'+(last[2]?last[2]+': ':'')+(last[3]&&last[3].img?'📷 صورة':last[1])+'</span></div><div class="r">'+(u?'<span class="nw">'+wTime(0)+'</span><i>'+A(u)+'</i>':'<span>'+wTime(0)+'</span>')+'</div></div>'}).join('')}
 function wTime(ago){var d=new Date(Date.now()-ago*60000),h=d.getHours(),m=d.getMinutes(),ap=h<12?'ص':'م';h=h%12||12;return A(h+':'+('0'+m).slice(-2))+' '+ap}
 function wColor(n){var C=['#53bdeb','#f5a623','#25d366','#ff7eb6','#a78bfa','#fc9775'],s=0;for(var i=0;i<n.length;i++)s+=n.charCodeAt(i);return C[s%C.length]}
 var chatTimers=[];
 function openChat(id){var c=CH.find(function(x){return x.id===id}),b=document.getElementById('cBody'),first=!READ[id];
  document.getElementById('cAv').textContent=c.av;document.getElementById('cAv').style.background=c.bg;document.getElementById('cNm').textContent=c.n;document.getElementById('cSt').textContent=c.st;
  chatTimers.forEach(clearTimeout);chatTimers=[];b.innerHTML='<div class="cday">اليوم</div>';
- var prev=null,NI=0,lastB=null;function add(m){var d=document.createElement('div');if(m[0]==='act'){d.className='bub act';d.textContent=m[1];d.onclick=function(){if(m[2]==='kashif')openApp('kashif');else openApp(m[2])}}else{var tl=prev!==(m[2]||'_');prev=m[2]||'_';if(tl&&lastB)lastB.classList.add('lt');d.className='bub '+m[0]+(tl?' tl':'');lastB=d;d.innerHTML=(m[2]&&tl?'<span class="who" style="color:'+wColor(m[2])+'">'+m[2]+'</span>':'')+esc(m[1])+'<span class="tm">'+wTime(0)+'</span>'}if(m[0]==='act'&&lastB)lastB.classList.add('lt');b.appendChild(d);b.scrollTop=b.scrollHeight;if(m===c.m[c.m.length-1]&&lastB)lastB.classList.add('lt')}
+ var prev=null,NI=0,lastB=null;function add(m){var d=document.createElement('div');if(m[0]==='act'){d.className='bub act';d.textContent=m[1];d.onclick=function(){if(m[2]==='kashif')openApp('kashif');else openApp(m[2])}}else{var tl=prev!==(m[2]||'_');prev=m[2]||'_';if(tl&&lastB)lastB.classList.add('lt');d.className='bub '+m[0]+(tl?' tl':'');lastB=d;var x=m[3]||{},who=(m[2]&&tl?'<span class="who" style="color:'+wColor(m[2])+'">'+m[2]+'</span>':''),tm='<span class="tm">'+wTime(0)+'</span>';
+  if(x.img){d.className+=' im';d.innerHTML=who+'<img src="'+x.img+'" alt="صورة من تنسيق الكشتة" loading="lazy">'+tm;d.onclick=function(){openApp('kashta')}}
+  else if(x.link){d.className+=' lk';d.innerHTML=who+'<div class="lkc" onclick="openApp(\'kashta\')"><img src="/assets/og/kashta2.jpg" alt=""><div class="lkt"><b>نسّق كشتتكم 🔥 | وسمي</b><span>افتح كشتة، وأرسل الرابط للقروب، وكل واحد يختار وش بيجيب</span><small>wasmii.com</small></div></div><a class="lku" onclick="openApp(\'kashta\')">'+esc(m[1])+'</a>'+tm}
+  else d.innerHTML=who+esc(m[1])+tm}if(m[0]==='act'&&lastB)lastB.classList.add('lt');b.appendChild(d);b.scrollTop=b.scrollHeight;if(m===c.m[c.m.length-1]&&lastB)lastB.classList.add('lt')}
  if(first){var t=300;c.m.forEach(function(m){chatTimers.push(setTimeout(function(){var ty=document.createElement('div');ty.className='typing';ty.innerHTML='<i></i><i></i><i></i>';b.appendChild(ty);b.scrollTop=b.scrollHeight;
    chatTimers.push(setTimeout(function(){ty.remove();add(m)},650))},t));t+=1100})}else c.m.forEach(add);
  READ[id]=1;LS.set('w_read',READ);BADGE.chats=unread();badges();renderChats();var bk=document.getElementById('cBk');bk.textContent=BADGE.chats?A(BADGE.chats):'';go('chat')}
