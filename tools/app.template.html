@@ -646,14 +646,15 @@ function moon(){var m=MOON;drawMoon(document.getElementById('wMoon'),m.a);drawMo
  var w=Math.max(1,m.toNew-2);document.getElementById('mDark').textContent=m.il<20?'الليالي هذي ممتازة للنجوم، القمر خفيف والسماء ظلماء. ابعد عن أنوار المدن وشف درب التبانة 🌌':'القمر منوّر هالأيام، والنجوم الخفيفة ما تبين. أحسن ليالي النجوم تبدأ بعد '+A(w)+' '+daysWord(w)+' تقريباً، قريب من المحاق.'}
 
 /* ================= عدة البر ================= */
-var CATS=[['heat','🔥 التدفئة',/دفاي|مدفا|مدفأ|شعالة|فحم كهرب/],['sleep','🛏️ النوم والفرش',/كيس نوم|حقيبة نوم|مرتبة|سرير|بطانية|سجادة|حصيرة/],['coffee','☕ القهوة والشاي',/قهوة|شاي|ترمس|دلة|غلاية (?!شواء)|غلاية ماء|إبريق|ابريق|عزب/],['light','🔦 الإضاءة والطاقة',/فانوس|مصباح|flashlight|باور|طاقة|مولد|محول/i],['tent','⛺ الخيام والجلسات',/خيم|خيام|tent|كرسي|كراسي|طاولة/i],['cook','🍖 الطبخ والشوي',/موقد|شواية|شواء|اسطوانة|إسطوانة|ثلج|مبرد/]];
-var PRODS=DATA.prods,gearOn='heat',gearFetched=false;
+var CATS=[['winter','❄️ أغراض الشتاء',null],['heat','🔥 التدفئة',/دفاي|مدفا|مدفأ|شعالة|فحم كهرب/],['sleep','🛏️ النوم والفرش',/كيس نوم|حقيبة نوم|مرتبة|سرير|بطانية|سجادة|حصيرة/],['coffee','☕ القهوة والشاي',/قهوة|شاي|ترمس|دلة|غلاية (?!شواء)|غلاية ماء|إبريق|ابريق|عزب/],['light','🔦 الإضاءة والطاقة',/فانوس|مصباح|flashlight|باور|طاقة|مولد|محول/i],['tent','⛺ الخيام والجلسات',/خيم|خيام|tent|كرسي|كراسي|طاولة/i],['cook','🍖 الطبخ والشوي',/موقد|شواية|شواء|اسطوانة|إسطوانة|ثلج|مبرد/]];
+var PRODS=DATA.prods,WPRODS=DATA.winter||[],gearOn='heat',gearFetched=false;
 document.getElementById('need').innerHTML=CATS.map(function(c){return '<button data-c="'+c[0]+'" onclick="pickCat(\''+c[0]+'\')">'+c[1]+'</button>'}).join('');
 function pickCat(k){gearOn=k;document.querySelectorAll('#need button').forEach(function(b){b.classList.toggle('on',b.dataset.c===k)});renderGear()}
-function renderGear(){var re=CATS.find(function(c){return c[0]===gearOn})[2],it=PRODS.filter(function(p){return re.test(p.t)}).sort(function(a,b){return (b.o?1:0)-(a.o?1:0)});
+function renderGear(){var re=CATS.find(function(c){return c[0]===gearOn})[2],it=re?PRODS.filter(function(p){return re.test(p.t)}).sort(function(a,b){return (b.o?1:0)-(a.o?1:0)}):WPRODS.filter(function(p){return !/شواي|للزفاف|العرائس/.test(p.t)});
  document.getElementById('prods').innerHTML=it.length?it.map(function(p){return '<a class="pr" href="'+esc(p.u)+'" target="_blank" rel="sponsored noopener"><div class="im"><img loading="lazy" src="'+esc(p.i)+'" alt=""></div><div class="tx"><p>'+esc(p.t)+'</p><div class="pz">'+esc(p.p)+' ر.س'+(p.o?'<s>'+esc(p.o)+'</s>':'')+'</div></div></a>'}).join(''):'<p style="grid-column:span 2;text-align:center;color:var(--mut)">ما فيه منتجات بهالقسم الحين.</p>'}
 function loadGear(){pickCat(gearOn);if(gearFetched)return;gearFetched=true;
- fetch('https://wasmii.com/data/products.json',{cache:'no-cache'}).then(function(r){return r.json()}).then(function(j){if(j.items&&j.items.length){PRODS=j.items;renderGear()}}).catch(function(){})}
+ fetch('https://wasmii.com/data/products.json',{cache:'no-cache'}).then(function(r){return r.json()}).then(function(j){if(j.items&&j.items.length){PRODS=j.items;renderGear()}}).catch(function(){})
+ fetch('https://wasmii.com/data/winter.json',{cache:'no-cache'}).then(function(r){return r.json()}).then(function(j){if(j.items&&j.items.length){WPRODS=j.items;renderGear()}}).catch(function(){})}
 
 /* ================= أماكن / أنظمة / طيور ================= */
 (function(){var R=['الكل'].concat(DATA.places.map(function(p){return p.r}).filter(function(v,i,a){return a.indexOf(v)===i}));
@@ -735,7 +736,7 @@ function answer(){ring(false);callState='talk';var c=document.getElementById('ca
  else nx()}
 function endCall(shop){ring(false);try{speechSynthesis.cancel()}catch(e){}try{voiceA.pause()}catch(e){}var was=callState;callState=null;document.getElementById('call').className='';
  if(was==='ring'){RECENTS[0].miss=true;BADGE.phoneapp=1;badges();setTimeout(function(){banner('phoneapp','الهاتف','مكالمة فائتة من المربعانية ❄️',function(){openApp('phoneapp')})},800)}
- if(shop){home();setTimeout(function(){gearOn='heat';go('gear')},150)}}
+ if(shop){home();setTimeout(function(){gearOn='winter';go('gear')},150)}}
 
 /* ================= المشاركة ================= */
 function shareApp(fromCall){var u='https://wasmii.com/app',t=fromCall?'المربعانية اتصلت علي 😂❄️ جرّب وشوف وش قالت لك':'جوال وسمي 📱 دليلك بالبر: كم باقي على المربعانية، البوصلة والقبلة، أرسل موقعك.. وانتبه، ممكن يجيك اتصال 😏';
