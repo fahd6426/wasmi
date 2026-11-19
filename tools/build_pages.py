@@ -283,7 +283,7 @@ def build_home():
     rail = "".join(f'<a class="rc" href="/places/{p["slug"]}.html"><div class="tp" style="background:{TOPS.get(p["kind"], TOPS["جبال"])}">{p["kind"]}</div><div class="bd"><h3>{p["name"]}</h3><p>{p["region"]}</p></div></a>' for p in PLACES)
     places = f'<section class="sec"><div class="shead"><h2>وين تكشت؟</h2><a href="/places.html">كل الأماكن ‹</a></div><div class="rail">{rail}</div></section>'
     tips = '''<section class="sec"><div class="shead"><h2>قبل ما تطلع</h2><a href="/rules.html">الأنظمة كاملة ‹</a></div><div class="tips">
-<div class="tip"><b>بتنام بالبر؟ لازم تصريح</b>الكشتة اللي ترجع منها بنفس اليوم ما تحتاج تصريح. أما المبيت فيحتاج تصريح تخييم من منصة نباتي، وهو مجاني إذا كان ١٠ أيام أو أقل.</div>
+<div class="tip"><b>متى تحتاج تصريح؟</b>كشتة يوم وترجع، برّا المحميات: ما تحتاج تصريح. بتبات بالبر برّا المحميات: تصريح من منصة نباتي ومجاني لين ١٠ أيام. داخل محمية ملكية: التصريح من هيئة المحمية، وبعضها يطلبه حتى لكشتة يوم.</div>
 <div class="tip"><b>لا حطب محلي ولا فحم محلي</b>غرامة نقله أو جمعه تبدأ من ٥٠٠٠ ريال للمتر المكعب.</div>
 <div class="tip"><b>الروضات بدون سيارات</b>دخول المركبات للروضات المحمية غرامته ٥٠٠ ريال أول مرة.</div>
 </div></section>'''
