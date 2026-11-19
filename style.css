@@ -81,6 +81,8 @@ a.pc{text-decoration:none}
 .xt{flex:1;min-width:0}
 .xt small{color:var(--honey);font-weight:700;font-size:12.5px;letter-spacing:.3px}
 .xk .xt small{color:#ffd9a8}
+.xm{background:linear-gradient(135deg,#0f2a22,#1f4d3a 60%,#3d7a52);grid-column:1/-1}
+.xm .xt small{color:#b8f0c8}
 .xt h3{font-size:21px;margin:2px 0 6px;color:#fff}
 .xt p{font-size:13.5px;line-height:1.7;opacity:.88;margin:0}
 .xg{display:inline-block;margin-top:12px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:6px 14px;font-size:13px;font-weight:700}
