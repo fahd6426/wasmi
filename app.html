@@ -623,6 +623,16 @@ a{color:inherit;text-decoration:none}
   .nvme{position:absolute;left:8px;top:66px;z-index:500;font-size:18px;padding:6px 11px}
   .nvsh{flex:none;background:var(--dark);border-top:1px solid var(--line);padding:8px 12px calc(12px + env(safe-area-inset-bottom));max-height:46%;display:flex;flex-direction:column}
   .nvsh.big{max-height:72%}
+  .nvsh{max-height:none;height:46%;transition:height .25s ease;padding-top:0;border-radius:18px 18px 0 0;margin-top:-14px;position:relative;z-index:700;box-shadow:0 -6px 20px rgba(0,0,0,.35)}.nvsh.drag{transition:none}
+  .nvgrab{flex:none;display:flex;justify-content:center;padding:9px 0 7px;cursor:grab;touch-action:none}.nvgrab i{width:42px;height:5px;border-radius:3px;background:rgba(250,243,230,.3)}
+  .nvsh .nvbt{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 0 2px;flex:none}
+  .nva{display:flex;flex-direction:column;align-items:center;gap:5px;background:none;border:0;color:var(--sand);font:700 12px Tajawal,sans-serif;padding:0;cursor:pointer}
+  .nva .ic{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;background:rgba(250,243,230,.08);border:1px solid rgba(250,243,230,.12);transition:transform .15s}
+  .nva:active .ic{transform:scale(.92)}.nva .ic svg{width:24px;height:24px}
+  .nva.rec .ic{background:rgba(255,69,58,.12);border-color:rgba(255,69,58,.45)}.nva.rec.on .ic{background:#ff453a;border-color:#ff453a;animation:nvpul 1.6s infinite}.nva.rec.on .ic svg rect{fill:#fff}
+  .nva.shr .ic{background:rgba(47,190,90,.14);border-color:rgba(47,190,90,.5);color:#5ee08a}
+  @keyframes nvpul{0%{box-shadow:0 0 0 0 rgba(255,69,58,.5)}70%{box-shadow:0 0 0 10px rgba(255,69,58,0)}100%{box-shadow:0 0 0 0 rgba(255,69,58,0)}}
+  .nvst{margin:8px 0 4px;padding-bottom:8px;border-bottom:1px solid var(--line)}
   .nvhd{display:flex;align-items:center;justify-content:space-between;gap:8px}
   .nvhd h3{font-size:16px;margin:0}.nvhd span{font-size:12px;color:var(--mut)}
   .nvtg{background:none;border:1px solid var(--line);color:var(--sand);border-radius:10px;font:700 12px Tajawal,sans-serif;padding:4px 10px}
@@ -659,12 +669,18 @@ a{color:inherit;text-decoration:none}
     <button class="nvme" onclick="nvCenter()" aria-label="موقعي">◎</button>
     <div class="nvturn" id="nvTurn"><div class="ar" id="nvTa"></div><div class="tx"><b id="nvTd"></b><span id="nvTt"></span><small id="nvTr"></small></div></div>
     <div class="nvsh" id="nvSh">
-      <div class="nvhd"><div><h3>وش حولك</h3><span id="nvCnt">نحدد موقعك…</span></div><button class="nvtg" id="nvTg" onclick="nvBig()">كبّر القائمة</button></div>
+      <div class="nvgrab" id="nvGrab"><i></i></div>
+      <div class="nvbt" id="nvBt">
+        <button class="nva rec" id="nvBtn" onclick="gpsToggle()"><span class="ic" id="nvBi"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6.5" fill="#ff453a" stroke="none"/></svg></span><span class="t" id="nvBl">سجّل</span></button>
+        <button class="nva" onclick="gpsReset()"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></span><span class="t">تصفير</span></button>
+        <button class="nva" id="nvCp" onclick="gpsCopy()"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg></span><span class="t" id="nvCl">موقعي</span></button>
+        <button class="nva shr" onclick="nvShare()"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg></span><span class="t">شارك الجرة</span></button>
+      </div>
+      <div class="nvst"><span id="nvSt">–</span><span id="nvTm"></span></div>
+      <div class="nvhd"><div><h3>وش حولك</h3><span id="nvCnt">نحدد موقعك…</span></div></div>
       <div class="nvch" id="nvCh"></div>
       <div class="nvls" id="nvLs"></div>
       <div class="gbox" id="pG"><h3 id="pGt"></h3><p id="pGp"></p><ol class="guide" id="pGl"></ol></div>
-      <div class="nvbt" id="nvBt"><button class="b b1" id="nvBtn" onclick="gpsToggle()">▶︎ سجّل مشواري</button><button class="b b2" onclick="gpsReset()">↺ تصفير</button><button class="b b2" id="nvCp" onclick="gpsCopy()">نسخ موقعي</button><button class="b b1" onclick="nvShare()" style="background:#2fbe5a">📤 شارك جرتي</button></div>
-      <div class="nvst"><span id="nvSt">–</span><span id="nvTm"></span></div>
     </div>
   </div>
 </section>
@@ -1063,7 +1079,7 @@ function renderGreen(){if(!GREEN){document.getElementById('gList').innerHTML='<p
  document.getElementById('gNote').textContent='من صور الأقمار الصناعية للاخضرار، والمزارع مستبعدة'+(GREEN.updated?' · آخر تحديث '+dF.format(new Date(GREEN.updated)):'')}
 function greenAt(la,lo){var b=GREEN.bbox;if(la<b[0]-.1||la>b[2]+.1||lo<b[1]-.1||lo>b[3]+.1)return {out:true};
  var arr=cellsArr(),best=null,bd=1e9;arr.forEach(function(c){var d=km(la,lo,c.la,c.lo);if(d<bd){bd=d;best=c}});return {c:best,d:bd}}
-function greenLoc(){var b=document.getElementById('nvBtn');b.textContent='جاري تحديد موقعك…';if(!navigator.geolocation){b.textContent='جرّب مرة ثانية';guide('v','متصفحك ما يدعم الموقع هنا','افتح الصفحة بسفاري أو كروم:',OPEN_SAFARI(device()));return}
+function greenLoc(){var b=document.getElementById('gBtn');b.textContent='جاري تحديد موقعك…';if(!navigator.geolocation){b.textContent='جرّب مرة ثانية';guide('v','متصفحك ما يدعم الموقع هنا','افتح الصفحة بسفاري أو كروم:',OPEN_SAFARI(device()));return}
  navigator.geolocation.getCurrentPosition(function(p){unguide('v');b.textContent='📍 حدّث';gPos={la:p.coords.latitude,lo:p.coords.longitude};var r=GREEN?greenAt(gPos.la,gPos.lo):null,h=document.getElementById('gRes'),t=nearTown(gPos.la,gPos.lo);
   var where=t.d<15?'حولك قرب '+t.n:'حولك ('+t.dir+' '+t.n+')';
   if(!r)h.innerHTML='<small>الأرض حولك</small><div class="big" style="font-size:26px">ما وصلتنا البيانات</div><p>جرّب بعد شوي.</p>';
@@ -1130,7 +1146,7 @@ function nvInit(){var m=L.map('nvMap',{zoomControl:false,attributionControl:true
  NV.lay.topo=L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',{maxZoom:17,subdomains:'abc',attribution:'© OpenStreetMap · OpenTopoMap'});
  NV.lay.sat=L.layerGroup([L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{maxZoom:18,attribution:'© Esri · أسماء: GeoNames'}),L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',{maxZoom:10})]);
  NV.lay.osm=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'});
- NV.lay.sat.addTo(m);m.on('moveend',nvLabels);m.on('dragstart',function(){NV.follow=false});NV.grp=L.layerGroup().addTo(m);NV.trk=L.polyline(NV.pts,{color:'#e9a640',weight:4}).addTo(m);nvDrawShared();nvMark(NV.mk);if(NV.sh){var _w=document.getElementById('nvSh');_w&&_w.parentNode.classList.add('nvfol');NV.trk.setLatLngs([])}
+ NV.lay.sat.addTo(m);m.on('moveend',nvLabels);m.on('dragstart',function(){NV.follow=false});NV.grp=L.layerGroup().addTo(m);nvSheetInit();NV.trk=L.polyline(NV.pts,{color:'#e9a640',weight:4}).addTo(m);nvDrawShared();nvMark(NV.mk);if(NV.sh){var _w=document.getElementById('nvSh');_w&&_w.parentNode.classList.add('nvfol');NV.trk.setLatLngs([])}
  L.control.zoom({position:'bottomleft'}).addTo(m);nvChips();setTimeout(function(){m.invalidateSize()},350)}
 function nvLayer(k){if(!NV.map)return;NV.map.getContainer().classList.toggle('nvlt',k!=='sat');NV.map.removeLayer(NV.lay[NV.cur]);NV.lay[k].addTo(NV.map);NV.cur=k;document.querySelectorAll('.nvlay button').forEach(function(b){b.classList.toggle('on',b.dataset.l===k)})}
 function nvBig(){NV.big=!NV.big;document.getElementById('nvSh').classList.toggle('big',NV.big);document.getElementById('nvTg').textContent=NV.big?'صغّر القائمة':'كبّر القائمة';setTimeout(function(){NV.map&&NV.map.invalidateSize()},200)}
@@ -1141,6 +1157,18 @@ function nvIcon(){var h;if(NV.mk==='arrow')h='<div class="nvme2" style="width:34
  return L.divIcon({className:'',html:h,iconSize:[34,34],iconAnchor:[17,17]})}
 function nvRot(){if(!NV.me||NV.mk==='dot')return;var e=NV.me.getElement();e=e&&e.querySelector('.nvme2');if(e)e.style.transform='rotate('+NV.hd+'deg)'}
 function nvMark(k){NV.mk=k;try{localStorage.setItem('w_mk',k)}catch(e){}document.querySelectorAll('#nvMk button').forEach(function(b){b.classList.toggle('on',b.dataset.m===k)});if(NV.me){NV.me.setIcon(nvIcon());nvRot()}}
+function nvSheetInit(){var sh=document.getElementById('nvSh'),g=document.getElementById('nvGrab'),w=sh.parentNode;if(!g||sh._d)return;sh._d=1;
+ function snaps(){var H=w.clientHeight,top=sh.querySelector('.nvst'),mn=top?top.offsetTop+top.offsetHeight+6:150;return [mn,Math.round(H*.46),Math.round(H*.82)]}
+ function set(h,anim){sh.classList.toggle('drag',!anim);sh.style.height=h+'px';clearTimeout(sh._t);sh._t=setTimeout(function(){NV.map&&NV.map.invalidateSize()},anim?280:30)}
+ var y0=null,h0=0,moved=0;
+ function down(e){if(matchMedia('(min-width:900px)').matches&&document.body.classList.contains('gpage'))return;y0=(e.touches?e.touches[0]:e).clientY;h0=sh.offsetHeight;moved=0;sh.classList.add('drag')}
+ function move(e){if(y0===null)return;var y=(e.touches?e.touches[0]:e).clientY,s=snaps(),h=Math.max(s[0],Math.min(w.clientHeight-40,h0+(y0-y)));moved=Math.abs(y-y0);sh.style.height=h+'px';if(e.cancelable)e.preventDefault()}
+ function up(){if(y0===null)return;y0=null;var s=snaps(),h=sh.offsetHeight,best=s[0];
+  if(moved<6){var i=s.findIndex(function(v){return Math.abs(v-h)<20});best=s[(i+1)%3]}
+  else s.forEach(function(v){if(Math.abs(v-h)<Math.abs(best-h))best=v});set(best,true)}
+ g.addEventListener('touchstart',down,{passive:true});g.addEventListener('mousedown',down);
+ document.addEventListener('touchmove',move,{passive:false});document.addEventListener('mousemove',move);
+ document.addEventListener('touchend',up);document.addEventListener('mouseup',up)}
 function nvCenter(){NV.follow=true;if(NV.co&&NV.map)NV.map.setView([NV.co.latitude,NV.co.longitude],Math.max(NV.map.getZoom(),13))}
 function nvWatch(){if(NV.w!==null)return;if(!navigator.geolocation){guide('p','متصفحك ما يدعم الموقع هنا','افتح الصفحة بسفاري أو كروم:',OPEN_SAFARI(device()));return}
  NV.w=navigator.geolocation.watchPosition(gpsOn,function(err){if(err&&err.code!==1&&NV.co){document.getElementById('nvSt').textContent='يدوّر على إشارة…';return}
@@ -1150,9 +1178,10 @@ function gpsHav(a,b){var R=6371000,r=Math.PI/180,dl=(b.la-a.la)*r,dn=(b.lo-a.lo)
 function gpsBrg(a,b){var r=Math.PI/180,y=Math.sin((b.lo-a.lo)*r)*Math.cos(b.la*r),x=Math.cos(a.la*r)*Math.sin(b.la*r)-Math.sin(a.la*r)*Math.cos(b.la*r)*Math.cos((b.lo-a.lo)*r);return (Math.atan2(y,x)/r+360)%360}
 function gpsTime(){var s=Math.floor((NV.ac+(NV.rec&&NV.t0?Date.now()-NV.t0:0))/1000),h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60,p=function(n){return ('0'+n).slice(-2)};
  document.getElementById('nvTm').textContent=(NV.rec||s)?'⏱ '+A(h?h+':'+p(m)+':'+p(x):p(m)+':'+p(x)):''}
-function gpsToggle(){var b=document.getElementById('nvBtn');if(NV.rec){NV.rec=false;NV.ac+=Date.now()-NV.t0;NV.t0=0;clearInterval(NV.tick);gpsTime();b.textContent='▶︎ كمّل التسجيل';return}
- NV.rec=true;NV.t0=Date.now();NV.last=null;NV.tick=setInterval(gpsTime,1000);b.textContent='❚❚ وقّف';nvWatch()}
-function gpsReset(){NV.dist=0;NV.ac=0;NV.t0=NV.rec?Date.now():0;NV.last=null;NV.pts=[];NV.trk&&NV.trk.setLatLngs([]);nvSave();document.getElementById('nvDs').textContent=A(0);gpsTime();if(!NV.rec)document.getElementById('nvBtn').textContent='▶︎ سجّل مشواري'}
+function nvRecUI(st){var b=document.getElementById('nvBtn');b.classList.toggle('on',st==='on');document.getElementById('nvBi').innerHTML=st==='on'?'<svg viewBox="0 0 24 24"><rect x="7" y="6" width="3.5" height="12" rx="1" fill="#fff"/><rect x="13.5" y="6" width="3.5" height="12" rx="1" fill="#fff"/></svg>':'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="6.5" fill="#ff453a"/></svg>';document.getElementById('nvBl').textContent=st==='on'?'وقّف':st==='pause'?'كمّل':'سجّل'}
+function gpsToggle(){if(NV.rec){NV.rec=false;NV.ac+=Date.now()-NV.t0;NV.t0=0;clearInterval(NV.tick);gpsTime();nvRecUI('pause');return}
+ NV.rec=true;NV.t0=Date.now();NV.last=null;NV.tick=setInterval(gpsTime,1000);nvRecUI('on');nvWatch()}
+function gpsReset(){NV.dist=0;NV.ac=0;NV.t0=NV.rec?Date.now():0;NV.last=null;NV.pts=[];NV.trk&&NV.trk.setLatLngs([]);nvSave();document.getElementById('nvDs').textContent=A(0);gpsTime();if(!NV.rec)nvRecUI('off')}
 function gpsOn(p){var c=p.coords,pt={la:c.latitude,lo:c.longitude,t:p.timestamp},first=!NV.fix;unguide('p');NV.co=c;NV.fix=true;
  document.getElementById('nvSt').textContent=c.latitude.toFixed(5)+', '+c.longitude.toFixed(5)+' · ± '+A(Math.round(c.accuracy))+' م';
  document.getElementById('nvAl').textContent=(c.altitude!=null&&!isNaN(c.altitude))?A(Math.round(c.altitude)):'–';
@@ -1167,7 +1196,7 @@ function gpsOn(p){var c=p.coords,pt={la:c.latitude,lo:c.longitude,t:p.timestamp}
  if(hd!=null&&kmh>=2){NV.hd=hd;nvRot()}
  document.getElementById('nvDs').textContent=A((NV.dist/1000).toFixed(NV.dist<10000?2:1)).replace('.','٫');
  if(!NV.q||gpsHav(NV.q,pt)>4000)nvAround(pt);else nvList()}
-function gpsCopy(){if(!NV.co)return;var t=NV.co.latitude.toFixed(6)+', '+NV.co.longitude.toFixed(6),b=document.getElementById('nvCp');(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){b.textContent='انسخ ✓';setTimeout(function(){b.textContent='نسخ موقعي'},1500)}).catch(function(){prompt('انسخ الإحداثيات:',t)})}
+function gpsCopy(){if(!NV.co)return;var t=NV.co.latitude.toFixed(6)+', '+NV.co.longitude.toFixed(6),b=document.getElementById('nvCl');(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){b.textContent='انسخ ✓';setTimeout(function(){b.textContent='موقعي'},1500)}).catch(function(){prompt('انسخ الإحداثيات:',t)})}
 
 /* ===== الجرة: تسجيل المشوار ومشاركته، واللي وراك يمشي على نفس الطريق ===== */
 try{var _s=JSON.parse(localStorage.getItem('w_trk')||'null');if(_s&&_s.p&&_s.p.length){NV.pts=_s.p;NV.dist=_s.d||0}}catch(e){}
