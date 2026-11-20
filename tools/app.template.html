@@ -1196,7 +1196,7 @@ function plSimp(pts,tol){if(pts.length<3)return pts.slice();var keep=new Array(p
  while(st.length){var r=st.pop(),mx=0,mi=-1;for(var j=r[0]+1;j<r[1];j++){var dd=pd(pts[j],pts[r[0]],pts[r[1]]);if(dd>mx){mx=dd;mi=j}}if(mx>tol){keep[mi]=1;st.push([r[0],mi],[mi,r[1]])}}
  return pts.filter(function(_,j){return keep[j]})}
 function nvShare(){if(NV.pts.length<2){alert('سجّل مشوارك أول: اضغط «سجّل مشواري» وامشِ، وبعدين شارك جرتك');return}
- var sp=plSimp(NV.pts,4),u='https://wasmii.com/app#trk='+plEnc(sp),tx='هذي جرتي بالبر 🚙 امشِ على نفس الطريق من قارمن وسمي:';
+ var sp=plSimp(NV.pts,4),u='https://wasmii.com/garmin.html#trk='+plEnc(sp),tx='هذي جرتي بالبر 🚙 امشِ على نفس الطريق من قارمن وسمي:';
  if(navigator.share){navigator.share({title:'جرتي بالبر',text:tx,url:u}).catch(function(){})}else{window.open('https://wa.me/?text='+encodeURIComponent(tx+'\n'+u),'_blank')}}
 (function(){var m=/[#&]trk=([^&]+)/.exec(location.hash);if(!m)return;try{var p=plDec(decodeURIComponent(m[1]));if(p.length>1){NV.sh=p}}catch(e){}})();
 function nvDrawShared(){if(!NV.sh||!NV.map)return;if(NV.shL)NV.map.removeLayer(NV.shL);
