@@ -34,8 +34,8 @@
 <main class="wrap">
 <h1 style="font-size:30px;margin:26px 0 2px">مستلزمات البر</h1>
 <p style="color:var(--muted)">أغراض الكشتة والتخييم المناسبة لهالوقت من السنة، من أمازون السعودية.</p>
-<section id="dl" class="dbox" hidden><h2>🔥 العروض <span id="dc"></span></h2><p>منتجات عليها خصم الحين من أمازون</p><div class="sg" id="dg"></div></section>
 <nav class="cch" id="cch" hidden></nav>
+<section id="dl" class="dbox csec" hidden><h2>🔥 العروض <span id="dc"></span></h2><p>منتجات عليها خصم الحين من أمازون</p><div class="sg" id="dg"></div></section>
 <div id="cs"></div>
 <section id="allw"><h2 class="sh" id="ah" hidden>كل المنتجات</h2><div class="sg" id="sg"><p class="load">جاري التحميل…</p></div></section>
 <p class="disc">الأسعار قد تتغير · روابط أمازون بعمولة</p>
@@ -47,9 +47,9 @@ if(deals.length){document.getElementById('dg').innerHTML=deals.map(card).join(''
 if(d.cats&&d.cats.length){
  const cs=d.cats.map(c=>({c,it:d.items.filter(x=>x.c===c.id)})).filter(o=>o.it.length);
  document.getElementById('cs').innerHTML=cs.map(o=>`<section class="csec" id="c-${o.c.id}"><h2 class="sh">${o.c.e} ${e(o.c.n)} <span>(${o.it.length})</span></h2><div class="sg">${o.it.map(card).join('')}</div></section>`).join('');
- const ch=document.getElementById('cch');ch.innerHTML=cs.map(o=>`<a href="#c-${o.c.id}" data-c="${o.c.id}">${o.c.e} ${e(o.c.n)}</a>`).join('');ch.hidden=false;
+ const ch=document.getElementById('cch');ch.innerHTML=(deals.length?`<a href="#dl" data-c="dl">🔥 العروض (${deals.length})</a>`:'')+cs.map(o=>`<a href="#c-${o.c.id}" data-c="c-${o.c.id}">${o.c.e} ${e(o.c.n)}</a>`).join('');ch.hidden=false;
  document.getElementById('allw').hidden=true;
- const secs=[...document.querySelectorAll('.csec')];addEventListener('scroll',()=>{let cur=secs[0];secs.forEach(s=>{if(s.getBoundingClientRect().top<120)cur=s});ch.querySelectorAll('a').forEach(a=>{const on=cur&&a.dataset.c===cur.id.slice(2);a.classList.toggle('on',on);if(on&&!a._v){a._v=1;a.scrollIntoView({inline:'center',block:'nearest'})}else if(!on)a._v=0})},{passive:true});
+ const secs=[...document.querySelectorAll('.csec')].filter(x=>!x.hidden);addEventListener('scroll',()=>{let cur=secs[0];secs.forEach(s=>{if(s.getBoundingClientRect().top<120)cur=s});ch.querySelectorAll('a').forEach(a=>{const on=cur&&a.dataset.c===cur.id;a.classList.toggle('on',on);if(on&&!a._v){a._v=1;a.scrollIntoView({inline:'center',block:'nearest'})}else if(!on)a._v=0})},{passive:true});dispatchEvent(new Event('scroll'));
 }else document.getElementById('sg').innerHTML=rest.map(card).join('');
 }).catch(()=>{document.getElementById('sg').innerHTML='<p class="load">ما قدرنا نجيب المنتجات، جرّب بعد شوي.</p>'})</script>
 </main>
