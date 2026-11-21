@@ -34,7 +34,7 @@
 <main class="wrap">
 <h1 style="font-size:30px;margin:26px 0 2px">مستلزمات البر</h1>
 <p style="color:var(--muted)">أغراض الكشتة والتخييم المناسبة لهالوقت من السنة، من أمازون السعودية.</p>
-<nav class="cch" id="cch" hidden></nav>
+<div id="cchA"></div><nav class="cch" id="cch" hidden></nav>
 <section id="dl" class="dbox csec" hidden><h2>🔥 العروض <span id="dc"></span></h2><p>منتجات عليها خصم الحين من أمازون</p><div class="sg" id="dg"></div></section>
 <div id="cs"></div>
 <section id="allw"><h2 class="sh" id="ah" hidden>كل المنتجات</h2><div class="sg" id="sg"><p class="load">جاري التحميل…</p></div></section>
@@ -47,10 +47,17 @@ const deals=d.items.filter(x=>x.o&&x.o>x.p).sort((a,b)=>prs(a)-prs(b)||(1-b.p/b.
 if(deals.length){document.getElementById('dg').innerHTML=deals.map(card).join('');document.getElementById('dl').hidden=false;document.getElementById('dc').textContent='('+deals.length+')';if(!d.cats)document.getElementById('ah').hidden=false}
 if(d.cats&&d.cats.length){
  const cs=d.cats.map(c=>({c,it:d.items.filter(x=>x.c===c.id)})).filter(o=>o.it.length);
- document.getElementById('cs').innerHTML=cs.map(o=>`<section class="csec" id="c-${o.c.id}"><h2 class="sh">${o.c.e} ${e(o.c.n)} <span>(${o.it.length})</span></h2><div class="sg">${o.it.map(card).join('')}</div></section>`).join('');
- const ch=document.getElementById('cch');ch.innerHTML=(deals.length?`<a href="#dl" data-c="dl">🔥 العروض (${deals.length})</a>`:'')+cs.map(o=>`<a href="#c-${o.c.id}" data-c="c-${o.c.id}">${o.c.e} ${e(o.c.n)}</a>`).join('');ch.hidden=false;
+ /* تبويبات: قسم واحد يظهر بكل مرة بدل صفحة طويلة */
+ const T={};if(deals.length)T.dl={h:'',it:null};cs.forEach(o=>T['c-'+o.c.id]={h:`<h2 class="sh">${o.c.e} ${e(o.c.n)} <span>(${o.it.length})</span></h2>`,it:o.it});
+ const ch=document.getElementById('cch'),box=document.getElementById('cs'),dl=document.getElementById('dl');
+ ch.innerHTML=(deals.length?`<a href="#dl" data-c="dl">🔥 العروض (${deals.length})</a>`:'')+cs.map(o=>`<a href="#c-${o.c.id}" data-c="c-${o.c.id}">${o.c.e} ${e(o.c.n)}</a>`).join('');ch.hidden=false;
  document.getElementById('allw').hidden=true;
- const secs=[...document.querySelectorAll('.csec')].filter(x=>!x.hidden);addEventListener('scroll',()=>{let cur=secs[0];secs.forEach(s=>{if(s.getBoundingClientRect().top<120)cur=s});ch.querySelectorAll('a').forEach(a=>{const on=cur&&a.dataset.c===cur.id;a.classList.toggle('on',on);if(on&&!a._v){a._v=1;a.scrollIntoView({inline:'center',block:'nearest'})}else if(!on)a._v=0})},{passive:true});dispatchEvent(new Event('scroll'));
+ function show(id,scroll){if(!T[id])id=Object.keys(T)[0];if(id==='dl'){dl.hidden=false;box.innerHTML=''}else{dl.hidden=true;box.innerHTML=`<section class="csec">${T[id].h}<div class="sg">${T[id].it.map(card).join('')}</div></section>`}
+  ch.querySelectorAll('a').forEach(a=>{const on=a.dataset.c===id;a.classList.toggle('on',on);if(on){const r=a.getBoundingClientRect(),c=ch.getBoundingClientRect();ch.scrollLeft+=(r.left+r.width/2)-(c.left+c.width/2)}});
+  if(scroll){const y=document.getElementById('cchA').getBoundingClientRect().top+scrollY;if(scrollY>y)scrollTo(0,y)}
+  try{history.replaceState(null,'','#'+id)}catch(_){}}
+ ch.addEventListener('click',ev=>{const a=ev.target.closest('a');if(!a)return;ev.preventDefault();show(a.dataset.c,true)});
+ show((location.hash||'').slice(1),false);
 }else document.getElementById('sg').innerHTML=rest.map(card).join('');
 }).catch(()=>{document.getElementById('sg').innerHTML='<p class="load">ما قدرنا نجيب المنتجات، جرّب بعد شوي.</p>'})</script>
 </main>
