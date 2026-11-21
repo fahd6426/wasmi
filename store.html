@@ -42,7 +42,8 @@
 <script>fetch('/data/products.json?v='+Date.now()).then(r=>r.json()).then(d=>{
 const e=s=>String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');const f=n=>Number(n).toLocaleString('ar-SA',{maximumFractionDigits:2});
 const card=x=>{const pc=x.o&&x.o>x.p?Math.round((1-x.p/x.o)*100):0;return `<a class="pr" href="${e(x.u)}" target="_blank" rel="nofollow sponsored noopener"><div class="im">${pc?`<span class="off">-${pc}%</span>`:''}<img src="${e(x.i)}" alt="${e(x.t)}" loading="lazy"></div><div class="bd"><h2>${e(x.t)}</h2>${pc?`<div class="pd"><div class="was">قبل: <span>${f(x.o)} ر.س</span></div><div class="nw">الحين: <b>${f(x.p)} ر.س</b></div><div class="save">توفر ${f(x.o-x.p)} ر.س</div></div>`:`<div class="pp"><b>${f(x.p)} ر.س</b></div>`}<span class="go">اشتر من أمازون</span></div></a>`};
-const deals=d.items.filter(x=>x.o&&x.o>x.p).sort((a,b)=>(1-a.p/a.o)<(1-b.p/b.o)?1:-1),rest=d.items.filter(x=>!(x.o&&x.o>x.p));
+const PR=[/كرسي|كراسي/,/فانوس|مصباح|كشاف|إضاءة/,/خزان ماء|خزان مياه|جيك|بركة مياه|جالون/,/مدة|مدات|سجاد/],prs=x=>{const i=PR.findIndex(r=>r.test(x.t));return i<0?PR.length:i};
+const deals=d.items.filter(x=>x.o&&x.o>x.p).sort((a,b)=>prs(a)-prs(b)||(1-b.p/b.o)-(1-a.p/a.o)),rest=d.items.filter(x=>!(x.o&&x.o>x.p));
 if(deals.length){document.getElementById('dg').innerHTML=deals.map(card).join('');document.getElementById('dl').hidden=false;document.getElementById('dc').textContent='('+deals.length+')';if(!d.cats)document.getElementById('ah').hidden=false}
 if(d.cats&&d.cats.length){
  const cs=d.cats.map(c=>({c,it:d.items.filter(x=>x.c===c.id)})).filter(o=>o.it.length);
