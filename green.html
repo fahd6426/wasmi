@@ -79,18 +79,28 @@ function km(a,b,c,d){var R=6371,t=Math.PI/180,x=Math.sin((c-a)*t/2),y=Math.sin((
 function dir8(a,b,c,d){var t=Math.PI/180,y=Math.sin((d-b)*t)*Math.cos(c*t),x=Math.cos(a*t)*Math.sin(c*t)-Math.sin(a*t)*Math.cos(c*t)*Math.cos((d-b)*t);return DN[Math.round(((Math.atan2(y,x)/t+360)%360)/45)%8]}
 function nearTown(la,lo){var b=null,bd=1e9;TOWNS.forEach(function(t){var d=km(la,lo,t[1],t[2]);if(d<bd){bd=d;b=t}});return {n:b[0],d:Math.round(bd),dir:dir8(b[1],b[2],la,lo)}}
 function lvl(g){return g>=35?['وسمت زين 🌿','#5fbf6a']:g>=15?['بدأت تخضر 🌱','#a9c65a']:g>=4?['ربعت على خفيف 🌾','#d9b26a']:['للحين ما بان شي 🏜️','#b9a58a']}
-function cellsArr(){return (GREEN&&GREEN.cells||[]).map(function(c){return {la:c[0]/10,lo:c[1]/10,g:c[2],cur:c[3],pv:c.length>4?c[4]:-1}})}
-function clusters(arr){var s=arr.filter(function(c){return c.g>=4}).sort(function(a,b){return b.g-a.g}),out=[];s.forEach(function(c){if(!out.some(function(o){return km(o.la,o.lo,c.la,c.lo)<35}))out.push(c)});return out}
+function cellsArr(){return (GREEN&&GREEN.cells||[]).map(function(c){var p=c.length>6;return {la:p?c[5]:c[0]/10,lo:p?c[6]:c[1]/10,kla:c[0],klo:c[1],g:c[2],cur:c[3],pv:c.length>4?c[4]:-1}})}
+function clusters(arr,r){var s=arr.filter(function(c){return c.g>=4}).sort(function(a,b){return b.g-a.g}),out=[];s.forEach(function(c){if(!out.some(function(o){return km(o.la,o.lo,c.la,c.lo)<r}))out.push(c)});return out}
 function pctA(n){return A(Math.round(n))+'٪'}
 function cmpTxt(c){if(!GREEN.prev||c.pv<0)return '';var d=c.g-c.pv;return d>=3?'<b style="color:#5fbf6a">↑ زادت</b> من '+pctA(c.pv)+' الأسبوع اللي فات':d<=-3?'<b style="color:#e8846b">↓ نقصت</b> من '+pctA(c.pv)+' الأسبوع اللي فات':'نفس الأسبوع اللي فات تقريباً ('+pctA(c.pv)+')'}
+// أسماء الأماكن (قرى وشعبان وجبال) من نفس بيانات قارمن
+var GNP={};function gnCell(k){if(!GNP[k])GNP[k]=fetch('/data/names/'+k+'.json').then(function(r){return r.ok?r.json():[]}).catch(function(){return []});return GNP[k]}
+function gnNear(la,lo){var ks=[],fa=Math.floor(la),fo=Math.floor(lo);[[0,0],[la-fa<.3?-1:la-fa>.7?1:0,0],[0,lo-fo<.3?-1:lo-fo>.7?1:0]].forEach(function(o){var k=(fa+o[0])+'_'+(fo+o[1]);if(ks.indexOf(k)<0)ks.push(k)});
+ return Promise.all(ks.map(gnCell)).then(function(ls){var b=null,bd=1e9;ls.forEach(function(l){l.forEach(function(f){if(f[3]==='farm')return;var d=km(la,lo,f[0],f[1]);if(d<bd){bd=d;b=f}})});return b&&bd<=25?{n:b[2],d:bd,la:b[0],lo:b[1]}:null})}
+function placeTxt(c,nm){if(nm){return nm.d<1.5?'عند '+nm.n:dir8(nm.la,nm.lo,c.la,c.lo)+' '+nm.n+' بـ'+A(Math.max(1,Math.round(nm.d)))+' كم'}var t=nearTown(c.la,c.lo);return t.d<15?'قرب '+t.n:t.dir+' '+t.n+' بـ'+A(t.d)+' كم'}
+var gSeq=0;
 function renderGreen(){if(!GREEN){document.getElementById('gList').innerHTML='<p style="color:var(--mut)">ما قدرنا نحمّل بيانات الربيع الحين.</p>';return}
- var cl=clusters(cellsArr());if(gPos){cl=cl.filter(function(c){c.dk=km(gPos.la,gPos.lo,c.la,c.lo);return c.dk<=400}).sort(function(a,b){return (a.dk/60-a.g/12)-(b.dk/60-b.g/12)});document.getElementById('gSub').textContent='أقرب الأماكن اللي ربّعت حولك (لين ٤٠٠ كم)'}
- cl=cl.slice(0,8);
- document.getElementById('gList').innerHTML=cl.length?cl.map(function(c){var t=nearTown(c.la,c.lo),L=lvl(c.g),cm=cmpTxt(c);
-  return '<div class="card"><span class="when" style="background:'+L[1]+'33;color:'+L[1]+'">'+L[0]+'</span><h3>'+(t.d<15?'قرب '+t.n:t.dir+' '+t.n+' بـ'+A(t.d)+' كم')+'</h3><p>نسبة الربيع <b>'+pctA(c.g)+'</b>'+(gPos?' · يبعد عنك '+A(Math.round(c.dk))+' كم':'')+(cm?'<br>'+cm:'')+'</p><a class="b b2" href="https://maps.google.com/?q='+c.la.toFixed(2)+','+c.lo.toFixed(2)+'" target="_blank" rel="noopener">افتح بالخرائط</a></div>'}).join(''):'<p style="color:var(--mut)">للحين ما فيه أماكن ربّعت'+(gPos?' قريب منك':'')+'.</p>';
- document.getElementById('gNote').textContent='نسبة الربيع = كم من الأرض (بمربع ١١ كم تقريباً) اخضرت عن قبل الموسم، من صور الأقمار الصناعية، والمزارع مستبعدة. نحدّثها مرتين بالأسبوع'+(GREEN.updated?' · آخر قياس '+dF.format(new Date(GREEN.updated)):'')}
+ var arr=cellsArr(),cl;
+ if(gPos){arr.forEach(function(c){c.dk=km(gPos.la,gPos.lo,c.la,c.lo)});var R=[40,70,120,200,400];for(var i=0;i<R.length;i++){cl=clusters(arr.filter(function(c){return c.dk<=R[i]}),6);if(cl.length>=6||i===R.length-1)break}
+  cl.sort(function(a,b){return a.dk-b.dk});cl=cl.slice(0,10);document.getElementById('gSub').textContent='أقرب الأماكن اللي ربّعت حولك، من الأقرب'}
+ else cl=clusters(arr,35).slice(0,8);
+ var seq=++gSeq;
+ Promise.all(cl.map(function(c){return gnNear(c.la,c.lo)})).then(function(nms){if(seq!==gSeq)return;
+ document.getElementById('gList').innerHTML=cl.length?cl.map(function(c,i){var L=lvl(c.g),cm=cmpTxt(c);
+  return '<div class="card"><span class="when" style="background:'+L[1]+'33;color:'+L[1]+'">'+L[0]+'</span><h3>'+placeTxt(c,nms[i])+'</h3><p>نسبة الربيع <b>'+pctA(c.g)+'</b>'+(gPos?' · يبعد عنك '+A(Math.round(c.dk))+' كم '+dir8(gPos.la,gPos.lo,c.la,c.lo):'')+(cm?'<br>'+cm:'')+'</p><a class="b b2" href="https://maps.google.com/?q='+c.la.toFixed(4)+','+c.lo.toFixed(4)+'" target="_blank" rel="noopener">افتح بالخرائط</a></div>'}).join(''):'<p style="color:var(--mut)">للحين ما فيه أماكن ربّعت'+(gPos?' قريب منك':'')+'.</p>'});
+ document.getElementById('gNote').textContent='نسبة الربيع = كم من الأرض حول المكان اخضرت عن قبل الموسم، من صور الأقمار الصناعية (دقة ٥٠٠ م تقريباً)، والمزارع مستبعدة. الموقع بالخرائط يوديك لأكثر بقعة ربّعت. نحدّثها مرتين بالأسبوع'+(GREEN.updated?' · آخر قياس '+dF.format(new Date(GREEN.updated)):'')}
 function greenAt(la,lo){var b=GREEN.bbox;if(la<b[0]-.1||la>b[2]+.1||lo<b[1]-.1||lo>b[3]+.1)return {out:true};
- var arr=cellsArr(),own=null,best=null,bd=1e9,kl=Math.round(la*10),ko=Math.round(lo*10);arr.forEach(function(c){if(Math.round(c.la*10)===kl&&Math.round(c.lo*10)===ko)own=c;if(c.g>=4){var d=km(la,lo,c.la,c.lo);if(d<bd){bd=d;best=c}}});
+ var arr=cellsArr(),own=null,best=null,bd=1e9,kl=Math.round(la*10),ko=Math.round(lo*10);arr.forEach(function(c){if(c.kla===kl&&c.klo===ko)own=c;if(c.g>=4){var d=km(la,lo,c.la,c.lo);if(d<bd){bd=d;best=c}}});
  return {own:own||{la:kl/10,lo:ko/10,g:0,pv:-1},near:best,d:bd}}
 function greenLoc(){var b=document.getElementById('gBtn');b.textContent='جاري تحديد موقعك…';if(!navigator.geolocation){b.textContent='جرّب مرة ثانية';guide('v','متصفحك ما يدعم الموقع هنا','افتح الصفحة بسفاري أو كروم:',OPEN_SAFARI(device()));return}
  navigator.geolocation.getCurrentPosition(function(p){unguide('v');b.textContent='📍 حدّث';gPos={la:p.coords.latitude,lo:p.coords.longitude};var r=GREEN?greenAt(gPos.la,gPos.lo):null,h=document.getElementById('gRes'),t=nearTown(gPos.la,gPos.lo);
