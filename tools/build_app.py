@@ -1,4 +1,4 @@
-# يبني app.html (جوال وسمي) من القالب ومحتوى صفحات الموقع
+# يبني tools/app.full.html (جوال وسمي القديم، للمعاينة) من القالب ومحتوى صفحات الموقع
 import re, json, html, os, io, base64
 from PIL import Image
 R = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -37,5 +37,6 @@ t = rd('tools/app.template.html')
 t = t.replace('/*BASECSS*/', rd('tools/app.base.css'))
 t = t.replace('/*SEASONS*/', rd('seasons-data.js'))
 t = t.replace('/*DATA*/', data)
-open(os.path.join(R, 'app.html'), 'w', encoding='utf-8').write(t)
+# جوال وسمي انشال: app.html صار تحويل، فالنسخة الكاملة تنكتب هنا للمعاينة بس (برا git)
+open(os.path.join(R, 'tools', 'app.full.html'), 'w', encoding='utf-8').write(t)
 print('app.html', len(t), 'places', len(places), 'birds', len(birds), 'prods', len(prods))
