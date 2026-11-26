@@ -17,7 +17,7 @@ let n = 0;
     if (fs.statSync(p).isDirectory()) inject(p);
     else if (f.endsWith('.html')) {
       let h = fs.readFileSync(p, 'utf8');
-      if (!h.includes('native-bridge.js')) { h = h.replace(/<head([^>]*)>/i, '<head$1><script src="/native-bridge.js"></script>'); fs.writeFileSync(p, h); n++; }
+      if (!h.includes('native-bridge.js')) { h = h.replace(/<head([^>]*)>/i, '<head$1><script src="/native-bridge.js"></script>'); h = h.replace(/(<meta name="viewport" content="[^"]*)(")/i, (m, a, q) => a.includes('viewport-fit') ? m : a + ', viewport-fit=cover' + q); fs.writeFileSync(p, h); n++; }
     }
   }
 })(OUT);

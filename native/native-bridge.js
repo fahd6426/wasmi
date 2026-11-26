@@ -4,7 +4,7 @@
   if (!C || !C.isNativePlatform || !C.isNativePlatform()) return;
   document.documentElement.classList.add('in-app');
   var st = document.createElement('style');
-  st.textContent = '.in-app .leaflet-container{background:#cdb68b}'; // بدون نت: خلفية رملية بدل الأبيض
+  st.textContent = '.in-app .leaflet-container{background:#cdb68b}.in-app .nav{padding-top:env(safe-area-inset-top)}'; // بدون نت: خلفية رملية بدل الأبيض
   document.head.appendChild(st);
   var P = C.Plugins || {};
 

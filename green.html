@@ -90,7 +90,8 @@ function gnNear(la,lo,only){var ks=[],fa=Math.floor(la),fo=Math.floor(lo);[[0,0]
 function goBtns(la,lo,nm){return '<div style="display:flex;gap:8px;margin-top:10px"><a class="b b1" style="flex:2;margin:0;font-size:15.5px;padding:12px" href="/garmin.html#to='+la.toFixed(5)+','+lo.toFixed(5)+'&n='+encodeURIComponent(nm||'بقعة الربيع')+'">🧭 وديني بقارمن وسمي</a><a class="b b2" style="flex:1;margin:0" href="https://maps.google.com/?q='+la.toFixed(5)+','+lo.toFixed(5)+'" target="_blank" rel="noopener">قوقل ماب</a></div>'}
 function placeTxt(c,nm){if(nm){return nm.d<1.5?'عند '+nm.n:dir8(nm.la,nm.lo,c.la,c.lo)+' '+nm.n+' بـ'+A(Math.max(1,Math.round(nm.d)))+' كم'}var t=nearTown(c.la,c.lo);return t.d<15?'قرب '+t.n:t.dir+' '+t.n+' بـ'+A(t.d)+' كم'}
 var gSeq=0;
-function renderGreen(){if(!GREEN){document.getElementById('gList').innerHTML='<p style="color:var(--mut)">ما قدرنا نحمّل بيانات الربيع الحين.</p>';return}
+var greenErr=false;
+function renderGreen(){if(!GREEN){document.getElementById('gList').innerHTML='<p style="color:var(--mut)">'+(greenErr?'ما قدرنا نحمّل بيانات الربيع الحين، تأكد من النت وجرّب مرة ثانية.':'جاري تحميل بيانات الربيع…')+'</p>';return}
  var arr=cellsArr(),cl;
  if(gPos){arr.forEach(function(c){c.dk=km(gPos.la,gPos.lo,c.la,c.lo)});var R=[40,70,120,200,400];for(var i=0;i<R.length;i++){cl=clusters(arr.filter(function(c){return c.dk<=R[i]}),2.5);if(cl.length>=6||i===R.length-1)break}
   cl.sort(function(a,b){return a.dk-b.dk});cl=cl.slice(0,12);document.getElementById('gSub').textContent='أقرب الأماكن اللي ربّعت حولك، من الأقرب'}
@@ -116,7 +117,7 @@ function greenLoc(){var b=document.getElementById('gBtn');b.textContent='جار�
   renderGreen()},
  function(err){b.textContent='جرّب مرة ثانية';guide('v',err&&err.code===1?'نحتاج إذن الموقع':'ما وصلنا موقعك',err&&err.code===1?'عشان نشوف أرضك، سوّ هالخطوات وبعدها اضغط «جرّب مرة ثانية»:':'تأكد إن الموقع (GPS) شغال، وإذا تكرر:',locSteps(device()))},{enableHighAccuracy:false,timeout:20000,maximumAge:600000})}
 var greenFetched=false;
-function loadGreen(){renderGreen();if(greenFetched)return;greenFetched=true;fetch('https://wasmii.com/data/green.json',{cache:'no-cache'}).then(function(r){return r.json()}).then(function(j){if(j&&j.cells){GREEN=j;renderGreen()}}).catch(function(){})}
+function loadGreen(){renderGreen();if(greenFetched)return;greenFetched=true;fetch('/data/green.json',{cache:'no-cache'}).then(function(r){return r.json()}).then(function(j){if(j&&j.cells){GREEN=j;renderGreen()}else throw 0}).catch(function(){greenErr=true;renderGreen()})}
 
 loadGreen();
 // لو الموقع مسموح من قبل: نشيك على أرضه على طول
