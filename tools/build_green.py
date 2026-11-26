@@ -68,6 +68,8 @@ a{{color:inherit;text-decoration:none}}
 {gd}
 {js}
 loadGreen();
+// لو الموقع مسموح من قبل: نشيك على أرضه على طول
+try{{navigator.permissions&&navigator.permissions.query({{name:'geolocation'}}).then(function(r){{if(r.state==='granted')greenLoc()}})}}catch(e){{}}
 </script>
 </body>
 </html>

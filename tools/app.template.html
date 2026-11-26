@@ -955,7 +955,7 @@ function renderGreen(){if(!GREEN){document.getElementById('gList').innerHTML='<p
  var arr=cellsArr(),cl;
  if(gPos){arr.forEach(function(c){c.dk=km(gPos.la,gPos.lo,c.la,c.lo)});var R=[40,70,120,200,400];for(var i=0;i<R.length;i++){cl=clusters(arr.filter(function(c){return c.dk<=R[i]}),6);if(cl.length>=6||i===R.length-1)break}
   cl.sort(function(a,b){return a.dk-b.dk});cl=cl.slice(0,10);document.getElementById('gSub').textContent='أقرب الأماكن اللي ربّعت حولك، من الأقرب'}
- else cl=clusters(arr,35).slice(0,8);
+ else{document.getElementById('gSub').textContent='';document.getElementById('gList').innerHTML='<div class="card"><p>اضغط <b>«شيك على أرضي»</b> فوق، ونعطيك أقرب الأماكن اللي ربّعت حولك، من الأقرب لك.</p></div>';document.getElementById('gNote').textContent='';return}
  var seq=++gSeq;
  Promise.all(cl.map(function(c){return gnNear(c.la,c.lo)})).then(function(nms){if(seq!==gSeq)return;
   // السبخات تبتل بعد المطر وتلخبط القراءة: نشيلها
