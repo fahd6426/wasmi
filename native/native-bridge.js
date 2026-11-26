@@ -68,7 +68,7 @@
       });
     }).catch(function () {});
   }
-  if (LN) {
+  if (LN && !window.__TOUR) {
     LN.addListener('localNotificationActionPerformed', function (e) {
       var u = e && e.notification && e.notification.extra && e.notification.extra.url;
       if (u) location.href = u;

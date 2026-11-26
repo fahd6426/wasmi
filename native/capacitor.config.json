@@ -3,9 +3,20 @@
   "appName": "وسمي",
   "webDir": "www",
   "backgroundColor": "#1a0d06",
-  "server": { "allowNavigation": ["wasmii.com", "*.wasmii.com"] },
-  "ios": { "contentInset": "never", "backgroundColor": "#1a0d06", "limitsNavigationsToAppBoundDomains": false },
+  "server": {
+    "allowNavigation": [
+      "wasmii.com",
+      "*.wasmii.com"
+    ]
+  },
+  "ios": {
+    "contentInset": "always",
+    "backgroundColor": "#1a0d06",
+    "limitsNavigationsToAppBoundDomains": false
+  },
   "plugins": {
-    "LocalNotifications": { "iconColor": "#C98F3E" }
+    "LocalNotifications": {
+      "iconColor": "#C98F3E"
+    }
   }
 }

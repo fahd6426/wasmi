@@ -19,7 +19,7 @@ jobs:
         working-directory: native
         run: |
           npm install --no-audit --no-fund
-          node build-www.js
+          TOUR=1 node build-www.js
       - name: بناء مشروع iOS
         working-directory: native
         run: |
@@ -45,14 +45,11 @@ jobs:
           xcrun simctl location "$UDID" set 26.5750,42.2380 || true
           mkdir -p shots
           xcrun simctl io "$UDID" recordVideo --codec=h264 shots/wasmii-app.mp4 & REC=$!
-          xcrun simctl launch "$UDID" com.wasmii.app; sleep 12
+          xcrun simctl launch "$UDID" com.wasmii.app; sleep 11
           xcrun simctl io "$UDID" screenshot shots/1-home.png
-          xcrun simctl openurl "$UDID" "wasmii://garmin.html"; sleep 14
-          xcrun simctl io "$UDID" screenshot shots/2-garmin.png
-          xcrun simctl openurl "$UDID" "wasmii://green.html"; sleep 12
-          xcrun simctl io "$UDID" screenshot shots/3-green.png
-          xcrun simctl openurl "$UDID" "wasmii://garmin.html#to=26.6125,42.1975&n=بقعة الربيع"; sleep 14
-          xcrun simctl io "$UDID" screenshot shots/4-route.png
+          sleep 14; xcrun simctl io "$UDID" screenshot shots/2-garmin.png
+          sleep 14; xcrun simctl io "$UDID" screenshot shots/3-green.png
+          sleep 16; xcrun simctl io "$UDID" screenshot shots/4-route.png
           kill -INT $REC; sleep 3
           ls -la shots
       - uses: actions/upload-artifact@v4
