@@ -4,7 +4,7 @@
   if (!C || !C.isNativePlatform || !C.isNativePlatform()) return;
   document.documentElement.classList.add('in-app');
   var st = document.createElement('style');
-  st.textContent = '.in-app .leaflet-container{background:#cdb68b}.in-app .nav{padding-top:env(safe-area-inset-top)}'; // بدون نت: خلفية رملية بدل الأبيض
+  st.textContent = '.in-app .leaflet-container{background:#cdb68b}.in-app .nav{padding-top:env(safe-area-inset-top)}.in-app .gtop{height:calc(54px + env(safe-area-inset-top))!important}.in-app #nvPwa,.in-app .nvpwa{display:none!important}'; // بدون نت: خلفية رملية بدل الأبيض
   document.head.appendChild(st);
   var P = C.Plugins || {};
 

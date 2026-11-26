@@ -45,11 +45,8 @@ jobs:
           xcrun simctl location "$UDID" set 26.5750,42.2380 || true
           mkdir -p shots
           xcrun simctl io "$UDID" recordVideo --codec=h264 shots/wasmii-app.mp4 & REC=$!
-          xcrun simctl launch "$UDID" com.wasmii.app; sleep 11
-          xcrun simctl io "$UDID" screenshot shots/1-home.png
-          sleep 14; xcrun simctl io "$UDID" screenshot shots/2-garmin.png
-          sleep 14; xcrun simctl io "$UDID" screenshot shots/3-green.png
-          sleep 16; xcrun simctl io "$UDID" screenshot shots/4-route.png
+          xcrun simctl launch "$UDID" com.wasmii.app
+          for i in $(seq -w 1 30); do sleep 2; xcrun simctl io "$UDID" screenshot shots/s$i.png >/dev/null 2>&1; done
           kill -INT $REC; sleep 3
           ls -la shots
       - uses: actions/upload-artifact@v4
