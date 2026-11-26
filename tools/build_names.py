@@ -38,9 +38,11 @@ def tr(name):
             out.append('ال'+tw(toks[k+1]));k+=2;continue
         out.append(tw(t));k+=1
     return ' '.join(x for x in out if x)
+# تصحيحات أسماء معروفة (GeoNames كاتبها غلط)
+FIX={'عقيلة اللبن':'عقلة اللبن','شعيب عقيلة اللبن':'شعيب عقلة اللبن'}
 def clean(a):
     a=re.sub('[ً-ْـ]','',a).strip()   # بدون تشكيل
-    return a
+    return FIX.get(a,a)
 src=sys.argv[1];cells=collections.defaultdict(list);n=na=0
 for l in open(src,encoding='utf-8'):
     f=l.rstrip('\n').split('\t')

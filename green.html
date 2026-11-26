@@ -85,8 +85,8 @@ function pctA(n){return A(Math.round(n))+'٪'}
 function cmpTxt(c){if(!GREEN.prev||c.pv<0)return '';var d=c.g-c.pv;return d>=3?'<b style="color:#5fbf6a">↑ زادت</b> من '+pctA(c.pv)+' الأسبوع اللي فات':d<=-3?'<b style="color:#e8846b">↓ نقصت</b> من '+pctA(c.pv)+' الأسبوع اللي فات':'نفس الأسبوع اللي فات تقريباً ('+pctA(c.pv)+')'}
 // أسماء الأماكن (قرى وشعبان وجبال) من نفس بيانات قارمن
 var GNP={};function gnCell(k){if(!GNP[k])GNP[k]=fetch('/data/names/'+k+'.json').then(function(r){return r.ok?r.json():[]}).catch(function(){return []});return GNP[k]}
-function gnNear(la,lo){var ks=[],fa=Math.floor(la),fo=Math.floor(lo);[[0,0],[la-fa<.3?-1:la-fa>.7?1:0,0],[0,lo-fo<.3?-1:lo-fo>.7?1:0]].forEach(function(o){var k=(fa+o[0])+'_'+(fo+o[1]);if(ks.indexOf(k)<0)ks.push(k)});
- return Promise.all(ks.map(gnCell)).then(function(ls){var b=null,bd=1e9;ls.forEach(function(l){l.forEach(function(f){if(f[3]==='farm')return;var d=km(la,lo,f[0],f[1]);if(d<bd){bd=d;b=f}})});return b&&bd<=25?{n:b[2],d:bd,la:b[0],lo:b[1]}:null})}
+function gnNear(la,lo,only){var ks=[],fa=Math.floor(la),fo=Math.floor(lo);[[0,0],[la-fa<.3?-1:la-fa>.7?1:0,0],[0,lo-fo<.3?-1:lo-fo>.7?1:0]].forEach(function(o){var k=(fa+o[0])+'_'+(fo+o[1]);if(ks.indexOf(k)<0)ks.push(k)});
+ return Promise.all(ks.map(gnCell)).then(function(ls){var b=null,bd=1e9,br=1e9;ls.forEach(function(l){l.forEach(function(f){if(only&&only.indexOf(f[3])<0)return;var d=km(la,lo,f[0],f[1]),r=f[3]==='wadi'?d*3+2:d;if(r<br){br=r;bd=d;b=f}})});return b&&bd<=(only?12:25)?{n:b[2],d:bd,la:b[0],lo:b[1]}:null})}
 function placeTxt(c,nm){if(nm){return nm.d<1.5?'عند '+nm.n:dir8(nm.la,nm.lo,c.la,c.lo)+' '+nm.n+' بـ'+A(Math.max(1,Math.round(nm.d)))+' كم'}var t=nearTown(c.la,c.lo);return t.d<15?'قرب '+t.n:t.dir+' '+t.n+' بـ'+A(t.d)+' كم'}
 var gSeq=0;
 function renderGreen(){if(!GREEN){document.getElementById('gList').innerHTML='<p style="color:var(--mut)">ما قدرنا نحمّل بيانات الربيع الحين.</p>';return}
@@ -109,7 +109,7 @@ function greenLoc(){var b=document.getElementById('gBtn');b.textContent='جار�
   var where=t.d<15?'حولك قرب '+t.n:'حولك ('+t.dir+' '+t.n+')';
   if(!r)h.innerHTML='<small>الأرض حولك</small><div class="big" style="font-size:26px">ما وصلتنا البيانات</div><p>جرّب بعد شوي.</p>';
   else if(r.out)h.innerHTML='<small>الأرض حولك</small><div class="big" style="font-size:24px">منطقتك برا تغطيتنا</div><p>نغطي الحين من خط ٢٤ لين حدود الشمال، ومن البحر الأحمر لين الخليج.</p>';
-  else{var c=r.own,L=lvl(c.g),cm=cmpTxt(c);
+  else{var c=r.own,L=lvl(c.g),cm=cmpTxt(c);gnNear(gPos.la,gPos.lo,['place','water']).then(function(nm){if(nm){var sm=document.querySelector('#gRes small');if(sm)sm.textContent='الأرض حولك '+(nm.d<3?'في '+nm.n:'قرب '+nm.n)}});
    var nb=(c.g<4&&r.near&&r.d<=60)?'<p>أقرب أرض ربّعت على بعد '+A(Math.round(r.d))+' كم ('+dir8(gPos.la,gPos.lo,r.near.la,r.near.lo)+' منك) ونسبتها '+pctA(r.near.g)+'.</p><a class="b b2" href="https://maps.google.com/?q='+r.near.la.toFixed(2)+','+r.near.lo.toFixed(2)+'" target="_blank" rel="noopener">افتحها بالخرائط</a>':'';
    h.innerHTML='<small>الأرض '+where+'</small><div class="big" style="font-size:30px;color:'+L[1]+'">'+L[0]+'</div><p style="font-size:17px">نسبة الربيع حولك: <b style="color:'+L[1]+';font-size:22px">'+pctA(c.g)+'</b></p>'+(cm?'<p>'+cm+'</p>':'')+'<p style="font-size:13px;color:var(--mut)">ارجع الأسبوع الجاي وقارن، نحدّث النسبة مرتين بالأسبوع.</p>'+nb}
   renderGreen()},
