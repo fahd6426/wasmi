@@ -1,0 +1,62 @@
+name: تطبيق وسمي (iOS)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['native/**', '.github/workflows/ios.yml']
+
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: تجهيز ملفات الموقع داخل التطبيق
+        working-directory: native
+        run: |
+          npm install --no-audit --no-fund
+          node build-www.js
+      - name: بناء مشروع iOS
+        working-directory: native
+        run: |
+          npx cap add ios --packagemanager CocoaPods
+          npx @capacitor/assets generate --ios --iconBackgroundColor '#1a0d06' --splashBackgroundColor '#1a0d06' || echo "assets skipped"
+          ./ios-setup.sh
+          npx cap sync ios
+      - name: بناء التطبيق للمحاكي
+        working-directory: native/ios/App
+        run: |
+          xcodebuild -workspace App.xcworkspace -scheme App -configuration Debug -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' -derivedDataPath build CODE_SIGNING_ALLOWED=NO build | tail -20
+      - name: تشغيل بالمحاكي وتصوير
+        working-directory: native
+        run: |
+          UDID=$(xcrun simctl list devices available -j | python3 -c "import json,sys;d=json.load(sys.stdin)['devices'];c=[x for k,v in d.items() if 'iOS' in k for x in v if 'iPhone' in x['name'] and 'Pro' in x['name'] and 'Max' not in x['name']];print(c[-1]['udid'])")
+          echo "UDID=$UDID"
+          xcrun simctl boot "$UDID"; sleep 25
+          APP=$(find ios/App/build -name 'App.app' -path '*iphonesimulator*' | head -1)
+          xcrun simctl install "$UDID" "$APP"
+          xcrun simctl privacy "$UDID" grant location-always com.wasmii.app || true
+          xcrun simctl privacy "$UDID" grant notifications com.wasmii.app || true
+          xcrun simctl location "$UDID" set 26.5750,42.2380 || true
+          mkdir -p shots
+          xcrun simctl io "$UDID" recordVideo --codec=h264 shots/wasmii-app.mp4 & REC=$!
+          xcrun simctl launch "$UDID" com.wasmii.app; sleep 12
+          xcrun simctl io "$UDID" screenshot shots/1-home.png
+          xcrun simctl openurl "$UDID" "wasmii://garmin.html"; sleep 14
+          xcrun simctl io "$UDID" screenshot shots/2-garmin.png
+          xcrun simctl openurl "$UDID" "wasmii://green.html"; sleep 12
+          xcrun simctl io "$UDID" screenshot shots/3-green.png
+          xcrun simctl openurl "$UDID" "wasmii://garmin.html#to=26.6125,42.1975&n=بقعة الربيع"; sleep 14
+          xcrun simctl io "$UDID" screenshot shots/4-route.png
+          kill -INT $REC; sleep 3
+          ls -la shots
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wasmii-ios-simulator
+          path: |
+            native/shots

@@ -1,0 +1,11 @@
+{
+  "appId": "com.wasmii.app",
+  "appName": "وسمي",
+  "webDir": "www",
+  "backgroundColor": "#1a0d06",
+  "server": { "allowNavigation": ["wasmii.com", "*.wasmii.com"] },
+  "ios": { "contentInset": "never", "backgroundColor": "#1a0d06", "limitsNavigationsToAppBoundDomains": false },
+  "plugins": {
+    "LocalNotifications": { "iconColor": "#C98F3E" }
+  }
+}
