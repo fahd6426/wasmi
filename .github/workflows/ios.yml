@@ -35,7 +35,7 @@ jobs:
       - name: تشغيل بالمحاكي وتصوير
         working-directory: native
         run: |
-          UDID=$(xcrun simctl list devices available -j | python3 -c "import json,sys;d=json.load(sys.stdin)['devices'];c=[x for k,v in d.items() if 'iOS' in k for x in v if 'iPhone' in x['name'] and 'Pro' in x['name'] and 'Max' not in x['name']];print(c[-1]['udid'])")
+          UDID=$(xcrun simctl list devices available -j | python3 -c "import json,sys;d=json.load(sys.stdin)['devices'];c=[x for k,v in d.items() if 'iOS' in k for x in v if 'iPhone' in x['name'] and 'Pro' in x['name'] and 'Max' in x['name']];print(c[-1]['udid'])")
           echo "UDID=$UDID"
           xcrun simctl boot "$UDID"; sleep 25
           APP=$(find ios/App/build -name 'App.app' -path '*iphonesimulator*' | head -1)
@@ -46,7 +46,7 @@ jobs:
           mkdir -p shots
           xcrun simctl io "$UDID" recordVideo --codec=h264 shots/wasmii-app.mp4 & REC=$!
           xcrun simctl launch "$UDID" com.wasmii.app
-          for i in $(seq -w 1 30); do sleep 2; xcrun simctl io "$UDID" screenshot shots/s$i.png >/dev/null 2>&1; done
+          for i in $(seq -w 1 45); do sleep 2; xcrun simctl io "$UDID" screenshot shots/s$i.png >/dev/null 2>&1; done
           kill -INT $REC; sleep 3
           ls -la shots
       - uses: actions/upload-artifact@v4

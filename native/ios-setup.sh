@@ -21,4 +21,6 @@ $B -c "Add :CFBundleURLTypes:0:CFBundleURLSchemes array" "$PL"
 $B -c "Add :CFBundleURLTypes:0:CFBundleURLSchemes:0 string wasmii" "$PL"
 $B -c "Delete :ITSAppUsesNonExemptEncryption" "$PL" 2>/dev/null || true
 $B -c "Add :ITSAppUsesNonExemptEncryption bool false" "$PL"
+# آيفون بس (بدون آيباد)
+sed -i '' 's/TARGETED_DEVICE_FAMILY = "1,2";/TARGETED_DEVICE_FAMILY = 1;/g' ios/App/App.xcodeproj/project.pbxproj
 echo "Info.plist جاهز"
