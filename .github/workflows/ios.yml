@@ -46,7 +46,7 @@ jobs:
           mkdir -p shots
           xcrun simctl io "$UDID" recordVideo --codec=h264 shots/wasmii-app.mp4 & REC=$!
           xcrun simctl launch "$UDID" com.wasmii.app
-          for i in $(seq -w 1 45); do sleep 2; xcrun simctl io "$UDID" screenshot shots/s$i.png >/dev/null 2>&1; done
+          for i in $(seq -w 1 55); do sleep 2; xcrun simctl io "$UDID" screenshot shots/s$i.png >/dev/null 2>&1; done
           kill -INT $REC; sleep 3
           ls -la shots
       - uses: actions/upload-artifact@v4

@@ -23,7 +23,7 @@ let n = 0;
 })(OUT);
 // وضع الجولة (للتصوير الآلي بالمحاكي بس): ينقّل بين الصفحات لحاله
 if (process.env.TOUR === '1') {
-  const T = '<script>window.__TOUR=1;(function(){var s=sessionStorage,st=+(s.getItem("tour")||0),seq=["/garmin.html","/green.html","/seasons.html","/places.html","/garmin.html#to=26.6125,42.1975&n="+encodeURIComponent("بقعة الربيع")];if(location.pathname.indexOf("green")>=0)setTimeout(function(){try{greenLoc()}catch(e){}},2500);if(st<seq.length)setTimeout(function(){s.setItem("tour",st+1);location.href=seq[st]},14000)})()</script>';
+  const T = '<script>window.__TOUR=1;(function(){var s=sessionStorage,st=+(s.getItem("tour")||0),seq=["/garmin.html","/green.html","/seasons.html","/places.html","/garmin.html#to=26.6125,42.1975&n="+encodeURIComponent("بقعة الربيع")];if(location.pathname.indexOf("green")>=0)setTimeout(function(){try{greenLoc()}catch(e){}},2500);if(st<seq.length)setTimeout(function(){s.setItem("tour",st+1);location.href=seq[st]},st?14000:24000)})()</script>';
   for (const f of ['index.html', 'garmin.html', 'green.html', 'seasons.html', 'places.html']) { const p = path.join(OUT, f); if (fs.existsSync(p)) fs.writeFileSync(p, fs.readFileSync(p, 'utf8').replace(/<head([^>]*)>/i, '<head$1>' + T)); }
   console.log('وضع الجولة شغال');
 }

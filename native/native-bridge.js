@@ -33,6 +33,8 @@
         if (!l) return;
         ok({ coords: { latitude: l.latitude, longitude: l.longitude, accuracy: l.accuracy, altitude: l.altitude, altitudeAccuracy: l.altitudeAccuracy, heading: l.bearing, speed: l.speed }, timestamp: l.time || Date.now() });
       }).then(function (wid) { if (ws[id] === 'x') BG.removeWatcher({ id: wid }); else ws[id] = wid; });
+      // أول قراءة على طول حتى لو الواحد واقف ما تحرك
+      if (G) G.getCurrentPosition({ enableHighAccuracy: true, timeout: 15000 }).then(function (p) { if (ws[id] !== 'x') ok({ coords: p.coords, timestamp: p.timestamp }); }).catch(function () {});
       return id;
     };
     geo.clearWatch = function (id) { if (ws[id] && ws[id] !== 'x') BG.removeWatcher({ id: ws[id] }); ws[id] = 'x'; };
@@ -92,4 +94,6 @@
   }
   window.addEventListener('online', net); window.addEventListener('offline', net);
   document.addEventListener('DOMContentLoaded', net);
+  /* الخريطة تعيد حساب مقاسها بعد ما تستقر الصفحة (عشان ما يطلع جزء فاضي) */
+  [800, 2000, 4000].forEach(function (ms) { setTimeout(function () { try { window.dispatchEvent(new Event('resize')); } catch (e) {} }, ms); });
 })();
